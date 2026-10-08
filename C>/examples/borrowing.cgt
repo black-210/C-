@@ -1,0 +1,31 @@
+module examples::borrowing;
+
+struct Counter {
+    count: i32,
+}
+
+fn inspect(c: &Counter) -> i32 {
+    return c.count;
+}
+
+fn increment(c: &mut Counter) -> void {
+    c.count = c.count + 1;
+}
+
+fn main() -> i32 {
+    let mut c: Counter = Counter {
+        count: 10,
+    };
+
+    println("Inspecting shared borrow &c:");
+    let val: i32 = inspect(&c);
+    print_i64(val);
+
+    println("Mutating via mutable borrow &mut c:");
+    increment(&mut c);
+
+    let new_val: i32 = inspect(&c);
+    print_i64(new_val);
+
+    return 0;
+}

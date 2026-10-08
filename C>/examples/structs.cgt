@@ -1,0 +1,35 @@
+module examples::structs;
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+struct Rectangle {
+    top_left: Point,
+    width: i32,
+    height: i32,
+}
+
+fn area(width: i32, height: i32) -> i32 {
+    return width * height;
+}
+
+fn main() -> i32 {
+    let pt: Point = Point {
+        x: 10,
+        y: 20,
+    };
+
+    let rect: Rectangle = Rectangle {
+        top_left: pt,
+        width: 100,
+        height: 50,
+    };
+
+    let a: i32 = area(rect.width, rect.height);
+    println("Rectangle area:");
+    print_i64(a);
+
+    return 0;
+}

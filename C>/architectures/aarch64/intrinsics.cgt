@@ -1,0 +1,30 @@
+// C> AArch64 Architecture Intrinsics Module
+mod arch::aarch64 {
+    @inline
+    fn cntvct() -> u64 {
+        unsafe {
+            return cgt_arm_cntvct();
+        }
+    }
+
+    @inline
+    fn dmb() {
+        unsafe {
+            cgt_arm_dmb_ish();
+        }
+    }
+
+    @inline
+    fn isb() {
+        unsafe {
+            cgt_arm_isb();
+        }
+    }
+
+    @inline
+    fn cpu_yield() {
+        unsafe {
+            cgt_arm_yield();
+        }
+    }
+}

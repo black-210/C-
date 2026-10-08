@@ -1,0 +1,18 @@
+module std::core;
+
+pub struct Buffer {
+    ptr: *raw u8,
+    size: u64,
+    capacity: u64,
+}
+
+pub fn panic(msg: str) -> void {
+    print("[C> Panic]: ");
+    println(msg);
+}
+
+pub fn assert(condition: bool, msg: str) -> void {
+    if (!condition) {
+        panic(msg);
+    }
+}

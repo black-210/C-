@@ -1,0 +1,23 @@
+module examples::safe_memory;
+
+struct SafeNode {
+    id: i32,
+    active: bool,
+}
+
+fn verify_node(node: &SafeNode) -> bool {
+    return node.active;
+}
+
+fn main() -> i32 {
+    let node: SafeNode = SafeNode {
+        id: 1,
+        active: true,
+    };
+
+    if (verify_node(&node)) {
+        println("Safe memory invariant preserved: Node is active.");
+    }
+
+    return 0;
+}

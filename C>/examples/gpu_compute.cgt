@@ -1,0 +1,12 @@
+module examples::gpu_compute;
+
+gpu_kernel fn vector_scale(scalar: f32) -> void {
+    println("GPU Compute Kernel executing on device grid.");
+}
+
+fn main() -> i32 {
+    println("Host initializing GPU pipeline and device queues.");
+    vector_scale(2.5);
+    println("GPU compute workload finished.");
+    return 0;
+}

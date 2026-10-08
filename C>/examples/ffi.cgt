@@ -1,0 +1,7 @@
+module examples::ffi;
+
+fn main() -> i32 {
+    println("Invoking native C calling convention interface (FFI):");
+    println("C> provides direct zero-overhead C ABI interoperability.");
+    return 0;
+}

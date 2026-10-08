@@ -1,0 +1,12 @@
+module std::gpu;
+
+pub struct GpuBuffer {
+    device_ptr: *raw u8,
+    size_bytes: u64,
+}
+
+pub struct Dim3 {
+    x: u32,
+    y: u32,
+    z: u32,
+}

@@ -1,0 +1,22 @@
+module examples::generics;
+
+struct Pair {
+    first: i32,
+    second: i32,
+}
+
+fn make_pair(a: i32, b: i32) -> Pair {
+    let p: Pair = Pair {
+        first: a,
+        second: b,
+    };
+    return p;
+}
+
+fn main() -> i32 {
+    let p: Pair = make_pair(100, 200);
+    println("Pair generic representation created:");
+    print_i64(p.first);
+    print_i64(p.second);
+    return 0;
+}

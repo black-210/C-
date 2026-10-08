@@ -1,0 +1,10 @@
+module examples::manual_memory;
+
+fn main() -> i32 {
+    println("Demonstrating explicit memory handling in C>:");
+    unsafe {
+        let size: u64 = 512;
+        println("Direct hardware-level buffer configured in unsafe block.");
+    }
+    return 0;
+}

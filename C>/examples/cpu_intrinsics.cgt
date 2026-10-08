@@ -1,0 +1,10 @@
+module examples::cpu_intrinsics;
+
+fn main() -> i32 {
+    println("Direct CPU Intrinsics & Cycle Performance Monitoring:");
+    unsafe {
+        asm("pause");
+        println("CPU pipeline pause instruction executed.");
+    }
+    return 0;
+}

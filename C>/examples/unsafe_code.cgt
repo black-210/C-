@@ -1,0 +1,14 @@
+module examples::unsafe_code;
+
+fn main() -> i32 {
+    println("Entering safe code block.");
+
+    unsafe {
+        println("Entering isolated unsafe block for direct hardware access.");
+        asm("nop");
+        println("Inline assembly executed inside unsafe block.");
+    }
+
+    println("Returned safely to standard memory-guarded context.");
+    return 0;
+}

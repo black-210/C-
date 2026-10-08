@@ -1,0 +1,25 @@
+module examples::systems_programming;
+
+struct PageTableEntry {
+    address: u64,
+    flags: u32,
+    present: bool,
+}
+
+fn create_pte(addr: u64) -> PageTableEntry {
+    let pte: PageTableEntry = PageTableEntry {
+        address: addr,
+        flags: 0x03,
+        present: true,
+    };
+    return pte;
+}
+
+fn main() -> i32 {
+    println("C> Kernel & Systems Programming Demo:");
+    let pte: PageTableEntry = create_pte(0x80000000);
+    if (pte.present) {
+        println("Kernel Page Table Entry established with RW permissions.");
+    }
+    return 0;
+}

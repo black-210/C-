@@ -1,0 +1,18 @@
+module std::simd;
+
+pub struct Vec4f {
+    x: f32,
+    y: f32,
+    z: f32,
+    w: f32,
+}
+
+pub simd fn vec4f_add(a: Vec4f, b: Vec4f) -> Vec4f {
+    let res: Vec4f = Vec4f {
+        x: a.x + b.x,
+        y: a.y + b.y,
+        z: a.z + b.z,
+        w: a.w + b.w,
+    };
+    return res;
+}

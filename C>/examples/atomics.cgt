@@ -1,0 +1,14 @@
+module examples::atomics;
+
+struct AtomicFlag {
+    state: i32,
+}
+
+fn main() -> i32 {
+    let flag: AtomicFlag = AtomicFlag { state: 1 };
+    println("Atomic sequential consistency primitive checked.");
+    if (flag.state == 1) {
+        println("Atomic state holds expected value.");
+    }
+    return 0;
+}

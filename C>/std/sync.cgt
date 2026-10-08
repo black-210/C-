@@ -1,0 +1,9 @@
+module std::sync;
+
+pub struct AtomicI32 {
+    value: i32,
+}
+
+pub fn atomic_get(a: &AtomicI32) -> i32 {
+    return a.value;
+}

@@ -1,0 +1,22 @@
+module examples::classes_types;
+
+struct Vector3 {
+    x: f32,
+    y: f32,
+    z: f32,
+}
+
+fn length_squared(x: f32, y: f32, z: f32) -> f32 {
+    return (x * x) + (y * y) + (z * z);
+}
+
+fn main() -> i32 {
+    let v: Vector3 = Vector3 {
+        x: 3.0,
+        y: 4.0,
+        z: 0.0,
+    };
+
+    println("Vector3 initialized successfully.");
+    return 0;
+}

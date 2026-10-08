@@ -1,0 +1,25 @@
+module examples::ownership;
+
+struct Resource {
+    handle: i32,
+    size: i32,
+}
+
+fn consume(r: own<Resource>) -> void {
+    println("Resource consumed and owned by function.");
+}
+
+fn main() -> i32 {
+    let r1: own<Resource> = Resource {
+        handle: 42,
+        size: 1024,
+    };
+
+    println("Ownership initialized.");
+    let r2: own<Resource> = move(r1);
+
+    println("Ownership transferred to r2 via move(r1).");
+    consume(r2);
+
+    return 0;
+}

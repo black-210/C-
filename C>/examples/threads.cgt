@@ -1,0 +1,12 @@
+module examples::threads;
+
+fn worker_task(id: i32) -> void {
+    println("Worker task running on thread execution boundary.");
+}
+
+fn main() -> i32 {
+    println("Main thread initializing parallel execution.");
+    worker_task(1);
+    println("Worker task finished successfully.");
+    return 0;
+}

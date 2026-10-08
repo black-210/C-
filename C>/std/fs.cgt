@@ -1,0 +1,10 @@
+module std::fs;
+
+pub struct FileHandle {
+    fd: i32,
+    is_open: bool,
+}
+
+pub fn is_valid(f: &FileHandle) -> bool {
+    return f.is_open;
+}

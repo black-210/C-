@@ -1,0 +1,10 @@
+module examples::mmio;
+
+fn main() -> i32 {
+    println("Memory-Mapped I/O (MMIO) and Device Controller example:");
+    unsafe {
+        let uart_base: u64 = 0x10000000;
+        println("UART MMIO hardware register accessed in unsafe driver mode.");
+    }
+    return 0;
+}

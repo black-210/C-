@@ -1,0 +1,6 @@
+{
+  "name": "C> Programming Language",
+  "description": "C> is a modern systems programming language and compiler implemented in C, combining high-level safety with direct CPU/GPU control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,16 @@
+// C> RISC-V Architecture Intrinsics Module
+mod arch::riscv {
+    @inline
+    fn rdcycle() -> u64 {
+        unsafe {
+            return cgt_riscv_rdcycle();
+        }
+    }
+
+    @inline
+    fn fence() {
+        unsafe {
+            cgt_riscv_fence();
+        }
+    }
+}

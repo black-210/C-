@@ -1,0 +1,24 @@
+module examples::functions;
+
+fn add(a: i32, b: i32) -> i32 {
+    return a + b;
+}
+
+fn factorial(n: i32) -> i32 {
+    if (n <= 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+fn main() -> i32 {
+    let sum: i32 = add(15, 27);
+    println("Calculated sum in C>:");
+    print_i64(sum);
+
+    let fact: i32 = factorial(5);
+    println("Factorial(5):");
+    print_i64(fact);
+
+    return 0;
+}

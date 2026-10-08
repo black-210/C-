@@ -1,0 +1,27 @@
+module examples::simd;
+
+struct SimdVector4 {
+    v0: f32,
+    v1: f32,
+    v2: f32,
+    v3: f32,
+}
+
+simd fn add_vectors(a: SimdVector4, b: SimdVector4) -> SimdVector4 {
+    let result: SimdVector4 = SimdVector4 {
+        v0: a.v0 + b.v0,
+        v1: a.v1 + b.v1,
+        v2: a.v2 + b.v2,
+        v3: a.v3 + b.v3,
+    };
+    return result;
+}
+
+fn main() -> i32 {
+    let vec_a: SimdVector4 = SimdVector4 { v0: 1.0, v1: 2.0, v2: 3.0, v3: 4.0 };
+    let vec_b: SimdVector4 = SimdVector4 { v0: 10.0, v1: 20.0, v2: 30.0, v3: 40.0 };
+
+    let res: SimdVector4 = add_vectors(vec_a, vec_b);
+    println("SIMD vector lanes computed successfully.");
+    return 0;
+}

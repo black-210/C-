@@ -1,0 +1,23 @@
+// C> x86_64 Architecture Intrinsics Module
+mod arch::x86_64 {
+    @inline
+    fn rdtsc() -> u64 {
+        unsafe {
+            return cgt_arch_rdtsc();
+        }
+    }
+
+    @inline
+    fn mfence() {
+        unsafe {
+            cgt_arch_mfence();
+        }
+    }
+
+    @inline
+    fn cpu_pause() {
+        unsafe {
+            cgt_arch_pause();
+        }
+    }
+}

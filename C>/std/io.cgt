@@ -1,0 +1,13 @@
+module std::io;
+
+pub fn print_str(s: str) -> void {
+    print(s);
+}
+
+pub fn println_str(s: str) -> void {
+    println(s);
+}
+
+pub fn println_num(n: i64) -> void {
+    print_i64(n);
+}

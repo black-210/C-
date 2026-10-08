@@ -1,0 +1,21 @@
+module examples::lifetimes;
+
+struct ScopeData {
+    value: i32,
+}
+
+fn process_within_lifetime(data: &ScopeData) -> i32 {
+    return data.value * 2;
+}
+
+fn main() -> i32 {
+    let s: ScopeData = ScopeData {
+        value: 50,
+    };
+
+    let result: i32 = process_within_lifetime(&s);
+    println("Lifetime checked result:");
+    print_i64(result);
+
+    return 0;
+}
