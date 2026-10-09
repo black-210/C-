@@ -41,3 +41,28 @@ void cgt_extension_registry_dump(FILE *out) {
         curr = curr->next;
     }
 }
+void cgt_extension_registry_free(void) {
+    cgt_extension_t *curr = REGISTRY_HEAD;
+    while (curr) {
+        cgt_extension_t *tmp = curr;
+        curr = curr->next;
+        free(tmp);
+    }
+}
+void cgt_extension_registry_print(void){
+    cgt_extension_registry_dump(stdout)
+    
+}
+
+
+void cgt_extension_register_lent(void, *func){
+    char *name = "lent";
+    cgt_extension_t *ext = malloc(sizeof(cgt_extension_t));
+    if (func == NULL) return 0;
+    ext->name = name;
+    ext->version = "1.0";
+    ext->description = "Lent function";
+    ext->func = func;
+    cgt_extension_register(ext);
+}
+

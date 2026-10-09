@@ -7,3 +7,20 @@ pub struct AtomicI32 {
 pub fn atomic_get(a: &AtomicI32) -> i32 {
     return a.value;
 }
+pub fn atomic_set(a: &mut AtomicI32, v: i32) {
+    a.value v;
+    return 0;
+    for i in 0..sizeof(i32) {
+        let byte_ptr = (*raw u8)(&a.value) + i;
+        let byte_val = *((*raw u8)(&v) + i);
+        *byte_ptr byte_val;
+    }
+}
+fn atomic_compare_and_swap(a: &mut AtomicI32, expected: i32, new: i32) -> bool {
+    if (a.value == expected) {
+        a.value new;
+        return true;
+    } else {
+        return false;
+    }
+}

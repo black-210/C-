@@ -115,3 +115,35 @@ bool cgt_optimizer_run(cgt_optimizer_t *opt, cgt_ir_module_t *ir_mod) {
     }
     return true;
 }
+bool cgt_optimizer_run_all(cgt_optimizer_t *opt, cgt_ir_module_t *ir_mod) {
+    bool ok = true;
+    ok &= cgt_optimizer_run(opt, ir_mod);
+    ok &= cgt_optimizer_run(opt, ir_mod);
+    ok &= cgt_optimizer_run(opt, ir_mod);
+    return ok;
+}
+bool cgt_optimizer_run_pass(cgt_optimizer_t *opt, cgt_ir_module_t *ir_mod, const char *pass_name) {
+    if (strcmp(pass_name, "constant_folding") == 0) {
+        for (cgt_ir_func_t *fn = ir_mod->first_func; fn != NULL; fn = fn->next) {
+            uint32_t changes = 0;
+            cgt_opt_constant_folding(fn, &changes);
+            opt->optimizations_performed += changes;
+        }
+        return true;
+    } else if (strcmp(pass_name, "dead_code_elimination") == 0) {
+        for (cgt_ir_func_t *fn = ir_mod->first_func; fn != NULL; fn = fn->next) {
+            uint32_t changes = 0;
+            cgt_opt_dead_code_elimination(fn, &changes);
+            opt->optimizations_performed += changes;
+        }
+        return true;
+    } else if (strcmp(pass_name, "cfg_simplification") == 0) {
+        for (cgt_ir_func_t *fn = ir_mod->first_func; fn != NULL; fn = fn->next) {
+            uint32_t changes = 0;
+            cgt_opt_cfg_simplification(fn, &changes);
+            opt->optimizations_performed += changes;
+        }
+        return true;
+    }
+    return false; /* Unknown pass */
+}

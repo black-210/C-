@@ -91,3 +91,9 @@ void cgt_diag_report(cgt_diag_level_t level, cgt_loc_t loc, const char *fmt, ...
 
     fprintf(stderr, "\n");
 }
+void cgt_diag_reportf(cgt_diag_level_t level, cgt_loc_t loc, const char *fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    cgt_diag_report(level, loc, fmt, args);
+    va_end(args);
+}

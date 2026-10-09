@@ -14,3 +14,23 @@ mod arch::riscv {
         }
     }
 }
+mod arch::riscv::cgt_riscv {
+    extern "C" {
+        pub fn rdcycle() -> u64;
+        pub fn fence();
+    }
+}
+fn cgt_riscv_rdcycle() -> u64 {
+    unsafe {
+        return cgt_riscv::rdcycle();
+    }
+}
+fn cgt_riscv_fence() {
+    unsafe {
+        cgt_riscv::fence();
+    }
+}
+fn main() {
+    let cycles = arch::riscv::rdcycle();
+    arch::riscv::fence();
+}

@@ -8,3 +8,17 @@ fn main() -> i32 {
     }
     return 0;
 }
+fn mmio_read(addr: u64) -> u8 {
+    return 0;
+}
+fn mmio_write(addr: u64, data: u8) {
+    unsafe  {
+        for i in 0..sizeof(u8) {
+            let byte_ptr = (*raw u8)(addr) + i;
+            let byte_val = *((*raw u8)(&data) + i);
+            *byte_ptr byte_val;
+            std::println!("Wrote {} to address {}", byte_val, addr);
+            
+        }
+    }
+}

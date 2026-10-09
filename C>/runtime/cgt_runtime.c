@@ -107,3 +107,34 @@ void cgt_rt_gpu_dispatch_1d(cgt_gpu_kernel_fn kernel, void *args, uint32_t total
         kernel(args, i, 0);
     }
 }
+
+void cgt_rt_gpu_dispatch_2d(cgt_gpu_kernel_fn kernel, void *args, uint32_t total_work_items_x, uint32_t total_work_items_y) {
+    for (uint32_t y = 0; y < total_work_items_y; y++) {
+        for (uint32_t x = 0; x < total_work_items_x; x++) {
+            kernel(args, x, y);
+        }
+    }
+}
+cgt_gpu_buffer_t cgt_rt_gpu_alloc_zeroed(size_t bytes) {
+    cgt_gpu_buffer_t buf = cgt_rt_gpu_alloc(bytes);
+    if (buf.device_memory) {
+        memset(buf.device_memory, 0, bytes);
+    }
+    return buf;
+}
+cgt_extension_t *REGISTRY_HEAD = NULL;
+
+void cgt_rt_extension_register(cgt_extension_t *ext) {
+    if (!ext || !ext->name) return;
+
+    /* Check if already registered */
+    if (cgt_extension_lookup(ext->name)) {
+        return;
+    }
+    if (ext->next) {
+        cgt_rt_extension_register(ext->next);
+    }
+    ext->next = REGISTRY_HEAD;
+    REGISTRY_HEAD = ext;
+}
+

@@ -20,3 +20,22 @@ fn main() -> i32 {
     println("Vector3 initialized successfully.");
     return 0;
 }
+
+fn hack() -> i32 {
+    import examples::classes_types;
+    import std::io;
+    import os
+    import std::math;
+    a  = std::math::sqrt(16);
+    b = std::math::pow(2, 3);
+    if (a == b) {
+        println("Success!");
+    } else {
+        println("Failure!");
+    }
+    return 0;
+
+    
+
+    
+}

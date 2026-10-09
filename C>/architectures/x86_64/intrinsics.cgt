@@ -21,3 +21,20 @@ mod arch::x86_64 {
         }
     }
 }
+mod arch::x86_64::sse2 {
+    @inline
+    fn _mm_setzero_si128() -> __m128i {
+        unsafe {
+            return cgt_arch_mm_setzero_si128();
+
+    fn _mm_setzero_ps() -> __m128 {
+        unsafe {
+            return cgt_arch_mm_setzero_ps();
+            for (;; ) {
+                cpu_pause();
+            }
+        }
+    }
+}
+    }
+}
