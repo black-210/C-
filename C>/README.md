@@ -1,13 +1,15 @@
 # C> (C-Greater) Systems Programming Language
 
-**Version**: 1.0.0  
+**Version**: 2.0.0-LTS (v2+)  
 **Target Environments**: Operating Systems, Kernels, Drivers, Firmware, Embedded Devices, Real-Time Graphics, High-Performance Computing, and Systems Infrastructure  
-**Implementation**: 100% Native C (ISO C11)
+**Implementation**: Self-Hosting Independent Translator in C> + Bootstrap Native Compiler (ISO C11)  
+**Specification Reference**: `docs/V2_SPECIFICATION.md`
 
 ---
 
 ## Table of Contents
 
+0. [What's New in Version 2+ (v2+) & Self-Translator](#0-whats-new-in-version-2-v2--self-translator)
 1. [What C> Is](#1-what-c-is)
 2. [Design Philosophy](#2-design-philosophy)
 3. [Why C> Exists](#3-why-c-exists)
@@ -38,6 +40,30 @@
 28. [Foreign Function Interface (FFI) & C ABI](#28-foreign-function-interface-ffi--c-abi)
 29. [Inline Assembly Support](#29-inline-assembly-support)
 30. [Architecture Support (x86_64, AArch64, RISC-V)](#30-architecture-support-x86_64-aarch64-risc-v)
+
+---
+
+## 0. What's New in Version 2+ (v2+) & Self-Translator
+
+C> v2+ expands into a **universal, comprehensive programming language** spanning high-level software engineering and low-level kernel development, accompanied by an independent self-hosting translator:
+
+1. **Native Self-Hosting Translator (`translator/cgt_self_translator.cgt`)**:
+   - Written in C> itself to translate C> programs.
+   - Self-translating: parses its own source code and produces independent executable binaries.
+2. **Independent Standalone Translation (`cgt -t / --standalone`)**:
+   - Generates 100% self-sufficient target code with embedded regional memory arenas, hazard epoch pointers, and trap handlers. Zero external C header or library dependencies required.
+3. **Formal Verification Contracts**:
+   - `spec` and `contract` blocks with `requires(condition)`, `ensures(condition)`, and `invariant(condition)`.
+4. **Scoped Regional Arenas (`region(arena) { ... }`)**:
+   - High-throughput bulk allocations with instantaneous $O(1)$ reclamation upon scope exit.
+5. **Lock-Free Concurrency & Hazard Pointers**:
+   - `hazard { ... }` blocks and `claim(ptr)` for wait-free epoch reclamation without data races.
+6. **Cooperative Green Fibers (`quantum` & `yield_to`)**:
+   - Zero-allocation cooperative task switching.
+7. **Zero-Copy Type Transmutation (`morph`)**:
+   - Zero-overhead type reinterpretation with compile-time alignment and safety proof.
+8. **Hardware SIMD Vectors (`vector<T, N>`) & Address Pinning (`pin`)**:
+   - Direct mapping to CPU vector registers and DMA memory stabilization.
 31. [GPU Architecture & Backends](#31-gpu-architecture--backends)
 32. [Standard Library & Runtime](#32-standard-library--runtime)
 33. [Extensions Subsystem](#33-extensions-subsystem)

@@ -92,6 +92,29 @@ static cgt_type_t *parse_type(cgt_parser_t *parser) {
         return cgt_type_owned(inner, loc);
     }
 
+    if (match(parser, TOK_VECTOR)) {
+        expect(parser, TOK_LT, "expected '<' after vector");
+        cgt_type_t *elem = parse_type(parser);
+        expect(parser, TOK_COMMA, "expected ',' between vector type and lanes");
+        cgt_token_t lane_tok = expect(parser, TOK_INT_LIT, "expected integer lane count in vector");
+        expect(parser, TOK_GT, "expected '>' after vector lanes");
+        return cgt_type_vector(elem, (uint32_t)lane_tok.as.int_val, loc);
+    }
+
+    if (match(parser, TOK_DEVICE_SPAN)) {
+        expect(parser, TOK_LT, "expected '<' after device_span");
+        cgt_type_t *elem = parse_type(parser);
+        expect(parser, TOK_GT, "expected '>' after device_span element type");
+        return cgt_type_device_span(elem, loc);
+    }
+
+    if (match(parser, TOK_NEXUS)) {
+        expect(parser, TOK_LT, "expected '<' after nexus");
+        cgt_type_t *elem = parse_type(parser);
+        expect(parser, TOK_GT, "expected '>' after nexus payload type");
+        return cgt_type_nexus(elem, loc);
+    }
+
     if (match(parser, TOK_LBRACKET)) {
         cgt_type_t *inner = parse_type(parser);
         if (match(parser, TOK_SEMICOLON)) {
@@ -226,6 +249,38 @@ static cgt_expr_t *parse_primary(cgt_parser_t *parser) {
         e->loc = loc;
         e->as.inline_asm.assembly_text = asm_tok.as.str_val;
         return e;
+    }
+
+    if (match(parser, TOK_MORPH)) {
+        expect(parser, TOK_LPAREN, "expected '(' after morph");
+        cgt_expr_t *val = parse_expression(parser);
+        expect(parser, TOK_COMMA, "expected ',' between value and target type in morph");
+        cgt_type_t *target_type = parse_type(parser);
+        expect(parser, TOK_RPAREN, "expected ')' after morph arguments");
+        return cgt_expr_morph(val, target_type, loc);
+    }
+
+    if (match(parser, TOK_CLAIM)) {
+        expect(parser, TOK_LPAREN, "expected '(' after claim");
+        cgt_expr_t *target = parse_expression(parser);
+        expect(parser, TOK_RPAREN, "expected ')' after claim target");
+        return cgt_expr_claim(target, loc);
+    }
+
+    if (match(parser, TOK_PIN)) {
+        expect(parser, TOK_LPAREN, "expected '(' after pin");
+        cgt_expr_t *target = parse_expression(parser);
+        expect(parser, TOK_RPAREN, "expected ')' after pin target");
+        return cgt_expr_pin(target, loc);
+    }
+
+    if (match(parser, TOK_TRANSFER)) {
+        expect(parser, TOK_LPAREN, "expected '(' after transfer");
+        cgt_expr_t *val = parse_expression(parser);
+        expect(parser, TOK_COMMA, "expected ',' in transfer");
+        cgt_expr_t *dest = parse_expression(parser);
+        expect(parser, TOK_RPAREN, "expected ')' after transfer arguments");
+        return cgt_expr_transfer(val, dest, loc);
     }
 
     if (match(parser, TOK_IDENT)) {
@@ -563,6 +618,49 @@ static cgt_stmt_t *parse_statement(cgt_parser_t *parser) {
         return cgt_stmt_defer(def, loc);
     }
 
+    if (match(parser, TOK_REGION)) {
+        const char *r_name = "arena";
+        if (match(parser, TOK_LPAREN)) {
+            cgt_token_t r_tok = expect(parser, TOK_IDENT, "expected region name");
+            r_name = r_tok.lexeme;
+            expect(parser, TOK_RPAREN, "expected ')' after region name");
+        }
+        cgt_expr_t *body = parse_primary(parser);
+        return cgt_stmt_region(r_name, body, loc);
+    }
+
+    if (match(parser, TOK_ISOLATE)) {
+        cgt_expr_t *body = parse_primary(parser);
+        return cgt_stmt_isolate(body, loc);
+    }
+
+    if (match(parser, TOK_QUANTUM)) {
+        cgt_expr_t *body = parse_primary(parser);
+        return cgt_stmt_quantum(body, loc);
+    }
+
+    if (match(parser, TOK_YIELD_TO)) {
+        expect(parser, TOK_LPAREN, "expected '(' after yield_to");
+        cgt_expr_t *target = parse_expression(parser);
+        expect(parser, TOK_RPAREN, "expected ')' after yield_to argument");
+        expect(parser, TOK_SEMICOLON, "expected ';' after yield_to statement");
+        return cgt_stmt_yield(target, loc);
+    }
+
+    if (match(parser, TOK_HAZARD)) {
+        cgt_expr_t *body = parse_primary(parser);
+        return cgt_stmt_hazard(body, loc);
+    }
+
+    if (match(parser, TOK_REQUIRES) || match(parser, TOK_ENSURES) || match(parser, TOK_INVARIANT)) {
+        cgt_token_kind_t ckind = parser->prev.kind;
+        expect(parser, TOK_LPAREN, "expected '(' after contract keyword");
+        cgt_expr_t *cond = parse_expression(parser);
+        expect(parser, TOK_RPAREN, "expected ')' after contract condition");
+        expect(parser, TOK_SEMICOLON, "expected ';' after contract");
+        return cgt_stmt_contract(ckind, cond, NULL, loc);
+    }
+
     /* Check for assignment or expression statement */
     cgt_expr_t *expr = parse_expression(parser);
     if (check(parser, TOK_ASSIGN) || check(parser, TOK_PLUS_ASSIGN) ||
@@ -648,6 +746,46 @@ static cgt_decl_t *parse_declaration(cgt_parser_t *parser) {
         }
         expect(parser, TOK_RBRACE, "expected '}' closing struct");
         cgt_decl_t *d = cgt_decl_struct(id_tok.lexeme, fields, count, loc);
+        d->is_pub = is_pub;
+        return d;
+    }
+
+    if (match(parser, TOK_SPEC) || match(parser, TOK_CONTRACT)) {
+        cgt_token_t id_tok = expect(parser, TOK_IDENT, "expected contract/spec name");
+        expect(parser, TOK_LBRACE, "expected '{' after spec name");
+        cgt_stmt_t **contracts = NULL;
+        size_t count = 0, cap = 0;
+        while (!check(parser, TOK_RBRACE) && !check(parser, TOK_EOF)) {
+            cgt_stmt_t *st = parse_statement(parser);
+            if (st) {
+                if (count >= cap) {
+                    cap = cap ? cap * 2 : 4;
+                    contracts = (cgt_stmt_t **)cgt_realloc(contracts, cap * sizeof(cgt_stmt_t *));
+                }
+                contracts[count++] = st;
+            }
+        }
+        expect(parser, TOK_RBRACE, "expected '}' closing spec block");
+        cgt_decl_t *d = cgt_decl_spec(id_tok.lexeme, contracts, count, loc);
+        d->is_pub = is_pub;
+        return d;
+    }
+
+    if (match(parser, TOK_NEXUS)) {
+        cgt_token_t id_tok = expect(parser, TOK_IDENT, "expected nexus name");
+        cgt_type_t *payload = NULL;
+        if (match(parser, TOK_LT)) {
+            payload = parse_type(parser);
+            expect(parser, TOK_GT, "expected '>' after nexus payload type");
+        }
+        size_t cap_size = 64;
+        if (match(parser, TOK_LPAREN)) {
+            cgt_token_t sz = expect(parser, TOK_INT_LIT, "expected integer capacity for nexus");
+            cap_size = (size_t)sz.as.int_val;
+            expect(parser, TOK_RPAREN, "expected ')' after nexus capacity");
+        }
+        expect(parser, TOK_SEMICOLON, "expected ';' after nexus declaration");
+        cgt_decl_t *d = cgt_decl_nexus(id_tok.lexeme, payload, cap_size, loc);
         d->is_pub = is_pub;
         return d;
     }

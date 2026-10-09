@@ -39,6 +39,9 @@ void cgt_codegen_free(cgt_codegen_t *cg);
 /* Emits C code representing the lowered IR */
 bool cgt_codegen_generate_c(cgt_codegen_t *cg);
 
+/* Emits 100% self-contained, standalone translated C code with embedded runtime */
+bool cgt_codegen_generate_standalone_c(cgt_codegen_t *cg);
+
 /* Emits x86_64 assembly */
 bool cgt_codegen_generate_asm(cgt_codegen_t *cg);
 

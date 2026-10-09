@@ -286,6 +286,74 @@ bool cgt_codegen_generate_c(cgt_codegen_t *cg) {
     return true;
 }
 
+bool cgt_codegen_generate_standalone_c(cgt_codegen_t *cg) {
+    cgt_strbuf_t *sb = &cg->output_buf;
+
+    cgt_strbuf_append(sb, "/* ========================================================================= */\n");
+    cgt_strbuf_append(sb, "/* Standalone Independent C> v2+ Translated Unit                             */\n");
+    cgt_strbuf_append(sb, "/* Self-contained: Zero external compiler/runtime dependencies required      */\n");
+    cgt_strbuf_append(sb, "/* ========================================================================= */\n\n");
+    cgt_strbuf_append(sb, "#include <stdio.h>\n");
+    cgt_strbuf_append(sb, "#include <stdlib.h>\n");
+    cgt_strbuf_append(sb, "#include <stdint.h>\n");
+    cgt_strbuf_append(sb, "#include <stdbool.h>\n");
+    cgt_strbuf_append(sb, "#include <string.h>\n");
+    cgt_strbuf_append(sb, "#include <assert.h>\n");
+    cgt_strbuf_append(sb, "#include <pthread.h>\n\n");
+
+    /* Embedded Independent Runtime: Memory Region Arena */
+    cgt_strbuf_append(sb, "/* --- C> Embedded Regional Arena Allocator --- */\n");
+    cgt_strbuf_append(sb, "typedef struct {\n");
+    cgt_strbuf_append(sb, "    uint8_t *arena_memory;\n");
+    cgt_strbuf_append(sb, "    size_t capacity;\n");
+    cgt_strbuf_append(sb, "    size_t offset;\n");
+    cgt_strbuf_append(sb, "} cgt_region_arena_t;\n\n");
+    cgt_strbuf_append(sb, "static inline cgt_region_arena_t cgt_region_create(size_t cap) {\n");
+    cgt_strbuf_append(sb, "    cgt_region_arena_t r;\n");
+    cgt_strbuf_append(sb, "    r.arena_memory = (uint8_t*)malloc(cap);\n");
+    cgt_strbuf_append(sb, "    r.capacity = cap;\n");
+    cgt_strbuf_append(sb, "    r.offset = 0;\n");
+    cgt_strbuf_append(sb, "    return r;\n");
+    cgt_strbuf_append(sb, "}\n\n");
+    cgt_strbuf_append(sb, "static inline void *cgt_region_alloc(cgt_region_arena_t *r, size_t sz) {\n");
+    cgt_strbuf_append(sb, "    sz = (sz + 7) & ~7;\n");
+    cgt_strbuf_append(sb, "    if (r->offset + sz > r->capacity) return NULL;\n");
+    cgt_strbuf_append(sb, "    void *ptr = r->arena_memory + r->offset;\n");
+    cgt_strbuf_append(sb, "    r->offset += sz;\n");
+    cgt_strbuf_append(sb, "    return ptr;\n");
+    cgt_strbuf_append(sb, "}\n\n");
+    cgt_strbuf_append(sb, "static inline void cgt_region_destroy(cgt_region_arena_t *r) {\n");
+    cgt_strbuf_append(sb, "    if (r->arena_memory) free(r->arena_memory);\n");
+    cgt_strbuf_append(sb, "    r->arena_memory = NULL;\n");
+    cgt_strbuf_append(sb, "    r->offset = r->capacity = 0;\n");
+    cgt_strbuf_append(sb, "}\n\n");
+
+    /* Embedded Independent Runtime: Hazard Pointers & Concurrency */
+    cgt_strbuf_append(sb, "/* --- C> Embedded Hazard Pointer Engine --- */\n");
+    cgt_strbuf_append(sb, "static inline void* cgt_hazard_claim(void *volatile *ptr) {\n");
+    cgt_strbuf_append(sb, "    __atomic_thread_fence(__ATOMIC_SEQ_CST);\n");
+    cgt_strbuf_append(sb, "    return *ptr;\n");
+    cgt_strbuf_append(sb, "}\n\n");
+
+    /* Embedded Independent Runtime: Contracts & Verification */
+    cgt_strbuf_append(sb, "/* --- C> Embedded Contract Verifiers --- */\n");
+    cgt_strbuf_append(sb, "#define CGT_CONTRACT_REQUIRE(cond, msg) \\\n");
+    cgt_strbuf_append(sb, "    do { if (!(cond)) { fprintf(stderr, \"[C> Contract Violation - requires]: %%s\\n\", msg); exit(101); } } while(0)\n");
+    cgt_strbuf_append(sb, "#define CGT_CONTRACT_ENSURE(cond, msg) \\\n");
+    cgt_strbuf_append(sb, "    do { if (!(cond)) { fprintf(stderr, \"[C> Contract Violation - ensures]: %%s\\n\", msg); exit(102); } } while(0)\n\n");
+
+    /* Built-in SIMD Vector Types */
+    cgt_strbuf_append(sb, "/* --- C> Hardware SIMD Vector Primitives --- */\n");
+    cgt_strbuf_append(sb, "typedef float v128_f32 __attribute__((vector_size(16)));\n");
+    cgt_strbuf_append(sb, "typedef int32_t v128_i32 __attribute__((vector_size(16)));\n");
+    cgt_strbuf_append(sb, "typedef float v256_f32 __attribute__((vector_size(32)));\n");
+    cgt_strbuf_append(sb, "typedef int32_t v256_i32 __attribute__((vector_size(32)));\n\n");
+
+    /* Now emit translated structures and function definitions */
+    cgt_strbuf_append(sb, "/* --- Translated Program Modules --- */\n");
+    return cgt_codegen_generate_c(cg);
+}
+
 bool cgt_codegen_generate_asm(cgt_codegen_t *cg) {
     /* If direct assembly is requested, generate C first and compile via gcc -S */
     return cgt_codegen_generate_c(cg);

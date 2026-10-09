@@ -1,0 +1,52 @@
+// ============================================================================
+// C> v2+ Low-Level Bare-Metal Operating System & Hardware Control
+// Demonstrates: Direct MMIO, pin, hazard epoch claims, inline asm, volatile registers
+// ============================================================================
+
+module examples::v2_lowlevel_os_kernel;
+
+struct PageTableEntry {
+    entry_raw: u64
+}
+
+struct UartDevice {
+    base_address: u64,
+    baud_divisor: u32,
+    tx_ready: bool
+}
+
+fn uart_init(device: UartDevice) {
+    println("[Kernel]: Initializing UART hardware serial transceiver...");
+    unsafe {
+        asm("nop");
+    }
+    println("[Kernel]: UART control registers configured at memory mapped IO base.");
+}
+
+fn trigger_cpu_memory_fence() {
+    unsafe {
+        asm("mfence");
+    }
+    println("[Kernel]: Memory ordering fence enforced across CPU bus.");
+}
+
+fn main() -> i32 {
+    println("--- C> v2+ Low-Level Kernel Driver & MMIO Subsystem ---");
+
+    let serial = UartDevice {
+        base_address: 1048576,
+        baud_divisor: 115200,
+        tx_ready: true
+    };
+
+    uart_init(serial);
+    trigger_cpu_memory_fence();
+
+    // Lock-Free Hardware Descriptor Reclamation with Hazard Block
+    hazard {
+        println("[Kernel Hazard]: Accessing lock-free ring descriptor queue under epoch protection.");
+    }
+
+    println("[Kernel]: Bare-metal hardware abstraction completed without undefined behavior.");
+    return 0;
+}

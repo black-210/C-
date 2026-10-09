@@ -9,10 +9,10 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-#define CGT_VERSION_MAJOR 1
+#define CGT_VERSION_MAJOR 2
 #define CGT_VERSION_MINOR 0
 #define CGT_VERSION_PATCH 0
-#define CGT_VERSION_STRING "1.0.0"
+#define CGT_VERSION_STRING "2.0.0"
 
 /* Source location */
 typedef struct {

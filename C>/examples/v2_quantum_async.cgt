@@ -1,0 +1,26 @@
+// ============================================================================
+// C> v2+ Quantum Cooperative Fibers & Micro-Task Concurrency
+// Demonstrates: quantum task blocks, cooperative yield_to, deterministic scheduling
+// ============================================================================
+
+module examples::v2_quantum_async;
+
+fn run_quantum_worker() {
+    quantum {
+        println("[Quantum Fiber]: Stage 1 - Preparing asynchronous network packet buffer...");
+        yield_to(0);
+        println("[Quantum Fiber]: Stage 2 - Packet data dispatched to network interface.");
+        yield_to(0);
+        println("[Quantum Fiber]: Stage 3 - Acknowledgment received. Task finalized.");
+    }
+}
+
+fn main() -> i32 {
+    println("--- C> v2+ Quantum Cooperative Fiber Execution ---");
+    println("Launching cooperative green micro-tasks with zero-allocation context...");
+
+    run_quantum_worker();
+
+    println("Quantum cooperative fiber completed without kernel thread switching overhead.");
+    return 0;
+}

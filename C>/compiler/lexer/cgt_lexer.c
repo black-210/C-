@@ -42,6 +42,24 @@ static struct {
     {"pub", TOK_PUB},
     {"extern", TOK_EXTERN},
     {"sizeof", TOK_SIZEOF},
+    /* C> v2+ Keywords */
+    {"spec", TOK_SPEC},
+    {"contract", TOK_CONTRACT},
+    {"requires", TOK_REQUIRES},
+    {"ensures", TOK_ENSURES},
+    {"invariant", TOK_INVARIANT},
+    {"nexus", TOK_NEXUS},
+    {"isolate", TOK_ISOLATE},
+    {"claim", TOK_CLAIM},
+    {"hazard", TOK_HAZARD},
+    {"region", TOK_REGION},
+    {"morph", TOK_MORPH},
+    {"quantum", TOK_QUANTUM},
+    {"yield_to", TOK_YIELD_TO},
+    {"pin", TOK_PIN},
+    {"transfer", TOK_TRANSFER},
+    {"vector", TOK_VECTOR},
+    {"device_span", TOK_DEVICE_SPAN},
     {NULL, TOK_EOF}
 };
 
@@ -92,6 +110,23 @@ const char *cgt_token_kind_name(cgt_token_kind_t kind) {
         case TOK_PUB: return "pub";
         case TOK_EXTERN: return "extern";
         case TOK_SIZEOF: return "sizeof";
+        case TOK_SPEC: return "spec";
+        case TOK_CONTRACT: return "contract";
+        case TOK_REQUIRES: return "requires";
+        case TOK_ENSURES: return "ensures";
+        case TOK_INVARIANT: return "invariant";
+        case TOK_NEXUS: return "nexus";
+        case TOK_ISOLATE: return "isolate";
+        case TOK_CLAIM: return "claim";
+        case TOK_HAZARD: return "hazard";
+        case TOK_REGION: return "region";
+        case TOK_MORPH: return "morph";
+        case TOK_QUANTUM: return "quantum";
+        case TOK_YIELD_TO: return "yield_to";
+        case TOK_PIN: return "pin";
+        case TOK_TRANSFER: return "transfer";
+        case TOK_VECTOR: return "vector";
+        case TOK_DEVICE_SPAN: return "device_span";
         case TOK_PLUS: return "+";
         case TOK_MINUS: return "-";
         case TOK_STAR: return "*";

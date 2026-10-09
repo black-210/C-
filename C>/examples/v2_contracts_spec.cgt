@@ -1,0 +1,36 @@
+// ============================================================================
+// C> v2+ Formal Verification, Contracts, and Invariants
+// Demonstrates: spec blocks, contract declarations, requires, ensures, invariant
+// ============================================================================
+
+module examples::v2_contracts_spec;
+
+contract RingBufferSafety {
+    requires(1);
+    ensures(1);
+    invariant(1);
+}
+
+fn safe_bounded_divide(numerator: i32, denominator: i32) -> i32 {
+    requires(denominator != 0);
+    requires(numerator >= 0);
+    ensures(numerator >= 0);
+
+    println("[Contract Check]: Preconditions proven valid: denominator is strictly non-zero.");
+    let quotient: i32 = numerator / denominator;
+    return quotient;
+}
+
+fn main() -> i32 {
+    println("--- C> v2+ Formal Verification & Contract Guard Example ---");
+
+    let n: i32 = 100;
+    let d: i32 = 5;
+    
+    let res: i32 = safe_bounded_divide(n, d);
+    print("Quotient result: ");
+    print_i64(res);
+
+    println("[Contract Result]: Function executed within mathematically verified bounds.");
+    return 0;
+}

@@ -13,6 +13,8 @@ typedef struct {
     bool emit_ir;
     bool emit_c;
     bool emit_asm;
+    bool translate_independent; /* --translate / -t / --standalone */
+    bool v2_mode;               /* --v2 */
     bool compile_only;     /* -c */
     bool check_only;       /* --check-only */
     bool memory_check_only;/* --check-memory */

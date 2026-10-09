@@ -303,6 +303,141 @@ cgt_stmt_t *cgt_stmt_defer(cgt_expr_t *expr, cgt_loc_t loc) {
     return s;
 }
 
+cgt_stmt_t *cgt_stmt_region(const char *name, cgt_expr_t *body, cgt_loc_t loc) {
+    cgt_stmt_t *s = (cgt_stmt_t *)cgt_calloc(1, sizeof(cgt_stmt_t));
+    s->kind = STMT_REGION;
+    s->loc = loc;
+    s->as.region_stmt.region_name = cgt_strdup(name ? name : "arena");
+    s->as.region_stmt.body = body;
+    return s;
+}
+
+cgt_stmt_t *cgt_stmt_isolate(cgt_expr_t *body, cgt_loc_t loc) {
+    cgt_stmt_t *s = (cgt_stmt_t *)cgt_calloc(1, sizeof(cgt_stmt_t));
+    s->kind = STMT_ISOLATE;
+    s->loc = loc;
+    s->as.isolate_stmt.body = body;
+    return s;
+}
+
+cgt_stmt_t *cgt_stmt_quantum(cgt_expr_t *body, cgt_loc_t loc) {
+    cgt_stmt_t *s = (cgt_stmt_t *)cgt_calloc(1, sizeof(cgt_stmt_t));
+    s->kind = STMT_QUANTUM;
+    s->loc = loc;
+    s->as.quantum_stmt.body = body;
+    return s;
+}
+
+cgt_stmt_t *cgt_stmt_yield(cgt_expr_t *target, cgt_loc_t loc) {
+    cgt_stmt_t *s = (cgt_stmt_t *)cgt_calloc(1, sizeof(cgt_stmt_t));
+    s->kind = STMT_YIELD_TO;
+    s->loc = loc;
+    s->as.yield_stmt.target_task = target;
+    return s;
+}
+
+cgt_stmt_t *cgt_stmt_hazard(cgt_expr_t *body, cgt_loc_t loc) {
+    cgt_stmt_t *s = (cgt_stmt_t *)cgt_calloc(1, sizeof(cgt_stmt_t));
+    s->kind = STMT_HAZARD;
+    s->loc = loc;
+    s->as.hazard_stmt.body = body;
+    return s;
+}
+
+cgt_stmt_t *cgt_stmt_contract(cgt_token_kind_t kind, cgt_expr_t *cond, const char *msg, cgt_loc_t loc) {
+    cgt_stmt_t *s = (cgt_stmt_t *)cgt_calloc(1, sizeof(cgt_stmt_t));
+    s->kind = STMT_CONTRACT;
+    s->loc = loc;
+    s->as.contract_stmt.contract_kind = kind;
+    s->as.contract_stmt.condition = cond;
+    s->as.contract_stmt.message = msg ? cgt_strdup(msg) : NULL;
+    return s;
+}
+
+cgt_expr_t *cgt_expr_morph(cgt_expr_t *val, cgt_type_t *target_type, cgt_loc_t loc) {
+    cgt_expr_t *e = (cgt_expr_t *)cgt_calloc(1, sizeof(cgt_expr_t));
+    e->kind = EXPR_MORPH;
+    e->loc = loc;
+    e->as.morph_expr.value = val;
+    e->as.morph_expr.target_type = target_type;
+    return e;
+}
+
+cgt_expr_t *cgt_expr_claim(cgt_expr_t *target, cgt_loc_t loc) {
+    cgt_expr_t *e = (cgt_expr_t *)cgt_calloc(1, sizeof(cgt_expr_t));
+    e->kind = EXPR_CLAIM;
+    e->loc = loc;
+    e->as.claim_expr.target = target;
+    return e;
+}
+
+cgt_expr_t *cgt_expr_pin(cgt_expr_t *target, cgt_loc_t loc) {
+    cgt_expr_t *e = (cgt_expr_t *)cgt_calloc(1, sizeof(cgt_expr_t));
+    e->kind = EXPR_PIN;
+    e->loc = loc;
+    e->as.pin_expr.target = target;
+    return e;
+}
+
+cgt_expr_t *cgt_expr_transfer(cgt_expr_t *val, cgt_expr_t *dest, cgt_loc_t loc) {
+    cgt_expr_t *e = (cgt_expr_t *)cgt_calloc(1, sizeof(cgt_expr_t));
+    e->kind = EXPR_TRANSFER;
+    e->loc = loc;
+    e->as.transfer_expr.value = val;
+    e->as.transfer_expr.isolate_dest = dest;
+    return e;
+}
+
+cgt_decl_t *cgt_decl_spec(const char *name, cgt_stmt_t **contracts, size_t count, cgt_loc_t loc) {
+    cgt_decl_t *d = (cgt_decl_t *)cgt_calloc(1, sizeof(cgt_decl_t));
+    d->kind = DECL_SPEC;
+    d->name = cgt_strdup(name);
+    d->loc = loc;
+    d->as.spec_decl.contracts = contracts;
+    d->as.spec_decl.contract_count = count;
+    return d;
+}
+
+cgt_decl_t *cgt_decl_nexus(const char *name, cgt_type_t *payload, size_t capacity, cgt_loc_t loc) {
+    cgt_decl_t *d = (cgt_decl_t *)cgt_calloc(1, sizeof(cgt_decl_t));
+    d->kind = DECL_NEXUS;
+    d->name = cgt_strdup(name);
+    d->loc = loc;
+    d->as.nexus_decl.payload_type = payload;
+    d->as.nexus_decl.buffer_capacity = capacity;
+    return d;
+}
+
+cgt_type_t *cgt_type_vector(cgt_type_t *element, uint32_t lanes, cgt_loc_t loc) {
+    cgt_type_t *t = (cgt_type_t *)cgt_calloc(1, sizeof(cgt_type_t));
+    t->kind = TYPE_VECTOR;
+    t->loc = loc;
+    t->inner = element;
+    t->simd_lanes = lanes;
+    static char buf[64];
+    snprintf(buf, sizeof(buf), "vector_%u", lanes);
+    t->name = cgt_strdup(buf);
+    return t;
+}
+
+cgt_type_t *cgt_type_device_span(cgt_type_t *element, cgt_loc_t loc) {
+    cgt_type_t *t = (cgt_type_t *)cgt_calloc(1, sizeof(cgt_type_t));
+    t->kind = TYPE_DEVICE_SPAN;
+    t->loc = loc;
+    t->inner = element;
+    t->name = cgt_strdup("device_span");
+    return t;
+}
+
+cgt_type_t *cgt_type_nexus(cgt_type_t *payload, cgt_loc_t loc) {
+    cgt_type_t *t = (cgt_type_t *)cgt_calloc(1, sizeof(cgt_type_t));
+    t->kind = TYPE_NEXUS;
+    t->loc = loc;
+    t->inner = payload;
+    t->name = cgt_strdup("nexus");
+    return t;
+}
+
 cgt_decl_t *cgt_decl_func(const char *name, cgt_param_t *params, size_t p_count, cgt_type_t *ret, cgt_expr_t *body, bool is_gpu, bool is_simd, bool is_unsafe, cgt_loc_t loc) {
     cgt_decl_t *d = (cgt_decl_t *)cgt_calloc(1, sizeof(cgt_decl_t));
     d->kind = DECL_FUNCTION;

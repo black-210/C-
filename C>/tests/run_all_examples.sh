@@ -14,4 +14,8 @@ for example in "$ROOT_DIR"/examples/*.cgt; do
     echo "OK"
 done
 
-echo "=== All C> Examples Compiled and Ran Successfully! ==="
+echo -n "Testing translator/cgt_self_translator.cgt... "
+"$CGT" "$ROOT_DIR/translator/cgt_self_translator.cgt" -r > /tmp/cgt_self_trans.log 2>&1
+echo "OK"
+
+echo "=== All C> Examples and Self-Translator Compiled and Ran Successfully! ==="

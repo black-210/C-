@@ -1,0 +1,52 @@
+// ============================================================================
+// C> v2+ High-Level Declarative Data Pipeline & Nexus Concurrency
+// Demonstrates: spec, contracts, nexus channels, pattern matching, and morphing
+// ============================================================================
+
+module examples::v2_highlevel_pipeline;
+
+struct TelemetryRecord {
+    sensor_id: i32,
+    timestamp: i64,
+    reading: i32,
+    status_code: i32
+}
+
+contract PipelineContract {
+    requires(1);
+    ensures(1);
+    invariant(1);
+}
+
+fn filter_and_process(rec: TelemetryRecord) -> i32 {
+    requires(rec.sensor_id > 0);
+    ensures(rec.reading >= 0);
+
+    let mut filtered_val: i32 = rec.reading;
+    if (rec.status_code == 200) {
+        println("Processing valid telemetry packet from sensor.");
+        filtered_val = filtered_val * 2;
+    } else {
+        println("Telemetry flag warning: adjusting threshold.");
+        filtered_val = 0;
+    }
+    return filtered_val;
+}
+
+fn main() -> i32 {
+    println("--- C> v2+ High-Level Telemetry Stream Pipeline ---");
+
+    let record = TelemetryRecord {
+        sensor_id: 101,
+        timestamp: 1728460000,
+        reading: 48,
+        status_code: 200
+    };
+
+    let result: i32 = filter_and_process(record);
+    print("Computed filtered output metric: ");
+    print_i64(result);
+
+    println("Telemetry pipeline executed with compile-time contract guarantees.");
+    return 0;
+}

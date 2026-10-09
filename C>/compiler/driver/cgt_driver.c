@@ -30,6 +30,9 @@ void cgt_driver_print_help(const char *prog_name) {
     printf("  --emit-ir             Lower to C> Intermediate Representation and dump to stdout\n");
     printf("  --emit-c              Emit generated intermediate C code\n");
     printf("  --emit-asm            Emit generated native target assembly (.s)\n");
+    printf("  -t, --translate       Translate C> to independent, standalone portable native code\n");
+    printf("  --standalone          Generate self-contained standalone translation unit\n");
+    printf("  --v2                  Enforce C> v2+ language specification and features\n");
     printf("  --check-only          Stop after semantic analysis and type checking\n");
     printf("  --check-memory        Run ownership and borrow checker diagnostics only\n");
     printf("  --security-audit      Perform static vulnerability and safety audit\n\n");
@@ -42,7 +45,7 @@ void cgt_driver_print_version(void) {
     printf("C> Compiler (cgt) version %s (x86_64-pc-linux-gnu)\n", CGT_VERSION_STRING);
     printf("Target Architecture: x86_64, aarch64, riscv64\n");
     printf("GPU Backends: Vulkan Compute, CUDA PTX, Metal, Host Virtual SIMD\n");
-    printf("Standard: C> Language Specification 1.0\n");
+    printf("Standard: C> Language Specification 2.0.0-LTS (v2+)\n");
 }
 
 int cgt_driver_parse_args(int argc, char **argv, cgt_driver_options_t *opts) {
@@ -58,6 +61,10 @@ int cgt_driver_parse_args(int argc, char **argv, cgt_driver_options_t *opts) {
             opts->output_path = argv[++i];
         } else if (strcmp(arg, "-c") == 0) {
             opts->compile_only = true;
+        } else if (strcmp(arg, "-t") == 0 || strcmp(arg, "--translate") == 0 || strcmp(arg, "--standalone") == 0) {
+            opts->translate_independent = true;
+        } else if (strcmp(arg, "--v2") == 0) {
+            opts->v2_mode = true;
         } else if (strcmp(arg, "-r") == 0 || strcmp(arg, "--run") == 0) {
             opts->run_after_build = true;
         } else if (strcmp(arg, "-v") == 0 || strcmp(arg, "--verbose") == 0) {
@@ -252,6 +259,27 @@ int cgt_driver_run(const cgt_driver_options_t *opts) {
 
     cgt_codegen_t codegen;
     cgt_codegen_init(&codegen, &ir_mod, cg_opts);
+
+    if (opts->translate_independent) {
+        cgt_codegen_generate_standalone_c(&codegen);
+        if (opts->output_path && strcmp(opts->output_path, "a.out") != 0) {
+            FILE *out_f = fopen(opts->output_path, "w");
+            if (out_f) {
+                fputs(codegen.output_buf.data, out_f);
+                fclose(out_f);
+                if (opts->verbose) printf("[C> Translator]: Standalone independent unit emitted -> %s\n", opts->output_path);
+            } else {
+                fprintf(stderr, "[C> Error]: Failed to write translated file '%s'\n", opts->output_path);
+            }
+        } else {
+            printf("%s\n", codegen.output_buf.data);
+        }
+        cgt_codegen_free(&codegen);
+        cgt_ir_module_free(&ir_mod);
+        free(source);
+        return 0;
+    }
+
     cgt_codegen_generate_c(&codegen);
 
     if (opts->emit_c) {

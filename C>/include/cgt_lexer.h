@@ -54,6 +54,25 @@ typedef enum {
     TOK_EXTERN,
     TOK_SIZEOF,
 
+    /* C> v2+ Keywords */
+    TOK_SPEC,          /* spec */
+    TOK_CONTRACT,      /* contract */
+    TOK_REQUIRES,      /* requires */
+    TOK_ENSURES,       /* ensures */
+    TOK_INVARIANT,     /* invariant */
+    TOK_NEXUS,         /* nexus */
+    TOK_ISOLATE,       /* isolate */
+    TOK_CLAIM,         /* claim */
+    TOK_HAZARD,        /* hazard */
+    TOK_REGION,        /* region */
+    TOK_MORPH,         /* morph */
+    TOK_QUANTUM,       /* quantum */
+    TOK_YIELD_TO,      /* yield_to */
+    TOK_PIN,           /* pin */
+    TOK_TRANSFER,      /* transfer */
+    TOK_VECTOR,        /* vector */
+    TOK_DEVICE_SPAN,   /* device_span */
+
     /* Operators & Punctuators */
     TOK_PLUS,          /* + */
     TOK_MINUS,         /* - */

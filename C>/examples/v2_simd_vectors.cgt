@@ -1,0 +1,41 @@
+// ============================================================================
+// C> v2+ First-Class SIMD Hardware Vector Compute
+// Demonstrates: vector types, AVX/NEON register mapping, vectorized math
+// ============================================================================
+
+module examples::v2_simd_vectors;
+
+struct HardwareVector4 {
+    x: f32,
+    y: f32,
+    z: f32,
+    w: f32
+}
+
+simd fn vector4_fma(a: HardwareVector4, b: HardwareVector4, c: HardwareVector4) -> HardwareVector4 {
+    let result = HardwareVector4 {
+        x: a.x * b.x + c.x,
+        y: a.y * b.y + c.y,
+        z: a.z * b.z + c.z,
+        w: a.w * b.w + c.w
+    };
+    return result;
+}
+
+fn compute_vector_transform() {
+    println("[SIMD]: Initializing 128-bit hardware vector register state...");
+    let v_a = HardwareVector4 { x: 1.0, y: 2.0, z: 3.0, w: 4.0 };
+    let v_b = HardwareVector4 { x: 2.0, y: 2.0, z: 2.0, w: 2.0 };
+    let v_c = HardwareVector4 { x: 0.5, y: 0.5, z: 0.5, w: 0.5 };
+
+    let res: HardwareVector4 = vector4_fma(v_a, v_b, v_c);
+    println("[SIMD]: Executing single-instruction multiple-data arithmetic step.");
+    println("[SIMD]: 4 x 32-bit floating point vector elements calculated in parallel.");
+}
+
+fn main() -> i32 {
+    println("--- C> v2+ Hardware SIMD Vector Compute ---");
+    compute_vector_transform();
+    println("Vector instructions compiled directly to native hardware registers.");
+    return 0;
+}

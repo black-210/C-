@@ -28,6 +28,9 @@ typedef enum {
     TYPE_SLICE,        /* &[T] */
     TYPE_SIMD,         /* SIMD vector: v128_f32, v128_i32, v256_f32, v256_i32 */
     TYPE_GPU_BUFFER,   /* gpu::Buffer<T> */
+    TYPE_VECTOR,       /* v2+ hardware vector<T, N> */
+    TYPE_DEVICE_SPAN,  /* v2+ unified CPU/GPU device_span<T> */
+    TYPE_NEXUS,        /* v2+ concurrency nexus channel nexus<T> */
     TYPE_STRUCT,
     TYPE_ENUM,
     TYPE_TRAIT,
@@ -80,7 +83,11 @@ typedef enum {
     EXPR_INLINE_ASM,   /* asm("...", inputs, outputs) */
     EXPR_SIMD_OP,      /* simd::add(a, b) */
     EXPR_GPU_DISPATCH, /* gpu::dispatch(...) */
-    EXPR_ATOMIC_OP     /* atomic_load, atomic_store, etc. */
+    EXPR_ATOMIC_OP,    /* atomic_load, atomic_store, etc. */
+    EXPR_MORPH,        /* morph(val, TargetType) */
+    EXPR_CLAIM,        /* claim(hazard_ptr) */
+    EXPR_PIN,          /* pin(expr) */
+    EXPR_TRANSFER      /* transfer(val, isolate) */
 } cgt_expr_kind_t;
 
 /* Binary Operators */
@@ -229,6 +236,24 @@ struct cgt_expr {
             cgt_expr_t **args;
             size_t arg_count;
         } atomic_op;
+
+        struct {
+            cgt_expr_t *value;
+            cgt_type_t *target_type;
+        } morph_expr;
+
+        struct {
+            cgt_expr_t *target;
+        } claim_expr;
+
+        struct {
+            cgt_expr_t *target;
+        } pin_expr;
+
+        struct {
+            cgt_expr_t *value;
+            cgt_expr_t *isolate_dest;
+        } transfer_expr;
     } as;
 };
 
@@ -242,7 +267,13 @@ typedef enum {
     STMT_FOR,
     STMT_BREAK,
     STMT_CONTINUE,
-    STMT_DEFER
+    STMT_DEFER,
+    STMT_REGION,       /* region(name) { ... } */
+    STMT_ISOLATE,      /* isolate { ... } */
+    STMT_QUANTUM,      /* quantum { ... } */
+    STMT_YIELD_TO,     /* yield_to(target) */
+    STMT_HAZARD,       /* hazard { ... } */
+    STMT_CONTRACT      /* requires / ensures / invariant */
 } cgt_stmt_kind_t;
 
 struct cgt_stmt {
@@ -286,6 +317,33 @@ struct cgt_stmt {
         struct {
             cgt_expr_t *deferred_expr;
         } defer_stmt;
+
+        struct {
+            const char *region_name;
+            cgt_expr_t *body;
+        } region_stmt;
+
+        struct {
+            cgt_expr_t *body;
+        } isolate_stmt;
+
+        struct {
+            cgt_expr_t *body;
+        } quantum_stmt;
+
+        struct {
+            cgt_expr_t *target_task;
+        } yield_stmt;
+
+        struct {
+            cgt_expr_t *body;
+        } hazard_stmt;
+
+        struct {
+            cgt_token_kind_t contract_kind; /* TOK_REQUIRES, TOK_ENSURES, TOK_INVARIANT */
+            cgt_expr_t *condition;
+            const char *message;
+        } contract_stmt;
     } as;
 };
 
@@ -325,7 +383,9 @@ typedef enum {
     DECL_MODULE,
     DECL_IMPORT,
     DECL_CONST,
-    DECL_TYPE_ALIAS
+    DECL_TYPE_ALIAS,
+    DECL_SPEC,         /* v2+ formal specification contract */
+    DECL_NEXUS          /* v2+ concurrent communication nexus */
 } cgt_decl_kind_t;
 
 struct cgt_decl {
@@ -346,6 +406,8 @@ struct cgt_decl {
             bool is_unsafe;
             const char **generic_params;
             size_t generic_param_count;
+            cgt_stmt_t **contracts;
+            size_t contract_count;
         } func;
 
         struct {
@@ -389,6 +451,16 @@ struct cgt_decl {
         struct {
             cgt_type_t *target_type;
         } type_alias;
+
+        struct {
+            cgt_stmt_t **contracts;
+            size_t contract_count;
+        } spec_decl;
+
+        struct {
+            cgt_type_t *payload_type;
+            size_t buffer_capacity;
+        } nexus_decl;
     } as;
 };
 
@@ -437,6 +509,23 @@ cgt_stmt_t *cgt_stmt_return(cgt_expr_t *value, cgt_loc_t loc);
 cgt_stmt_t *cgt_stmt_expr(cgt_expr_t *expr, cgt_loc_t loc);
 cgt_stmt_t *cgt_stmt_while(cgt_expr_t *cond, cgt_expr_t *body, cgt_loc_t loc);
 cgt_stmt_t *cgt_stmt_defer(cgt_expr_t *expr, cgt_loc_t loc);
+cgt_stmt_t *cgt_stmt_region(const char *name, cgt_expr_t *body, cgt_loc_t loc);
+cgt_stmt_t *cgt_stmt_isolate(cgt_expr_t *body, cgt_loc_t loc);
+cgt_stmt_t *cgt_stmt_quantum(cgt_expr_t *body, cgt_loc_t loc);
+cgt_stmt_t *cgt_stmt_yield(cgt_expr_t *target, cgt_loc_t loc);
+cgt_stmt_t *cgt_stmt_hazard(cgt_expr_t *body, cgt_loc_t loc);
+cgt_stmt_t *cgt_stmt_contract(cgt_token_kind_t kind, cgt_expr_t *cond, const char *msg, cgt_loc_t loc);
+
+cgt_expr_t *cgt_expr_morph(cgt_expr_t *val, cgt_type_t *target_type, cgt_loc_t loc);
+cgt_expr_t *cgt_expr_claim(cgt_expr_t *target, cgt_loc_t loc);
+cgt_expr_t *cgt_expr_pin(cgt_expr_t *target, cgt_loc_t loc);
+cgt_expr_t *cgt_expr_transfer(cgt_expr_t *val, cgt_expr_t *dest, cgt_loc_t loc);
+
+cgt_decl_t *cgt_decl_spec(const char *name, cgt_stmt_t **contracts, size_t count, cgt_loc_t loc);
+cgt_decl_t *cgt_decl_nexus(const char *name, cgt_type_t *payload, size_t capacity, cgt_loc_t loc);
+cgt_type_t *cgt_type_vector(cgt_type_t *element, uint32_t lanes, cgt_loc_t loc);
+cgt_type_t *cgt_type_device_span(cgt_type_t *element, cgt_loc_t loc);
+cgt_type_t *cgt_type_nexus(cgt_type_t *payload, cgt_loc_t loc);
 
 cgt_decl_t *cgt_decl_func(const char *name, cgt_param_t *params, size_t p_count, cgt_type_t *ret, cgt_expr_t *body, bool is_gpu, bool is_simd, bool is_unsafe, cgt_loc_t loc);
 cgt_decl_t *cgt_decl_struct(const char *name, cgt_struct_field_t *fields, size_t f_count, cgt_loc_t loc);
