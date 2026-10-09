@@ -1,0 +1,255 @@
+{
+  "version": "2.0.0",
+  "language": "cgt",
+  "keywords": [
+    {
+      "label": "spec",
+      "kind": "Keyword",
+      "detail": "Formal Specification Block (C> v2+)",
+      "documentation": "Declares mathematical specifications and formal properties to be statically checked or runtime-asserted.",
+      "insertText": "spec ${1:SpecificationName} {\n    requires(${2:condition});\n    ensures(${3:condition});\n}"
+    },
+    {
+      "label": "contract",
+      "kind": "Keyword",
+      "detail": "Formal Contract Block (C> v2+)",
+      "documentation": "Defines software contracts containing pre-conditions (`requires`), post-conditions (`ensures`), and invariants (`invariant`).",
+      "insertText": "contract ${1:ContractName} {\n    requires(${2:condition});\n    ensures(${3:condition});\n    invariant(${4:condition});\n}"
+    },
+    {
+      "label": "requires",
+      "kind": "Keyword",
+      "detail": "Contract Precondition Clause",
+      "documentation": "Specifies a boolean precondition that must be true before entering the associated function or scope.",
+      "insertText": "requires(${1:condition});"
+    },
+    {
+      "label": "ensures",
+      "kind": "Keyword",
+      "detail": "Contract Postcondition Clause",
+      "documentation": "Specifies a boolean postcondition guaranteed to hold upon exit from the associated function or scope.",
+      "insertText": "ensures(${1:condition});"
+    },
+    {
+      "label": "invariant",
+      "kind": "Keyword",
+      "detail": "Contract Invariant Clause",
+      "documentation": "Specifies an invariant condition that remains universally true across state changes.",
+      "insertText": "invariant(${1:condition});"
+    },
+    {
+      "label": "nexus",
+      "kind": "Keyword",
+      "detail": "Concurrent Channel & Hub (C> v2+)",
+      "documentation": "Declares a lock-free or buffered concurrent communication nexus between tasks or hardware pipelines.",
+      "insertText": "nexus ${1:HubName}<${2:PayloadType}>;"
+    },
+    {
+      "label": "quantum",
+      "kind": "Keyword",
+      "detail": "Cooperative Task Fiber (C> v2+)",
+      "documentation": "Begins a lightweight cooperative execution quantum that can yield execution explicitly using `yield_to`.",
+      "insertText": "quantum {\n    ${0}\n}"
+    },
+    {
+      "label": "yield_to",
+      "kind": "Keyword",
+      "detail": "Fiber Cooperative Yield",
+      "documentation": "Yields control from current quantum fiber to the specified target fiber or runtime scheduler.",
+      "insertText": "yield_to(${1:target});"
+    },
+    {
+      "label": "region",
+      "kind": "Keyword",
+      "detail": "Scoped Arena Region Allocator (C> v2+)",
+      "documentation": "Creates a scoped memory arena. Allocations inside the region are fast pointer bumps and freed in O(1) time at scope boundary.",
+      "insertText": "region(${1:arena_name}) {\n    ${0}\n}"
+    },
+    {
+      "label": "morph",
+      "kind": "Keyword",
+      "detail": "Zero-Copy Structure Morphing (C> v2+)",
+      "documentation": "Safely reinterprets a raw byte stream or contiguous span into a typed header or packet without allocation.",
+      "insertText": "morph(${1:buffer}, ${2:TargetType})"
+    },
+    {
+      "label": "isolate",
+      "kind": "Keyword",
+      "detail": "Hardware Isolated Block (C> v2+)",
+      "documentation": "Enters an uninterruptible hardware isolated critical execution section with interrupts masked.",
+      "insertText": "isolate {\n    ${0}\n}"
+    },
+    {
+      "label": "hazard",
+      "kind": "Keyword",
+      "detail": "Lock-Free Hazard Pointer Epoch (C> v2+)",
+      "documentation": "Protects a pointer from concurrent deallocation during lock-free data structure traversal.",
+      "insertText": "hazard(${1:ptr}) {\n    ${0}\n}"
+    },
+    {
+      "label": "claim",
+      "kind": "Keyword",
+      "detail": "Claim Hazard Pointer",
+      "documentation": "Claims and pins a hazard pointer value, preventing epoch reclamation during reader execution.",
+      "insertText": "claim(${1:ptr})"
+    },
+    {
+      "label": "pin",
+      "kind": "Keyword",
+      "detail": "Hardware Address Pinning (C> v2+)",
+      "documentation": "Pins a variable or reference to a fixed physical address or MMIO register.",
+      "insertText": "pin(${1:addr})"
+    },
+    {
+      "label": "gpu_kernel",
+      "kind": "Keyword",
+      "detail": "GPU Compute Kernel Declaration",
+      "documentation": "Marks a function as a GPU compute kernel to be compiled to Vulkan SPIR-V, CUDA PTX, or Metal MSL.",
+      "insertText": "gpu_kernel fn ${1:name}(${2:params}) -> void {\n    ${0}\n}"
+    },
+    {
+      "label": "gpu_dispatch",
+      "kind": "Keyword",
+      "detail": "Host GPU Dispatch Command",
+      "documentation": "Dispatches a GPU kernel across a 1D, 2D, or 3D compute grid.",
+      "insertText": "gpu_dispatch(${1:kernel}, ${2:workgroups}, ${3:args});"
+    },
+    {
+      "label": "defer",
+      "kind": "Keyword",
+      "detail": "Deferred Scope Execution",
+      "documentation": "Defers execution of the statement or block until the enclosing scope exits.",
+      "insertText": "defer ${1:cleanup_call}();"
+    },
+    {
+      "label": "own",
+      "kind": "TypeParameter",
+      "detail": "Affine Owned Value Container",
+      "documentation": "Specifies exclusive affine heap ownership with no aliasing. Can only be moved, never cloned implicitly.",
+      "insertText": "own<${1:T}>"
+    },
+    {
+      "label": "lent",
+      "kind": "TypeParameter",
+      "detail": "Temporarily Lent Reference",
+      "documentation": "Represents an explicitly lent resource whose caller guarantees borrow lifetime without lockups.",
+      "insertText": "lent<${1:T}>"
+    },
+    {
+      "label": "ref",
+      "kind": "Keyword",
+      "detail": "Reference Borrow",
+      "documentation": "Creates a safe shared reference to a value.",
+      "insertText": "&${1:val}"
+    },
+    {
+      "label": "vector",
+      "kind": "TypeParameter",
+      "detail": "Hardware SIMD Vector Type",
+      "documentation": "Fixed-width SIMD hardware vector of element type T and lane count N (e.g. vector<f32, 4>, vector<i32, 8>).",
+      "insertText": "vector<${1:f32}, ${2:4}>"
+    },
+    {
+      "label": "device_span",
+      "kind": "TypeParameter",
+      "detail": "Unified CPU/GPU Memory Span",
+      "documentation": "Non-owning view over contiguous memory accessible from both CPU host and GPU device.",
+      "insertText": "device_span<${1:T}>"
+    }
+  ],
+  "types": [
+    { "label": "i8", "detail": "8-bit signed integer", "kind": "Class" },
+    { "label": "i16", "detail": "16-bit signed integer", "kind": "Class" },
+    { "label": "i32", "detail": "32-bit signed integer", "kind": "Class" },
+    { "label": "i64", "detail": "64-bit signed integer", "kind": "Class" },
+    { "label": "i128", "detail": "128-bit signed integer", "kind": "Class" },
+    { "label": "isize", "detail": "Pointer-sized signed integer", "kind": "Class" },
+    { "label": "u8", "detail": "8-bit unsigned integer / byte", "kind": "Class" },
+    { "label": "u16", "detail": "16-bit unsigned integer", "kind": "Class" },
+    { "label": "u32", "detail": "32-bit unsigned integer", "kind": "Class" },
+    { "label": "u64", "detail": "64-bit unsigned integer", "kind": "Class" },
+    { "label": "u128", "detail": "128-bit unsigned integer", "kind": "Class" },
+    { "label": "usize", "detail": "Pointer-sized unsigned integer", "kind": "Class" },
+    { "label": "f32", "detail": "32-bit IEEE 754 single precision float", "kind": "Class" },
+    { "label": "f64", "detail": "64-bit IEEE 754 double precision float", "kind": "Class" },
+    { "label": "bool", "detail": "Boolean type (true / false)", "kind": "Class" },
+    { "label": "void", "detail": "Unit / void return type", "kind": "Class" },
+    { "label": "str", "detail": "UTF-8 string slice reference", "kind": "Class" },
+    { "label": "v128_f32", "detail": "128-bit SIMD vector (4 x f32)", "kind": "Class" },
+    { "label": "v128_i32", "detail": "128-bit SIMD vector (4 x i32)", "kind": "Class" },
+    { "label": "v256_f32", "detail": "256-bit SIMD vector (8 x f32)", "kind": "Class" },
+    { "label": "v256_i32", "detail": "256-bit SIMD vector (8 x i32)", "kind": "Class" }
+  ],
+  "functions": [
+    {
+      "label": "println",
+      "detail": "fn println(fmt: str, ...) -> void",
+      "documentation": "Prints formatted text followed by a newline to standard output.",
+      "kind": "Function",
+      "insertText": "println(\"${1:text}\");"
+    },
+    {
+      "label": "print",
+      "detail": "fn print(fmt: str, ...) -> void",
+      "documentation": "Prints formatted text to standard output without trailing newline.",
+      "kind": "Function",
+      "insertText": "print(\"${1:text}\");"
+    },
+    {
+      "label": "move",
+      "detail": "fn move<T>(val: T) -> own<T>",
+      "documentation": "Explicitly relinquishes ownership and transfers the affine resource.",
+      "kind": "Function",
+      "insertText": "move(${1:resource})"
+    },
+    {
+      "label": "panic",
+      "detail": "fn panic(msg: str) -> void",
+      "documentation": "Halts execution with a runtime panic message and stack trace.",
+      "kind": "Function",
+      "insertText": "panic(\"${1:fatal error}\");"
+    },
+    {
+      "label": "assert",
+      "detail": "fn assert(cond: bool, msg: str) -> void",
+      "documentation": "Asserts that the condition is true; panics with msg if false.",
+      "kind": "Function",
+      "insertText": "assert(${1:condition}, \"${2:assertion failure}\");"
+    },
+    {
+      "label": "sizeof",
+      "detail": "fn sizeof<T>() -> usize",
+      "documentation": "Returns compile-time byte size of type T.",
+      "kind": "Function",
+      "insertText": "sizeof(${1:Type})"
+    },
+    {
+      "label": "atomic_load",
+      "detail": "fn atomic_load<T>(ptr: *const T) -> T",
+      "documentation": "Performs an atomic load with sequentially consistent memory ordering.",
+      "kind": "Function",
+      "insertText": "atomic_load(&${1:atomic_var})"
+    },
+    {
+      "label": "atomic_store",
+      "detail": "fn atomic_store<T>(ptr: *mut T, val: T) -> void",
+      "documentation": "Performs an atomic store with sequentially consistent memory ordering.",
+      "kind": "Function",
+      "insertText": "atomic_store(&mut ${1:atomic_var}, ${2:val});"
+    },
+    {
+      "label": "mmio_read32",
+      "detail": "fn mmio_read32(addr: usize) -> u32",
+      "documentation": "Reads a 32-bit hardware register via volatile memory-mapped I/O.",
+      "kind": "Function",
+      "insertText": "mmio_read32(${1:addr})"
+    },
+    {
+      "label": "mmio_write32",
+      "detail": "fn mmio_write32(addr: usize, val: u32) -> void",
+      "documentation": "Writes a 32-bit value to a hardware register via volatile memory-mapped I/O.",
+      "kind": "Function",
+      "insertText": "mmio_write32(${1:addr}, ${2:val});"
+    }
+  ]
+}

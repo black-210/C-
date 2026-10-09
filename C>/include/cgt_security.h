@@ -36,5 +36,6 @@ void cgt_security_auditor_free(cgt_security_auditor_t *auditor);
 
 void cgt_security_report_finding(cgt_security_auditor_t *auditor, cgt_security_rule_t rule, cgt_loc_t loc, bool is_fatal, const char *fmt, ...);
 bool cgt_security_audit_module(cgt_security_auditor_t *auditor, cgt_ast_module_t *module);
+bool cgt_security_print_findings(cgt_security_auditor_t *auditor);
 
 #endif /* CGT_SECURITY_H */

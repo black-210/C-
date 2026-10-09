@@ -336,7 +336,7 @@ int64_t cgt_driver_main(int argc, char **argv) {
     cgt_driver_options_t opts;
     cgt_driver_options_init(&opts);
     if (!cgt_driver_parse_args(argc, argv, &opts)) {
-        cgt_driver_usage();
+        cgt_driver_print_help(argv[0]);
         return 1;
     }
     return cgt_driver_run(&opts);

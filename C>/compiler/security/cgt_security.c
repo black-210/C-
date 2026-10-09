@@ -143,47 +143,23 @@ bool cgt_security_audit_module(cgt_security_auditor_t *auditor, cgt_ast_module_t
     }
     return auditor->error_count == 0;
 }
-bool cgt_security_audit_program(cgt_security_auditor_t *auditor, cgt_ast_program_t *program) {
-    for (size_t i = 0; i < program->module_count; i++) {
-        cgt_security_audit_module(auditor, program->modules[i]);
-    }
-    return auditor->error_count == 0;
-}
-
 
 static void print_finding(const cgt_security_finding_t *finding) {
-    printf("%s:%zu:%zu: %s\n", finding->loc.filename, finding->loc.line, finding->loc.column, finding->description);
+    printf("%s:%u:%u: %s\n", finding->loc.filename, (unsigned int)finding->loc.line, (unsigned int)finding->loc.col, finding->description);
 }
-static void print_findings(const cgt_security_auditor_t *auditor) {
-    for (size_t i = 0; i < auditor->count; i++) {
-        print_finding(&auditor->findings[i]);
-    }
-}
+
 static void print_summary(const cgt_security_auditor_t *auditor) {
     printf("Security audit summary:\n");
     printf("  %zu findings found\n", auditor->count);
-    printf("  %zu errors\n", auditor->error_count);
-    printf("  %zu warnings\n", auditor->warning_count);
+    printf("  %u errors\n", auditor->error_count);
+    printf("  %u warnings\n", auditor->warning_count);
 }
 
-static  print_finding_fn print_finding_fn_table[] = {
-    [SEC_RULE_INT_OVERFLOW_RISK] = print_finding,
-    [SEC_RULE_OUT_OF_BOUNDS_STATIC] = print_finding,
-    [SEC_RULE_UNSAFE_CAST] = print_finding,
-}
-
-static  void (*print_finding_fn_ptr)(const cgt_security_finding_t *finding) = print_finding_fn_table;
 bool cgt_security_print_findings(cgt_security_auditor_t *auditor) {
     if (auditor->count == 0) return true;
     print_summary(auditor);
-    for (size_t i = 0; i < sizeof(print_finding_fn_table)/sizeof(*print_finding_fn_table); i++) {
-        if (auditor->findings[i].rule < sizeof(print_finding_fn_table)/sizeof(*print_finding_fn_table)) {
-            print_finding_fn_ptr = print_finding_fn_table[i];
-            break;
-        }
-    }
     for (size_t i = 0; i < auditor->count; i++) {
-        print_finding_fn_ptr(&auditor->findings[i]);
+        print_finding(&auditor->findings[i]);
     }
     return auditor->error_count == 0;
 }

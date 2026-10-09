@@ -1,0 +1,242 @@
+{
+  "Function Declaration": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:name}(${2:params}) -> ${3:i32} {",
+      "    ${0:// implementation}",
+      "    return 0;",
+      "}"
+    ],
+    "description": "Declare a C> function"
+  },
+  "Public Function": {
+    "prefix": "pubfn",
+    "body": [
+      "pub fn ${1:name}(${2:params}) -> ${3:void} {",
+      "    ${0:// implementation}",
+      "}"
+    ],
+    "description": "Declare a public C> function"
+  },
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "fn main() -> i32 {",
+      "    println(\"${1:Hello, C> World!}\");",
+      "    ${0}",
+      "    return 0;",
+      "}"
+    ],
+    "description": "Standard C> main entry point"
+  },
+  "Module Declaration": {
+    "prefix": "module",
+    "body": [
+      "module ${1:package}::${2:submodule};",
+      "${0}"
+    ],
+    "description": "Define C> module namespace"
+  },
+  "Import Statement": {
+    "prefix": "import",
+    "body": [
+      "import ${1:module_path};",
+      "${0}"
+    ],
+    "description": "Import C> module"
+  },
+  "Struct Declaration": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name} {",
+      "    ${2:field}: ${3:i32},",
+      "    ${0}",
+      "}"
+    ],
+    "description": "Define a struct"
+  },
+  "Enum Declaration": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "    ${2:VariantA},",
+      "    ${3:VariantB},",
+      "    ${0}",
+      "}"
+    ],
+    "description": "Define an enum"
+  },
+  "Trait Interface": {
+    "prefix": "trait",
+    "body": [
+      "trait ${1:Name} {",
+      "    fn ${2:method}(self) -> ${3:i32};",
+      "}"
+    ],
+    "description": "Define a trait"
+  },
+  "Trait Implementation": {
+    "prefix": "impl",
+    "body": [
+      "impl ${1:TraitName} for ${2:TargetType} {",
+      "    fn ${3:method}(self) -> ${4:i32} {",
+      "        ${0}",
+      "    }",
+      "}"
+    ],
+    "description": "Implement a trait for a type"
+  },
+  "Formal Contract": {
+    "prefix": "contract",
+    "body": [
+      "contract ${1:SafetyInvariant} {",
+      "    requires(${2:capacity > 0});",
+      "    ensures(${3:result != null});",
+      "    invariant(${4:offset <= capacity});",
+      "}"
+    ],
+    "description": "C> v2+ Formal Contract Specification"
+  },
+  "Specification Block": {
+    "prefix": "spec",
+    "body": [
+      "spec ${1:VerificationModel} {",
+      "    requires(${2:precondition});",
+      "    ensures(${3:postcondition});",
+      "}"
+    ],
+    "description": "C> v2+ Formal Specification"
+  },
+  "Concurrent Nexus Hub": {
+    "prefix": "nexus",
+    "body": [
+      "nexus ${1:DataPipeline}<${2:PacketType}>;",
+      "${0}"
+    ],
+    "description": "C> v2+ Concurrent Event & Data Hub"
+  },
+  "Quantum Cooperative Task": {
+    "prefix": "quantum",
+    "body": [
+      "quantum {",
+      "    ${1:// cooperative green-thread execution}",
+      "    yield_to(${2:scheduler});",
+      "    ${0}",
+      "}"
+    ],
+    "description": "C> v2+ Cooperative Task Fiber"
+  },
+  "Scoped Memory Region": {
+    "prefix": "region",
+    "body": [
+      "region(${1:arena}) {",
+      "    ${0:// ultra-fast linear allocation with O(1) bulk destruction}",
+      "}"
+    ],
+    "description": "C> v2+ Scoped Arena Region"
+  },
+  "Zero-Copy Morph": {
+    "prefix": "morph",
+    "body": [
+      "let ${1:parsed}: &${2:TargetHeader} = morph(${3:raw_buffer}, ${2:TargetHeader});",
+      "${0}"
+    ],
+    "description": "C> v2+ Zero-Copy Structure Morphing"
+  },
+  "Hardware Isolate Block": {
+    "prefix": "isolate",
+    "body": [
+      "isolate {",
+      "    ${0:// uninterruptible hardware sequence}",
+      "}"
+    ],
+    "description": "C> v2+ Atomic Hardware Isolate Block"
+  },
+  "Lock-Free Hazard Pointer": {
+    "prefix": "hazard",
+    "body": [
+      "hazard(${1:protected_ptr}) {",
+      "    let ${2:claimed}: &${3:Type} = claim(${1:protected_ptr});",
+      "    ${0}",
+      "}"
+    ],
+    "description": "C> v2+ Lock-Free Hazard Pointer Epoch Reclamation"
+  },
+  "Hardware MMIO Pin": {
+    "prefix": "pin",
+    "body": [
+      "let ${1:reg} = pin(${2:0x4000_1000} as *mut volatile u32);",
+      "${0}"
+    ],
+    "description": "C> v2+ Hardware Address Pinning"
+  },
+  "SIMD Hardware Vector": {
+    "prefix": "vector",
+    "body": [
+      "let ${1:v}: vector<${2:f32}, ${3:4}> = [${4:1.0, 2.0, 3.0, 4.0}];",
+      "${0}"
+    ],
+    "description": "C> v2+ Hardware SIMD Vector"
+  },
+  "GPU Compute Kernel": {
+    "prefix": "gpukernel",
+    "body": [
+      "gpu_kernel fn ${1:kernel_name}(${2:buffer}: device_span<f32>, ${3:scalar}: f32) -> void {",
+      "    ${0:// executing across GPU compute threads}",
+      "}"
+    ],
+    "description": "Declare a native GPU compute kernel"
+  },
+  "GPU Dispatch": {
+    "prefix": "gpudispatch",
+    "body": [
+      "gpu_dispatch(${1:kernel_name}, ${2:total_workgroups}, ${3:args});",
+      "${0}"
+    ],
+    "description": "Dispatch GPU compute kernel from host"
+  },
+  "Defer Cleanup": {
+    "prefix": "defer",
+    "body": [
+      "defer ${1:cleanup_expression};",
+      "${0}"
+    ],
+    "description": "Defer execution until scope exit"
+  },
+  "Unsafe Assembly Block": {
+    "prefix": "unsafe",
+    "body": [
+      "unsafe {",
+      "    asm(\"${1:nop}\");",
+      "    ${0}",
+      "}"
+    ],
+    "description": "Unsafe hardware & raw pointer block"
+  },
+  "Affine Owned Allocation": {
+    "prefix": "own",
+    "body": [
+      "let ${1:resource}: own<${2:Type}> = ${2:Type} { ${3} };",
+      "${0}"
+    ],
+    "description": "C> Single-owner affine heap value"
+  },
+  "Mutable Borrow": {
+    "prefix": "mutborrow",
+    "body": [
+      "let ${1:ref_mut}: &mut ${2:Type} = &mut ${3:val};",
+      "${0}"
+    ],
+    "description": "Exclusive mutable borrow"
+  },
+  "Unit Test Block": {
+    "prefix": "test",
+    "body": [
+      "fn test_${1:feature}() -> bool {",
+      "    ${0:// assert expectations}",
+      "    return true;",
+      "}"
+    ],
+    "description": "Define a C> test case"
+  }
+}

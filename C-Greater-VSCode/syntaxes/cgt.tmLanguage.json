@@ -1,0 +1,218 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "C> (C-Greater)",
+  "scopeName": "source.cgt",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords_v2_contracts" },
+    { "include": "#keywords_v2_concurrency" },
+    { "include": "#keywords_v2_lowlevel" },
+    { "include": "#keywords_control" },
+    { "include": "#keywords_memory" },
+    { "include": "#keywords_declarations" },
+    { "include": "#keywords_gpu" },
+    { "include": "#types_v2_hardware" },
+    { "include": "#types_builtin" },
+    { "include": "#functions" },
+    { "include": "#operators" },
+    { "include": "#constants" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.cgt",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.cgt",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.cgt",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.cgt",
+              "match": "\\\\([nrt\\\\\"'0]|x[0-9a-fA-F]{2}|u\\{[0-9a-fA-F]+\\})"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.cgt",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.cgt",
+              "match": "\\\\([nrt\\\\\"'0]|x[0-9a-fA-F]{2})"
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.cgt",
+          "match": "\\b0x[0-9a-fA-F_]+([ui](8|16|32|64|128|size))?\\b"
+        },
+        {
+          "name": "constant.numeric.binary.cgt",
+          "match": "\\b0b[01_]+([ui](8|16|32|64|128|size))?\\b"
+        },
+        {
+          "name": "constant.numeric.float.cgt",
+          "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*([eE][+-]?[0-9_]+)?(f32|f64)?\\b"
+        },
+        {
+          "name": "constant.numeric.decimal.cgt",
+          "match": "\\b[0-9][0-9_]*([ui](8|16|32|64|128|size)|f32|f64)?\\b"
+        }
+      ]
+    },
+    "keywords_v2_contracts": {
+      "patterns": [
+        {
+          "name": "keyword.control.contract.cgt",
+          "match": "\\b(spec|contract|requires|ensures|invariant)\\b"
+        }
+      ]
+    },
+    "keywords_v2_concurrency": {
+      "patterns": [
+        {
+          "name": "keyword.control.concurrency.cgt",
+          "match": "\\b(nexus|quantum|yield_to)\\b"
+        }
+      ]
+    },
+    "keywords_v2_lowlevel": {
+      "patterns": [
+        {
+          "name": "keyword.other.lowlevel.cgt",
+          "match": "\\b(isolate|hazard|claim|pin|morph|region|volatile|asm)\\b"
+        }
+      ]
+    },
+    "keywords_control": {
+      "patterns": [
+        {
+          "name": "keyword.control.cgt",
+          "match": "\\b(if|else|while|for|in|return|break|continue|defer|match)\\b"
+        }
+      ]
+    },
+    "keywords_memory": {
+      "patterns": [
+        {
+          "name": "storage.modifier.memory.cgt",
+          "match": "\\b(own|lent|ref|borrow|move|clone|drop|unsafe)\\b"
+        }
+      ]
+    },
+    "keywords_declarations": {
+      "patterns": [
+        {
+          "name": "keyword.declaration.cgt",
+          "match": "\\b(fn|let|mut|struct|enum|trait|impl|type|const|pub|extern|module|import|as)\\b"
+        }
+      ]
+    },
+    "keywords_gpu": {
+      "patterns": [
+        {
+          "name": "keyword.other.gpu.cgt",
+          "match": "\\b(gpu_kernel|gpu_dispatch|gpu_alloc|gpu_free)\\b"
+        }
+      ]
+    },
+    "types_v2_hardware": {
+      "patterns": [
+        {
+          "name": "storage.type.hardware.cgt",
+          "match": "\\b(vector|device_span|v128_f32|v128_i32|v256_f32|v256_i32|Buffer)\\b"
+        }
+      ]
+    },
+    "types_builtin": {
+      "patterns": [
+        {
+          "name": "storage.type.primitive.cgt",
+          "match": "\\b(i8|i16|i32|i64|i128|isize|u8|u16|u32|u64|u128|usize|f32|f64|bool|void|str|char|ptr)\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "match": "\\b(fn)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.cgt" },
+            "2": { "name": "entity.name.function.cgt" }
+          }
+        },
+        {
+          "name": "support.function.cgt",
+          "match": "\\b(println|print|panic|assert|sizeof|alignof|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|mmio_read32|mmio_write32)\\b"
+        },
+        {
+          "name": "entity.name.function.call.cgt",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arrow.cgt",
+          "match": "(->|=>)"
+        },
+        {
+          "name": "keyword.operator.comparison.cgt",
+          "match": "(==|!=|<=|>=|<|>)"
+        },
+        {
+          "name": "keyword.operator.assignment.cgt",
+          "match": "(=|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.cgt",
+          "match": "(\\+|-|\\*|/|%|@)"
+        },
+        {
+          "name": "keyword.operator.bitwise.cgt",
+          "match": "(&|\\||\\^|~|<<|>>)"
+        },
+        {
+          "name": "keyword.operator.logical.cgt",
+          "match": "(&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.range.cgt",
+          "match": "(\\.\\.=|\\.\\.)"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.cgt",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.null.cgt",
+          "match": "\\b(null|nil)\\b"
+        }
+      ]
+    }
+  }
+}

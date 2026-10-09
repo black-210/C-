@@ -1,0 +1,115 @@
+{
+  "name": "c-greater",
+  "displayName": "C> (C-Greater) Language Support",
+  "description": "Comprehensive language support, syntax highlighting, rich snippets, and intelligent autocompletion for C> (C-Greater) v2+ in VS Code & Code-OSS",
+  "version": "2.0.0",
+  "publisher": "cgt-lang",
+  "author": {
+    "name": "C> Language Development Team"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "cgt",
+    "c-greater",
+    "systems programming",
+    "memory safety",
+    "gpu",
+    "simd",
+    "v2"
+  ],
+  "icon": "icon.png",
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:cgt"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "cgt",
+        "aliases": [
+          "C>",
+          "cgt",
+          "c-greater",
+          "CGreater"
+        ],
+        "extensions": [
+          ".cgt"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cgt",
+        "scopeName": "source.cgt",
+        "path": "./syntaxes/cgt.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "cgt",
+        "path": "./snippets/cgt.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "cgt.run",
+        "title": "C>: Run Current File (cgt -r)",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.compile",
+        "title": "C>: Compile Current File",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.translate",
+        "title": "C>: Translate to Standalone Native Code (-t)",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.check",
+        "title": "C>: Check Type & Memory Safety",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.securityAudit",
+        "title": "C>: Run Static Security Audit",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.version",
+        "title": "C>: Show Compiler Version",
+        "category": "C>"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == cgt",
+          "command": "cgt.run",
+          "group": "cgt_commands@1"
+        },
+        {
+          "when": "editorLangId == cgt",
+          "command": "cgt.translate",
+          "group": "cgt_commands@2"
+        },
+        {
+          "when": "editorLangId == cgt",
+          "command": "cgt.securityAudit",
+          "group": "cgt_commands@3"
+        }
+      ]
+    }
+  }
+}

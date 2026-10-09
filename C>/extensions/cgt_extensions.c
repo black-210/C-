@@ -49,20 +49,8 @@ void cgt_extension_registry_free(void) {
         free(tmp);
     }
 }
-void cgt_extension_registry_print(void){
-    cgt_extension_registry_dump(stdout)
-    
+void cgt_extension_registry_print(void) {
+    cgt_extension_registry_dump(stdout);
 }
 
-
-void cgt_extension_register_lent(void, *func){
-    char *name = "lent";
-    cgt_extension_t *ext = malloc(sizeof(cgt_extension_t));
-    if (func == NULL) return 0;
-    ext->name = name;
-    ext->version = "1.0";
-    ext->description = "Lent function";
-    ext->func = func;
-    cgt_extension_register(ext);
-}
 

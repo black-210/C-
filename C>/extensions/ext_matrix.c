@@ -31,16 +31,3 @@ static cgt_extension_t EXT_MATRIX_DEF = {
 void cgt_register_matrix_extension(void) {
     cgt_extension_register(&EXT_MATRIX_DEF);
 }
-static cgt_extension_t *REGISTRY_HEAD = NULL{
-    .cgt_register_matrix_extension
-    .cgt_extension_register_lent
-    .cgt_extension_registry_init
-    .cgt_extension_registry_free
-    .cgt_extension_registry_dump
-}
-
-static cgt_extension_lookup *REGISTRY_LOOKUP = NULL{
-    .cgt_extension_lookup
-    .cgt_extension_registry_print 
-    
-}

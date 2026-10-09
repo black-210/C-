@@ -122,19 +122,3 @@ cgt_gpu_buffer_t cgt_rt_gpu_alloc_zeroed(size_t bytes) {
     }
     return buf;
 }
-cgt_extension_t *REGISTRY_HEAD = NULL;
-
-void cgt_rt_extension_register(cgt_extension_t *ext) {
-    if (!ext || !ext->name) return;
-
-    /* Check if already registered */
-    if (cgt_extension_lookup(ext->name)) {
-        return;
-    }
-    if (ext->next) {
-        cgt_rt_extension_register(ext->next);
-    }
-    ext->next = REGISTRY_HEAD;
-    REGISTRY_HEAD = ext;
-}
-
