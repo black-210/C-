@@ -1,0 +1,33 @@
+// ============================================================================
+// C> v2.1 Optional Low-Level Bare-Metal Hardware Capabilities
+// Demonstrates: lowlevel block, raw_register, mmio_map, bit_slice, endian_swap
+// ============================================================================
+
+say "=================================================================";
+say "  C> v2.1 Optional Low-Level Bare-Metal Hardware Demonstration   ";
+say "=================================================================";
+
+say "[High-Level]: Everyday code remains clean and accessible.";
+
+// Optional low-level scope keeps hardware manipulation isolated
+lowlevel {
+    say "[Low-Level]: Directly accessing hardware registers & MMIO controller...";
+    
+    let gpio_status = raw_register(0x40021000, 0x01);
+    say "[Low-Level]: GPIO status written: ", gpio_status;
+    
+    let peripheral = mmio_map(0x40000000, 4096);
+    say "[Low-Level]: Memory-mapped I/O controller window mapped at: 0x40000000";
+    
+    let raw_val = 0xABCD;
+    let field = bit_slice(raw_val, 4, 11);
+    say "[Low-Level]: Hardware bit slice [4..11] extracted successfully.";
+    
+    let swapped = endian_swap(raw_val);
+    say "[Low-Level]: Byte order swapped via fast single-cycle instruction.";
+    
+    fence_sync(0);
+    say "[Low-Level]: Hardware memory barrier synchronization committed.";
+}
+
+say "[High-Level]: Safely returned to standard high-level application code.";

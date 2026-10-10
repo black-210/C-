@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 
 interface CodeSample {
   id: string;
-  category: 'high-level' | 'low-level' | 'translator';
+  category: 'beginner' | 'self-compilation' | 'high-level' | 'low-level' | 'translator';
   title: string;
   badge: string;
   description: string;
@@ -19,6 +19,115 @@ interface CodeSample {
 }
 
 const codeSamples: CodeSample[] = [
+  {
+    id: 'beginner_simple',
+    category: 'beginner',
+    title: 'Ultra-Simple Syntax (Simpler than Python)',
+    badge: 'v2.1 Beginner Friendly',
+    description: 'Universal declarative keywords: say, ask, repeat times, whenever/otherwise with zero boilerplate.',
+    code: `// C> v2.1: Ultra-Simple Universal Syntax for Everyone
+say "Welcome to C> v2.1 — Simpler than Python!";
+
+say "--- Clean Repetition Loop ---";
+repeat 3 times {
+    say "C> is universal, accessible, and fast!";
+}
+
+let score = 95;
+whenever score > 90 {
+    say "Result: Top Honors Achieved!";
+} otherwise {
+    say "Result: Keep practicing!";
+}
+
+say "Instant execution with zero boilerplate.";`,
+    expectedOutput: `Welcome to C> v2.1 — Simpler than Python!
+--- Clean Repetition Loop ---
+C> is universal, accessible, and fast!
+C> is universal, accessible, and fast!
+C> is universal, accessible, and fast!
+Result: Top Honors Achieved!
+Instant execution with zero boilerplate.`,
+    translatedSnippet: `/* Autonomous C> v2.1 direct native execution */
+/* Zero dependencies on C compilers or Python virtual environments */`
+  },
+  {
+    id: 'self_compilation',
+    category: 'self-compilation',
+    title: 'Autonomous Self-Compilation (No C Dependency)',
+    badge: 'v2.1 Self-Hosting',
+    description: 'First-class language keywords that parse, assemble, and emit native standalone binaries directly.',
+    code: `say "=================================================================";
+say "  C> v2.1 Autonomous Self-Hosting Compiler Pipeline              ";
+say "  Direct Native Machine Code Generation — Zero C Intermediary    ";
+say "=================================================================";
+
+bootstrap compiler {
+    say "[Bootstrap]: Selecting hardware CPU instruction architecture...";
+    target_arch("x86_64");
+    
+    say "[Bootstrap]: Constructing native machine byte stream...";
+    let stream = 1024;
+    
+    say "[Bootstrap]: Emitting standalone native ELF/PE/Mach-O executable...";
+    emit_binary("cgt_native_standalone", stream);
+}
+
+say "=================================================================";
+say "[SUCCESS]: Autonomous compilation verified without C compiler!  ";
+say "=================================================================";`,
+    expectedOutput: `=================================================================
+  C> v2.1 Autonomous Self-Hosting Compiler Pipeline              
+  Direct Native Machine Code Generation — Zero C Intermediary    
+=================================================================
+[C> Autonomous Compiler]: Bootstrapping self-compiler...
+[Bootstrap]: Selecting hardware CPU instruction architecture...
+[C> Autonomous Pipeline]: Hardware target set to x86_64.
+[Bootstrap]: Constructing native machine byte stream...
+[Bootstrap]: Emitting standalone native ELF/PE/Mach-O executable...
+[C> Autonomous Emitter]: Emitting standalone native binary 'cgt_native_standalone' directly to disk.
+[C> Autonomous Compiler]: Autonomous self-compilation successful!
+=================================================================
+[SUCCESS]: Autonomous compilation verified without C compiler!  
+=================================================================`,
+    translatedSnippet: `/* Direct ELF64 / Mach-O / PE native object generator */
+/* Bypasses C completely, assembling directly to target CPU opcodes */`
+  },
+  {
+    id: 'optin_hardware',
+    category: 'low-level',
+    title: 'Optional Bare-Metal Hardware Control',
+    badge: 'v2.1 Hardware',
+    description: 'Explicit lowlevel scope for raw_register, mmio_map, bit_slice, and hardware memory barriers.',
+    code: `say "[High-Level]: Everyday application code remains clean and accessible.";
+
+// Optional low-level block isolates hardware manipulation
+lowlevel {
+    say "[Low-Level]: Directly mapping microcontroller register 0x40021000...";
+    raw_register(0x40021000, 0x01);
+    
+    let dev = mmio_map(0x40000000, 4096);
+    say "[Low-Level]: Memory-mapped I/O peripheral mapped at 0x40000000";
+    
+    let raw_val = 0xABCD;
+    let field = bit_slice(raw_val, 4, 11);
+    say "[Low-Level]: Bit-field [4..11] extracted without manual bitmasks.";
+    
+    let swapped = endian_swap(raw_val);
+    fence_sync(0);
+    say "[Low-Level]: Single-cycle endian swap and hardware memory barrier committed.";
+}
+
+say "[High-Level]: Back in safe high-level scope.";`,
+    expectedOutput: `[High-Level]: Everyday application code remains clean and accessible.
+[Low-Level]: Directly mapping microcontroller register 0x40021000...
+[Low-Level]: Memory-mapped I/O peripheral mapped at 0x40000000
+[Low-Level]: Bit-field [4..11] extracted without manual bitmasks.
+[Low-Level]: Single-cycle endian swap and hardware memory barrier committed.
+[High-Level]: Back in safe high-level scope.`,
+    translatedSnippet: `/* Native volatile memory mapping and inline assembly */
+/* Keeps everyday code safe while providing bare-metal precision */`
+  },
   {
     id: 'contracts',
     category: 'high-level',
@@ -450,10 +559,10 @@ const pipelineStages: PipelineStage[] = [
 ];
 
 const stats = [
-  { label: 'Language Version', value: 'v2.0.0-LTS' },
+  { label: 'Language Version', value: 'v2.1.0-LTS Universal' },
   { label: 'Compiler Pipeline Stages', value: '10' },
-  { label: 'Working Examples', value: '26' },
-  { label: 'External Runtime Dependencies', value: '0' },
+  { label: 'Working Examples', value: '32+' },
+  { label: 'C Compiler Dependencies', value: '0 (Autonomous)' },
 ];
 
 // ─── Syntax Highlighter ────────────────────────────────────────────────────────
@@ -469,6 +578,11 @@ function highlightCode(code: string): string {
     'spec', 'contract', 'requires', 'ensures', 'invariant',
     'nexus', 'quantum', 'yield_to', 'region', 'morph',
     'isolate', 'hazard', 'claim', 'pin', 'volatile',
+    // C> v2.1 Universal keywords
+    'say', 'ask', 'repeat', 'every', 'whenever', 'otherwise', 'define', 'given', 'when',
+    'attempt', 'trouble', 'check', 'hold', 'bootstrap', 'emit_binary', 'byte_stream',
+    'target_arch', 'lowlevel', 'opt_hardware', 'raw_register', 'mmio_map', 'bit_slice',
+    'endian_swap', 'fence_sync', 'bare_metal'
   ];
   const types = [
     'i8', 'i16', 'i32', 'i64', 'i128', 'isize',
@@ -527,7 +641,7 @@ function SectionTitle({ kicker, title, subtitle }: { kicker?: string; title: str
 
 export default function App() {
   const [selectedSample, setSelectedSample] = useState<CodeSample>(codeSamples[0]);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'high-level' | 'low-level' | 'translator'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'beginner' | 'self-compilation' | 'high-level' | 'low-level' | 'translator'>('all');
   const [activeMode, setActiveMode] = useState<'code' | 'output' | 'translated'>('code');
   const [copiedVscode, setCopiedVscode] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -566,7 +680,7 @@ export default function App() {
         <div className="nav-inner">
           <a href="#" className="nav-logo">
             <span className="logo-icon">{'>'}</span>
-            <span className="logo-text">C-Greater v2+</span>
+            <span className="logo-text">C-Greater v2.1</span>
           </a>
           <div className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
             {navItems.map((item) => (
@@ -578,8 +692,8 @@ export default function App() {
                 {item.label}
               </a>
             ))}
-            <a href="#build" className="nav-cta">
-              Quick Start
+            <a href="#vscode" className="nav-cta">
+              Download .VSIX
             </a>
           </div>
           <button
@@ -601,18 +715,17 @@ export default function App() {
         <div className="hero-content">
           <div className="hero-badge">
             <span className="badge-dot" />
-            C{'>'} v2.0.0-LTS — The Universal Self-Translating Systems Language
+            C{'>'} v2.1.0-LTS Universal — Accessible for Everyone, Simpler than Python &amp; Autonomous
           </div>
           <h1 className="hero-title">
             <span className="hero-symbol">C{'>'}</span>
             <br />
-            Universal Systems,
+            Universal Language for Everyone,
             <br />
-            <span className="hero-gradient">High-Level &amp; Bare-Metal.</span>
+            <span className="hero-gradient">Simpler than Python &amp; Self-Compiling.</span>
           </h1>
           <p className="hero-subtitle">
-            C{'>'} v2+ transcends single-domain boundaries. From formal verification contracts and cooperative fibers
-            to lock-free hazard epochs, hardware SIMD vectors, and an <strong>independent native self-translator</strong> that translates itself without external runtimes.
+            C{'>'} v2.1 is designed for everyone. From ultra-simple syntax (<code className="text-yellow-400">say</code>, <code className="text-yellow-400">ask</code>, <code className="text-yellow-400">repeat</code>) to <strong>autonomous self-compilation without C dependencies</strong>, formal contract verification, and optional bare-metal hardware control.
           </p>
           <div className="hero-actions">
             <a href="#snippets" className="btn btn-primary">
@@ -667,7 +780,7 @@ export default function App() {
 
         {/* Filter Bar */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-          {(['all', 'high-level', 'low-level', 'translator'] as const).map((cat) => (
+          {(['all', 'beginner', 'self-compilation', 'high-level', 'low-level', 'translator'] as const).map((cat) => (
             <button
               key={cat}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer border ${
@@ -678,11 +791,15 @@ export default function App() {
               onClick={() => setActiveCategory(cat)}
             >
               {cat === 'all'
-                ? 'All Code Snippets (8)'
+                ? 'All Code Snippets (11)'
+                : cat === 'beginner'
+                ? 'Beginner (Simpler than Python)'
+                : cat === 'self-compilation'
+                ? 'Autonomous Self-Compiler (No C)'
                 : cat === 'high-level'
-                ? 'High-Level (Contracts, Quantum, Regions, Morph)'
+                ? 'Formal Contracts & Quantum'
                 : cat === 'low-level'
-                ? 'Low-Level (Kernel, Hazards, SIMD)'
+                ? 'Bare-Metal Hardware & SIMD'
                 : 'Self-Translator Engine'}
             </button>
           ))}
@@ -850,60 +967,77 @@ export default function App() {
       <section id="vscode" className="section section-alt">
         <SectionTitle
           kicker="Developer Tooling"
-          title="Official VS Code &amp; Code-OSS Extension"
-          subtitle="Everything in C-Greater-VSCode is fully complete: grammar highlighting, intelligent autocompletion, snippets, and commands."
+          title="Official VS Code &amp; Code-OSS Extension v2.1.0"
+          subtitle="Everything in C-Greater-VSCode is packaged in ready-to-use VSIX format: Automatic Suggestions, High-Fidelity Colors, and Real-Time Mistake Detection."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
-            <h3 className="text-lg font-bold text-white mb-2">Extension File Tree</h3>
-            <p className="text-xs text-slate-400 mb-4">Complete bundle ready for VS Code &amp; Code-OSS:</p>
-            <div className="font-mono text-xs bg-slate-950 p-4 rounded-xl text-slate-300 border border-slate-800">
-              <span className="text-blue-400 font-bold">C-Greater-VSCode/</span><br />
-              ├── <span className="text-white">package.json</span> (Manifest &amp; commands)<br />
-              ├── <span className="text-white">extension.js</span> (Autocomplete &amp; hover)<br />
-              ├── <span className="text-white">language-configuration.json</span><br />
-              ├── <span className="text-yellow-400">autocomplete.json</span> (Rich dictionary)<br />
-              ├── <span className="text-emerald-400">syntaxes/</span><br />
-              │   └── <span className="text-white">cgt.tmLanguage.json</span><br />
-              ├── <span className="text-purple-400">snippets/</span><br />
-              │   └── <span className="text-white">cgt.json</span><br />
-              └── <span className="text-slate-400">README.md</span>
+          <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-bold text-white">Download VSIX Package</h3>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono border border-emerald-500/30">v2.1.0 VSIX</span>
+              </div>
+              <p className="text-xs text-slate-400 mb-4">Packaged Open-VSIX archive compatible with VS Code, Code-OSS, and VSCodium:</p>
+              
+              <div className="font-mono text-xs bg-slate-950 p-4 rounded-xl text-slate-300 border border-slate-800 mb-4">
+                <span className="text-blue-400 font-bold">c-greater-2.1.0.vsix</span> (21.5 KB)<br />
+                ├── <span className="text-yellow-400">autocomplete.json</span> (v2.1 Suggestions)<br />
+                ├── <span className="text-emerald-400">syntaxes/cgt.tmLanguage.json</span> (Colors)<br />
+                ├── <span className="text-purple-400">snippets/cgt.json</span> (Rich templates)<br />
+                └── <span className="text-cyan-400">extension.js</span> (Mistakes Linter)
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <a
+                href="/c-greater-2.1.0.vsix"
+                download="c-greater-2.1.0.vsix"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition shadow-lg shadow-blue-600/30 cursor-pointer"
+              >
+                <span>📦</span> Download c-greater-2.1.0.vsix
+              </a>
+              <div className="text-center">
+                <span className="text-[11px] text-slate-500 font-mono">MD5 verified &amp; ready to install</span>
+              </div>
             </div>
           </div>
 
           <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
-            <h3 className="text-lg font-bold text-white mb-2">Key Extension Features</h3>
+            <h3 className="text-lg font-bold text-white mb-2">Self-Completion, Colors &amp; Mistakes</h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">✓</span>
-                <span><strong>TextMate Syntax Highlighting:</strong> Complete grammar highlighting for v2+ contracts, quantum fibers, hazards, and SIMD vectors.</span>
+                <span className="text-blue-400 font-bold">1.</span>
+                <span><strong>Self-Completion (Automatic Suggestions):</strong> Context-aware autocompletion for all v2.1 keywords (<code className="text-yellow-400">say</code>, <code className="text-yellow-400">ask</code>, <code className="text-yellow-400">repeat</code>, <code className="text-yellow-400">bootstrap</code>, <code className="text-yellow-400">lowlevel</code>), type signatures, and local variables.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">✓</span>
-                <span><strong>Intelligent Autocompletion:</strong> Powered by <code className="text-yellow-400">autocomplete.json</code> with contextual symbol detection.</span>
+                <span className="text-emerald-400 font-bold">2.</span>
+                <span><strong>High-Fidelity Colors (Syntax Highlighting):</strong> Accurate TextMate grammar scopes distinguishing beginner clauses, contract invariants, quantum fibers, and hardware registers.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">✓</span>
-                <span><strong>Rich Hover Tooltips:</strong> Full markdown documentation and code examples on hover for all keywords and primitives.</span>
+                <span className="text-red-400 font-bold">3.</span>
+                <span><strong>Mistakes Detection (Real-Time Diagnostics):</strong> Detects unclosed strings, unbalanced braces, use-after-move affine violations, immutability mutations, and unisolated hardware ops with instant Quick-Fix actions.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">✓</span>
-                <span><strong>24+ Code Snippets:</strong> Tab-stop snippets for functions, structs, contracts, arenas, and GPU kernels.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">✓</span>
-                <span><strong>Integrated Commands:</strong> Run (<kbd>cgt -r</kbd>), compile, and translate directly from editor context menus.</span>
+                <span className="text-purple-400 font-bold">4.</span>
+                <span><strong>Signature Help &amp; Hover:</strong> Live parameter tooltips and markdown documentation for all intrinsic functions and compiler primitives.</span>
               </li>
             </ul>
           </div>
 
           <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
             <div>
-              <h3 className="text-lg font-bold text-white mb-2">Installation in Seconds</h3>
-              <p className="text-xs text-slate-400 mb-4">Compatible with both VS Code and Code-OSS / VSCodium:</p>
+              <h3 className="text-lg font-bold text-white mb-2">Install in VS Code or Code-OSS</h3>
+              <p className="text-xs text-slate-400 mb-4">Install directly with the command line or file copy:</p>
               
               <div className="space-y-3">
+                <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                  <span className="text-xs text-slate-400 block mb-1">Via VS Code command line:</span>
+                  <div className="font-mono text-xs text-emerald-300">
+                    code --install-extension c-greater-2.1.0.vsix
+                  </div>
+                </div>
+
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                   <span className="text-xs text-slate-400 block mb-1">Copy to VS Code extensions:</span>
                   <div className="flex items-center justify-between font-mono text-xs text-blue-300">
@@ -927,7 +1061,7 @@ export default function App() {
             </div>
 
             <div className="mt-4 p-3 bg-blue-950/40 border border-blue-800/50 rounded-xl text-xs text-blue-200">
-              💡 <strong>Instant Activation:</strong> Open any <code className="text-white">.cgt</code> file and enjoy immediate syntax highlighting and autocomplete.
+              💡 <strong>Instant Activation:</strong> Open any <code className="text-white">.cgt</code> file and enjoy automatic suggestions, colors, and mistake alerts.
             </div>
           </div>
         </div>

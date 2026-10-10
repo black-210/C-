@@ -1,7 +1,5 @@
 {
   "name": "C> Programming Language",
-  "description": "C> is a modern systems programming language and compiler implemented in C, combining high-level safety with direct CPU/GPU control.",
-  "requestFramePermissions": [],
-
-  
+  "description": "C> (C-Greater) is a universal, self-compiling programming language simpler than Python for beginners with optional bare-metal hardware control, formal contracts, and VS Code support.",
+  "requestFramePermissions": []
 }

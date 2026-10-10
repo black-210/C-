@@ -1,18 +1,235 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "language": "cgt",
   "keywords": [
     {
+      "label": "say",
+      "kind": "Keyword",
+      "detail": "Universal Output Keyword (C> v2.1)",
+      "documentation": "Simpler and cleaner than Python print: outputs text and values directly to console. Parentheses are optional: `say \"Hello\"` or `say(x)`.",
+      "insertText": "say \"${1:Hello, World!}\";"
+    },
+    {
+      "label": "ask",
+      "kind": "Keyword",
+      "detail": "Universal User Input Prompt (C> v2.1)",
+      "documentation": "Simpler than Python input: prompts the user and assigns directly into a variable: `ask \"What is your name? \" -> user_name`.",
+      "insertText": "ask \"${1:Enter value: }\" -> ${2:answer};"
+    },
+    {
+      "label": "repeat",
+      "kind": "Keyword",
+      "detail": "Clean Repetition Loop (C> v2.1)",
+      "documentation": "Repeats a block N times without verbose range generators: `repeat 5 times { say \"Hi!\" }`.",
+      "insertText": "repeat ${1:5} times {\n    ${0}\n}"
+    },
+    {
+      "label": "every",
+      "kind": "Keyword",
+      "detail": "Clean Collection Iteration (C> v2.1)",
+      "documentation": "Iterates through elements of any array, list, or stream: `every item in collection { say item }`.",
+      "insertText": "every ${1:item} in ${2:items} {\n    ${0}\n}"
+    },
+    {
+      "label": "whenever",
+      "kind": "Keyword",
+      "detail": "Natural Condition Clause (C> v2.1)",
+      "documentation": "Clean, human-readable conditional execution: `whenever condition { ... } otherwise { ... }`.",
+      "insertText": "whenever ${1:condition} {\n    ${0}\n}"
+    },
+    {
+      "label": "otherwise",
+      "kind": "Keyword",
+      "detail": "Alternative Branch Clause (C> v2.1)",
+      "documentation": "Accompanies `whenever` to execute when condition is false: `otherwise { say \"Alternative\" }`.",
+      "insertText": "otherwise {\n    ${0}\n}"
+    },
+    {
+      "label": "define",
+      "kind": "Keyword",
+      "detail": "Declarative Universal Function (C> v2.1)",
+      "documentation": "Defines functions intuitively with automatic type inference: `define greet(name) { say \"Welcome, \" + name }`.",
+      "insertText": "define ${1:name}(${2:params}) {\n    ${0}\n}"
+    },
+    {
+      "label": "given",
+      "kind": "Keyword",
+      "detail": "Universal Pattern Match (C> v2.1)",
+      "documentation": "Intuitive declarative pattern matching: `given status { when \"active\" -> say \"Running\" }`.",
+      "insertText": "given ${1:value} {\n    when ${2:pattern} -> ${3:action}\n}"
+    },
+    {
+      "label": "when",
+      "kind": "Keyword",
+      "detail": "Pattern Matching Branch (C> v2.1)",
+      "documentation": "Branch inside a `given` block: `when condition -> action`.",
+      "insertText": "when ${1:pattern} -> ${2:action}"
+    },
+    {
+      "label": "attempt",
+      "kind": "Keyword",
+      "detail": "Clean Resilient Try Block (C> v2.1)",
+      "documentation": "Attempts execution safely and catches any trouble: `attempt { ... } trouble err { say err }`.",
+      "insertText": "attempt {\n    ${1}\n} trouble ${2:err} {\n    ${0}\n}"
+    },
+    {
+      "label": "trouble",
+      "kind": "Keyword",
+      "detail": "Trouble Recovery Handler (C> v2.1)",
+      "documentation": "Catches and handles failures from an `attempt` block.",
+      "insertText": "trouble ${1:err} {\n    ${0}\n}"
+    },
+    {
+      "label": "check",
+      "kind": "Keyword",
+      "detail": "Natural Assertion Clause (C> v2.1)",
+      "documentation": "Checks a condition and halts with clear message if false: `check count > 0, \"Must have items\"`.",
+      "insertText": "check ${1:condition}, \"${2:assertion message}\";"
+    },
+    {
+      "label": "hold",
+      "kind": "Keyword",
+      "detail": "Execution Sleep / Yield (C> v2.1)",
+      "documentation": "Pauses execution for a duration: `hold 500.ms` or `hold 2.seconds`.",
+      "insertText": "hold ${1:100}.ms;"
+    },
+    {
+      "label": "bootstrap",
+      "kind": "Keyword",
+      "detail": "Autonomous Self-Compilation Pipeline (C> v2.1)",
+      "documentation": "Directs the C> autonomous compiler to parse, analyze, and build itself into a standalone native binary without needing any C compiler or intermediary.",
+      "insertText": "bootstrap compiler {\n    target_arch(\"${1:x86_64}\");\n    emit_binary(\"${2:cgt_autonomous}\");\n}"
+    },
+    {
+      "label": "emit_binary",
+      "kind": "Keyword",
+      "detail": "Direct Native Binary Generation (C> v2.1)",
+      "documentation": "Generates a fully standalone native binary executable directly from byte streams or IR, completely bypassing C.",
+      "insertText": "emit_binary(\"${1:target_filename}\", ${2:stream});"
+    },
+    {
+      "label": "emit_native",
+      "kind": "Keyword",
+      "detail": "Native Machine Code Block (C> v2.1)",
+      "documentation": "Emits direct machine code instructions targeting the active CPU architecture.",
+      "insertText": "emit_native {\n    ${0}\n}"
+    },
+    {
+      "label": "byte_stream",
+      "kind": "Keyword",
+      "detail": "Machine Code / Byte Stream Assembler (C> v2.1)",
+      "documentation": "Constructs native machine opcodes and binary sections for self-compilation.",
+      "insertText": "let mut ${1:code} = byte_stream::new();"
+    },
+    {
+      "label": "lex_stream",
+      "kind": "Keyword",
+      "detail": "Self-Compiling Lexer Tokenizer (C> v2.1)",
+      "documentation": "Tokenizes C> source text natively for autonomous parsing.",
+      "insertText": "let ${1:tokens} = lex_stream::from_source(${2:source});"
+    },
+    {
+      "label": "parse_tree",
+      "kind": "Keyword",
+      "detail": "Autonomous AST Parser Node (C> v2.1)",
+      "documentation": "Constructs and traverses the abstract syntax tree for self-compilation.",
+      "insertText": "let ${1:ast} = parse_tree::build(${2:tokens});"
+    },
+    {
+      "label": "target_arch",
+      "kind": "Keyword",
+      "detail": "Native Target Architecture Selector (C> v2.1)",
+      "documentation": "Sets the hardware CPU target (e.g. x86_64, aarch64, riscv64, wasm32).",
+      "insertText": "target_arch(\"${1|x86_64,aarch64,riscv64,wasm32|}\");"
+    },
+    {
+      "label": "sym_table",
+      "kind": "Keyword",
+      "detail": "Compiler Symbol Table (C> v2.1)",
+      "documentation": "Manages identifiers, types, scopes, and memory offsets during compilation.",
+      "insertText": "let mut ${1:symbols} = sym_table::create();"
+    },
+    {
+      "label": "link_native",
+      "kind": "Keyword",
+      "detail": "Direct Native Object Linker (C> v2.1)",
+      "documentation": "Links native object sections directly into executable format (ELF / Mach-O / PE / WASM).",
+      "insertText": "link_native(${1:objects}, \"${2:output_executable}\");"
+    },
+    {
+      "label": "lowlevel",
+      "kind": "Keyword",
+      "detail": "Optional Bare-Metal Hardware Scope (C> v2.1)",
+      "documentation": "Explicit opt-in block for direct hardware control, MMIO, register mapping, and low-level memory operations. Keeps everyday code clean and beginner-accessible.",
+      "insertText": "lowlevel {\n    ${0}\n}"
+    },
+    {
+      "label": "opt_hardware",
+      "kind": "Keyword",
+      "detail": "Optional Hardware Feature Block (C> v2.1)",
+      "documentation": "Enables direct peripheral access, hardware registers, and architectural intrinsics.",
+      "insertText": "opt_hardware {\n    ${0}\n}"
+    },
+    {
+      "label": "raw_register",
+      "kind": "Keyword",
+      "detail": "Direct Hardware Register Access (C> v2.1)",
+      "documentation": "Reads or writes to physical microcontroller/CPU registers.",
+      "insertText": "raw_register(${1:0x40021000}, ${2:value});"
+    },
+    {
+      "label": "mmio_map",
+      "kind": "Keyword",
+      "detail": "Memory-Mapped I/O Device Window (C> v2.1)",
+      "documentation": "Maps physical device memory address space for direct memory operations.",
+      "insertText": "let ${1:dev} = mmio_map(${2:address}, ${3:length});"
+    },
+    {
+      "label": "fence_sync",
+      "kind": "Keyword",
+      "detail": "Hardware Memory Barrier / Fence (C> v2.1)",
+      "documentation": "Enforces hardware memory ordering (e.g. seq_cst, acquire, release).",
+      "insertText": "fence_sync(${1:seq_cst});"
+    },
+    {
+      "label": "direct_reg",
+      "kind": "Keyword",
+      "detail": "Architectural Register Direct Reference (C> v2.1)",
+      "documentation": "Accesses CPU hardware status registers (e.g. CR0, RFLAGS, CONTROL).",
+      "insertText": "direct_reg[${1:REG}]"
+    },
+    {
+      "label": "bit_slice",
+      "kind": "Keyword",
+      "detail": "Hardware Bit Field Extractor (C> v2.1)",
+      "documentation": "Extracts or writes specific bit ranges without manual bitmasks: `bit_slice(val, 0, 7)`.",
+      "insertText": "bit_slice(${1:val}, ${2:start}, ${3:end})"
+    },
+    {
+      "label": "endian_swap",
+      "kind": "Keyword",
+      "detail": "Byte Order Transmutation (C> v2.1)",
+      "documentation": "Swaps endianness (big-endian <-> little-endian) using dedicated single-cycle CPU instructions.",
+      "insertText": "endian_swap(${1:val})"
+    },
+    {
+      "label": "bare_metal",
+      "kind": "Keyword",
+      "detail": "OS-Free Freestanding Runtime (C> v2.1)",
+      "documentation": "Configures code to run without an operating system, suitable for kernel bootloaders and firmware.",
+      "insertText": "bare_metal {\n    ${0}\n}"
+    },
+    {
       "label": "spec",
       "kind": "Keyword",
-      "detail": "Formal Specification Block (C> v2+)",
+      "detail": "Formal Specification Block",
       "documentation": "Declares mathematical specifications and formal properties to be statically checked or runtime-asserted.",
       "insertText": "spec ${1:SpecificationName} {\n    requires(${2:condition});\n    ensures(${3:condition});\n}"
     },
     {
       "label": "contract",
       "kind": "Keyword",
-      "detail": "Formal Contract Block (C> v2+)",
+      "detail": "Formal Contract Block",
       "documentation": "Defines software contracts containing pre-conditions (`requires`), post-conditions (`ensures`), and invariants (`invariant`).",
       "insertText": "contract ${1:ContractName} {\n    requires(${2:condition});\n    ensures(${3:condition});\n    invariant(${4:condition});\n}"
     },
@@ -40,14 +257,14 @@
     {
       "label": "nexus",
       "kind": "Keyword",
-      "detail": "Concurrent Channel & Hub (C> v2+)",
+      "detail": "Concurrent Channel & Hub",
       "documentation": "Declares a lock-free or buffered concurrent communication nexus between tasks or hardware pipelines.",
       "insertText": "nexus ${1:HubName}<${2:PayloadType}>;"
     },
     {
       "label": "quantum",
       "kind": "Keyword",
-      "detail": "Cooperative Task Fiber (C> v2+)",
+      "detail": "Cooperative Task Fiber",
       "documentation": "Begins a lightweight cooperative execution quantum that can yield execution explicitly using `yield_to`.",
       "insertText": "quantum {\n    ${0}\n}"
     },
@@ -61,28 +278,28 @@
     {
       "label": "region",
       "kind": "Keyword",
-      "detail": "Scoped Arena Region Allocator (C> v2+)",
+      "detail": "Scoped Arena Region Allocator",
       "documentation": "Creates a scoped memory arena. Allocations inside the region are fast pointer bumps and freed in O(1) time at scope boundary.",
       "insertText": "region(${1:arena_name}) {\n    ${0}\n}"
     },
     {
       "label": "morph",
       "kind": "Keyword",
-      "detail": "Zero-Copy Structure Morphing (C> v2+)",
+      "detail": "Zero-Copy Structure Morphing",
       "documentation": "Safely reinterprets a raw byte stream or contiguous span into a typed header or packet without allocation.",
       "insertText": "morph(${1:buffer}, ${2:TargetType})"
     },
     {
       "label": "isolate",
       "kind": "Keyword",
-      "detail": "Hardware Isolated Block (C> v2+)",
+      "detail": "Hardware Isolated Block",
       "documentation": "Enters an uninterruptible hardware isolated critical execution section with interrupts masked.",
       "insertText": "isolate {\n    ${0}\n}"
     },
     {
       "label": "hazard",
       "kind": "Keyword",
-      "detail": "Lock-Free Hazard Pointer Epoch (C> v2+)",
+      "detail": "Lock-Free Hazard Pointer Epoch",
       "documentation": "Protects a pointer from concurrent deallocation during lock-free data structure traversal.",
       "insertText": "hazard(${1:ptr}) {\n    ${0}\n}"
     },
@@ -96,7 +313,7 @@
     {
       "label": "pin",
       "kind": "Keyword",
-      "detail": "Hardware Address Pinning (C> v2+)",
+      "detail": "Hardware Address Pinning",
       "documentation": "Pins a variable or reference to a fixed physical address or MMIO register.",
       "insertText": "pin(${1:addr})"
     },
@@ -175,12 +392,45 @@
     { "label": "bool", "detail": "Boolean type (true / false)", "kind": "Class" },
     { "label": "void", "detail": "Unit / void return type", "kind": "Class" },
     { "label": "str", "detail": "UTF-8 string slice reference", "kind": "Class" },
+    { "label": "byte_stream", "detail": "Autonomous Machine Byte Stream for Native Codegen", "kind": "Class" },
+    { "label": "sym_table", "detail": "Compiler Symbol Table Structure", "kind": "Class" },
+    { "label": "lex_stream", "detail": "Token Sequence for Self-Compiler Parsing", "kind": "Class" },
+    { "label": "parse_tree", "detail": "Abstract Syntax Tree Node Container", "kind": "Class" },
     { "label": "v128_f32", "detail": "128-bit SIMD vector (4 x f32)", "kind": "Class" },
     { "label": "v128_i32", "detail": "128-bit SIMD vector (4 x i32)", "kind": "Class" },
     { "label": "v256_f32", "detail": "256-bit SIMD vector (8 x f32)", "kind": "Class" },
-    { "label": "v256_i32", "detail": "256-bit SIMD vector (8 x i32)", "kind": "Class" }
+    { "label": "v256_i32", "detail": "256-bit SIMD vector (8 x i32)", "kind": "Class" },
+    { "label": "unmanaged", "detail": "Raw unmanaged memory reference for bare metal", "kind": "Class" }
   ],
   "functions": [
+    {
+      "label": "say",
+      "detail": "say value, ... -> void",
+      "documentation": "Outputs values and text to standard output directly.",
+      "kind": "Function",
+      "insertText": "say \"${1:text}\";"
+    },
+    {
+      "label": "ask",
+      "detail": "ask prompt -> var",
+      "documentation": "Prompts user from console and assigns input to the right-hand variable.",
+      "kind": "Function",
+      "insertText": "ask \"${1:Prompt: }\" -> ${2:input_var};"
+    },
+    {
+      "label": "check",
+      "detail": "check condition, message",
+      "documentation": "Simple readable assertion: validates condition and halts with message if not met.",
+      "kind": "Function",
+      "insertText": "check ${1:condition}, \"${2:error message}\";"
+    },
+    {
+      "label": "hold",
+      "detail": "hold duration",
+      "documentation": "Pauses current thread or quantum fiber for given duration.",
+      "kind": "Function",
+      "insertText": "hold ${1:100}.ms;"
+    },
     {
       "label": "println",
       "detail": "fn println(fmt: str, ...) -> void",
@@ -194,6 +444,55 @@
       "documentation": "Prints formatted text to standard output without trailing newline.",
       "kind": "Function",
       "insertText": "print(\"${1:text}\");"
+    },
+    {
+      "label": "emit_binary",
+      "detail": "fn emit_binary(path: str, code: byte_stream) -> void",
+      "documentation": "Emits a standalone executable binary directly to disk without intermediate C.",
+      "kind": "Function",
+      "insertText": "emit_binary(\"${1:app_binary}\", ${2:stream});"
+    },
+    {
+      "label": "emit_elf",
+      "detail": "fn emit_elf(path: str, stream: byte_stream) -> void",
+      "documentation": "Emits direct Linux / POSIX ELF64 executable file.",
+      "kind": "Function",
+      "insertText": "emit_elf(\"${1:bin_name}\", ${2:stream});"
+    },
+    {
+      "label": "emit_mach",
+      "detail": "fn emit_mach(path: str, stream: byte_stream) -> void",
+      "documentation": "Emits direct macOS Mach-O 64-bit binary.",
+      "kind": "Function",
+      "insertText": "emit_mach(\"${1:bin_name}\", ${2:stream});"
+    },
+    {
+      "label": "emit_pe",
+      "detail": "fn emit_pe(path: str, stream: byte_stream) -> void",
+      "documentation": "Emits direct Windows PE/COFF 64-bit executable.",
+      "kind": "Function",
+      "insertText": "emit_pe(\"${1:bin_name}.exe\", ${2:stream});"
+    },
+    {
+      "label": "bit_slice",
+      "detail": "fn bit_slice(val: u64, start: u32, end: u32) -> u64",
+      "documentation": "Extracts bit range [start..end] from value.",
+      "kind": "Function",
+      "insertText": "bit_slice(${1:val}, ${2:0}, ${3:7})"
+    },
+    {
+      "label": "endian_swap",
+      "detail": "fn endian_swap<T>(val: T) -> T",
+      "documentation": "Reverses byte order of primitive value using fast single-cycle instruction.",
+      "kind": "Function",
+      "insertText": "endian_swap(${1:val})"
+    },
+    {
+      "label": "fence_sync",
+      "detail": "fn fence_sync(order: MemoryOrder) -> void",
+      "documentation": "Inserts hardware memory fence barrier.",
+      "kind": "Function",
+      "insertText": "fence_sync(${1:seq_cst});"
     },
     {
       "label": "move",

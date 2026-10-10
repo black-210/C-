@@ -1,0 +1,20 @@
+// ============================================================================
+// C> v2.1 Ultra-Simple Beginner Example (Simpler than Python)
+// Demonstrates: say, repeat times, whenever/otherwise, and clean syntax
+// ============================================================================
+
+say "Welcome to C> v2.1 — Simpler than Python!";
+
+say "--- Repetition Loop ---";
+repeat 3 times {
+    say "C> is universal and accessible to everyone!";
+}
+
+let score = 95;
+whenever score > 90 {
+    say "Evaluation: Outstanding Performance!";
+} otherwise {
+    say "Evaluation: Keep learning!";
+}
+
+say "Done! Zero boilerplate, instant execution.";

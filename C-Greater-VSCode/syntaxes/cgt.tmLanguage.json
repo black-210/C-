@@ -6,6 +6,9 @@
     { "include": "#comments" },
     { "include": "#strings" },
     { "include": "#numbers" },
+    { "include": "#keywords_beginner" },
+    { "include": "#keywords_selfhost" },
+    { "include": "#keywords_v21_hardware" },
     { "include": "#keywords_v2_contracts" },
     { "include": "#keywords_v2_concurrency" },
     { "include": "#keywords_v2_lowlevel" },
@@ -76,6 +79,30 @@
         {
           "name": "constant.numeric.decimal.cgt",
           "match": "\\b[0-9][0-9_]*([ui](8|16|32|64|128|size)|f32|f64)?\\b"
+        }
+      ]
+    },
+    "keywords_beginner": {
+      "patterns": [
+        {
+          "name": "keyword.control.beginner.cgt",
+          "match": "\\b(say|ask|repeat|every|whenever|otherwise|define|given|when|attempt|trouble|check|hold|times)\\b"
+        }
+      ]
+    },
+    "keywords_selfhost": {
+      "patterns": [
+        {
+          "name": "keyword.control.selfhost.cgt",
+          "match": "\\b(bootstrap|emit_binary|emit_native|byte_stream|lex_stream|parse_tree|target_arch|sym_table|link_native)\\b"
+        }
+      ]
+    },
+    "keywords_v21_hardware": {
+      "patterns": [
+        {
+          "name": "keyword.other.hardware.cgt",
+          "match": "\\b(lowlevel|opt_hardware|raw_register|mmio_map|fence_sync|direct_reg|bit_slice|endian_swap|unmanaged|bare_metal)\\b"
         }
       ]
     },

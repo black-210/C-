@@ -1,4 +1,139 @@
 {
+  "Say Output (Universal)": {
+    "prefix": "say",
+    "body": [
+      "say \"${1:Hello, World!}\";"
+    ],
+    "description": "Universal output to console (simpler than Python print)"
+  },
+  "Ask Input (Universal)": {
+    "prefix": "ask",
+    "body": [
+      "ask \"${1:What is your name? }\" -> ${2:user_name};",
+      "say \"Hello, \", ${2:user_name};"
+    ],
+    "description": "Universal user input prompt with direct arrow binding"
+  },
+  "Repeat Loop": {
+    "prefix": "repeat",
+    "body": [
+      "repeat ${1:5} times {",
+      "    ${0:say \"Step\";}",
+      "}"
+    ],
+    "description": "Clean repetition loop without index boilerplate"
+  },
+  "Every Iteration": {
+    "prefix": "every",
+    "body": [
+      "every ${1:item} in ${2:collection} {",
+      "    ${0:say item;}",
+      "}"
+    ],
+    "description": "Universal clean collection iteration"
+  },
+  "Whenever Otherwise Branch": {
+    "prefix": "whenever",
+    "body": [
+      "whenever ${1:condition} {",
+      "    ${2:say \"True\";}",
+      "} otherwise {",
+      "    ${3:say \"False\";}",
+      "}"
+    ],
+    "description": "Natural declarative condition branch"
+  },
+  "Define Function": {
+    "prefix": "define",
+    "body": [
+      "define ${1:name}(${2:params}) {",
+      "    ${0:// declarative logic}",
+      "}"
+    ],
+    "description": "Universal function definition with automatic deduction"
+  },
+  "Given When Match": {
+    "prefix": "given",
+    "body": [
+      "given ${1:state} {",
+      "    when \"${2:active}\" -> ${3:say \"Active\";}",
+      "    when \"${4:idle}\"   -> ${5:say \"Idle\";}",
+      "}"
+    ],
+    "description": "Clean pattern matching expression"
+  },
+  "Attempt Trouble": {
+    "prefix": "attempt",
+    "body": [
+      "attempt {",
+      "    ${1:// resilient operation}",
+      "} trouble ${2:err} {",
+      "    say \"Trouble encountered: \", ${2:err};",
+      "}"
+    ],
+    "description": "Clean error handling without try/except boilerplate"
+  },
+  "Check Assertion": {
+    "prefix": "check",
+    "body": [
+      "check ${1:condition}, \"${2:assertion message}\";"
+    ],
+    "description": "Clean self-documenting assertion"
+  },
+  "Autonomous Bootstrap": {
+    "prefix": "bootstrap",
+    "body": [
+      "bootstrap compiler {",
+      "    target_arch(\"${1:x86_64}\");",
+      "    let mut stream = byte_stream::new();",
+      "    ${0:// direct native machine code assembly}",
+      "    emit_binary(\"${2:cgt_compiler}\", stream);",
+      "}"
+    ],
+    "description": "Autonomous compiler self-compilation without C dependency"
+  },
+  "Emit Native Binary": {
+    "prefix": "emitbinary",
+    "body": [
+      "emit_binary(\"${1:app_binary}\", ${2:stream});"
+    ],
+    "description": "Emit native standalone executable without C compiler"
+  },
+  "Byte Stream Assembler": {
+    "prefix": "bytestream",
+    "body": [
+      "let mut ${1:code} = byte_stream::new();",
+      "${1:code}.append_hex(\"${2:4889e5}\");",
+      "${0}"
+    ],
+    "description": "Native machine code byte stream for direct codegen"
+  },
+  "Lowlevel Hardware Scope": {
+    "prefix": "lowlevel",
+    "body": [
+      "lowlevel {",
+      "    raw_register(${1:0x40021000}, ${2:0x01});",
+      "    ${0}",
+      "}"
+    ],
+    "description": "Optional low-level hardware control block"
+  },
+  "Hardware MMIO Map": {
+    "prefix": "mmiomap",
+    "body": [
+      "let ${1:dev} = mmio_map(${2:0x40001000}, ${3:4096});",
+      "${0}"
+    ],
+    "description": "Memory-mapped I/O device controller"
+  },
+  "Bit Slice Extractor": {
+    "prefix": "bitslice",
+    "body": [
+      "let ${1:status_bits} = bit_slice(${2:raw_val}, ${3:0}, ${4:7});",
+      "${0}"
+    ],
+    "description": "Hardware bit-field slice extraction"
+  },
   "Function Declaration": {
     "prefix": "fn",
     "body": [

@@ -1,8 +1,8 @@
 {
   "name": "c-greater",
   "displayName": "C> (C-Greater) Language Support",
-  "description": "Comprehensive language support, syntax highlighting, rich snippets, and intelligent autocompletion for C> (C-Greater) v2+ in VS Code & Code-OSS",
-  "version": "2.0.0",
+  "description": "Universal, self-compiling language support with ultra-simple beginner syntax, high-performance low-level hardware control, syntax highlighting, autocomplete, snippets, and live mistake detection for VS Code & Code-OSS",
+  "version": "2.1.0",
   "publisher": "cgt-lang",
   "author": {
     "name": "C> Language Development Team"
@@ -20,12 +20,18 @@
   "keywords": [
     "cgt",
     "c-greater",
-    "systems programming",
-    "memory safety",
-    "gpu",
+    "self-compiling",
+    "beginner-friendly",
+    "systems-programming",
+    "universal",
+    "hardware",
     "simd",
-    "v2"
+    "v2.1"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cgt-lang/c-greater"
+  },
   "main": "./extension.js",
   "activationEvents": [
     "onLanguage:cgt"
@@ -67,7 +73,12 @@
       },
       {
         "command": "cgt.compile",
-        "title": "C>: Compile Current File",
+        "title": "C>: Compile Directly to Machine Code",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.bootstrap",
+        "title": "C>: Self-Compile Compiler (Autonomous Bootstrap)",
         "category": "C>"
       },
       {
