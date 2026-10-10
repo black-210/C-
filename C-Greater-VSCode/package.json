@@ -26,7 +26,6 @@
     "simd",
     "v2"
   ],
-  "icon": "icon.png",
   "main": "./extension.js",
   "activationEvents": [
     "onLanguage:cgt"
