@@ -7,6 +7,10 @@
     { "include": "#strings" },
     { "include": "#numbers" },
     { "include": "#keywords_beginner" },
+    { "include": "#keywords_pipeline" },
+    { "include": "#keywords_async_events" },
+    { "include": "#keywords_safety_guards" },
+    { "include": "#keywords_embedded_kernel" },
     { "include": "#keywords_selfhost" },
     { "include": "#keywords_v21_hardware" },
     { "include": "#keywords_v2_contracts" },
@@ -90,6 +94,38 @@
         }
       ]
     },
+    "keywords_pipeline": {
+      "patterns": [
+        {
+          "name": "keyword.control.flow.cgt",
+          "match": "\\b(flow|into|pipe|sift|tally|mesh|diverge|converge)\\b"
+        }
+      ]
+    },
+    "keywords_async_events": {
+      "patterns": [
+        {
+          "name": "keyword.control.async.cgt",
+          "match": "\\b(spawn|detach|await_all|await_any|signal|listen|emit_event|every_interval)\\b"
+        }
+      ]
+    },
+    "keywords_safety_guards": {
+      "patterns": [
+        {
+          "name": "keyword.control.guard.cgt",
+          "match": "\\b(guard|ensure_clean|isolate_fault|on_fault|sealed)\\b"
+        }
+      ]
+    },
+    "keywords_embedded_kernel": {
+      "patterns": [
+        {
+          "name": "keyword.other.kernel.cgt",
+          "match": "\\b(interrupt_gate|cpu_port_in|cpu_port_out|cache_flush|dma_transfer)\\b"
+        }
+      ]
+    },
     "keywords_selfhost": {
       "patterns": [
         {
@@ -166,7 +202,7 @@
       "patterns": [
         {
           "name": "storage.type.hardware.cgt",
-          "match": "\\b(vector|device_span|v128_f32|v128_i32|v256_f32|v256_i32|Buffer)\\b"
+          "match": "\\b(vector|tensor|signal_hub|event_packet|irq_handle|dma_channel|device_span|v128_f32|v128_i32|v256_f32|v256_i32|Buffer)\\b"
         }
       ]
     },
@@ -189,7 +225,7 @@
         },
         {
           "name": "support.function.cgt",
-          "match": "\\b(println|print|panic|assert|sizeof|alignof|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|mmio_read32|mmio_write32)\\b"
+          "match": "\\b(println|print|say|ask|check|hold|panic|assert|sizeof|alignof|matrix_mul|dot_product|norm|clamp_range|approx|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|mmio_read32|mmio_write32|cpu_port_in|cpu_port_out|cache_flush|dma_transfer)\\b"
         },
         {
           "name": "entity.name.function.call.cgt",

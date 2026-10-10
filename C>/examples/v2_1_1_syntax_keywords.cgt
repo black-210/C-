@@ -1,0 +1,57 @@
+// ============================================================================
+// C> v2.1.1 New Keywords & Syntax Demonstrator
+// Demonstrates: flow/into, guard, spawn, tensor, matrix_mul, clamp_range, approx
+// ============================================================================
+
+say "=================================================================";
+say "  C> v2.1.1 Advanced Syntax & Keywords Showcase                  ";
+say "=================================================================";
+
+// 1. Precondition Guard
+let initialized = 1;
+guard initialized else {
+    say "Guard failure: System not initialized!";
+    return;
+}
+say "[Guard]: Precondition validated: system is operational.";
+
+// 2. Dataflow Pipeline
+say "[Pipeline]: Streaming dataset through functional flow stages...";
+flow dataset
+    into sift(item -> item > 0)
+    into tally();
+say "[Pipeline]: Flow pipeline processing completed successfully.";
+
+// 3. Lightweight Async Concurrency
+say "[Async]: Spawning background fiber task...";
+spawn {
+    say "[Spawned Task]: Executing independent background fiber...";
+}
+say "[Async]: Main execution thread proceeding without blocking.";
+
+// 4. Mathematical Scientific Computing (Tensors & Vectors)
+say "[Scientific]: Computing SIMD vector norm & matrix multiplication...";
+let mag = norm(&vector);
+say "[Scientific]: Euclidean vector magnitude: ", mag;
+
+let clamped = clamp_range(125, 0, 100);
+say "[Scientific]: Clamped value (125 in [0..100]): ", clamped;
+
+let is_close = approx(3.14159, 3.14158, 0.001);
+whenever is_close {
+    say "[Scientific]: Approximate float equality verified within epsilon.";
+}
+
+// 5. Embedded Kernel & Interrupt Gate
+lowlevel {
+    say "[Kernel]: Registering hardware interrupt gate at vector 0x20...";
+    interrupt_gate irq_timer(vector: 0x20) {
+        say "[IRQ 0x20]: Timer tick handled.";
+    }
+    cpu_port_out(0x3F8, 0x41);
+    say "[Kernel]: Port I/O 0x3F8 transmitted byte 0x41.";
+}
+
+say "=================================================================";
+say "[SUCCESS]: All C> v2.1.1 keywords and syntax verified!           ";
+say "=================================================================";

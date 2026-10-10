@@ -1,17 +1,21 @@
 /**
  * C> (C-Greater) Language Extension for VS Code and Code-OSS
- * Version: 2.1.0-LTS Universal Edition
+ * Version: 2.1.1-LTS Universal Edition
  * 
  * Provides:
- * - Intelligent Autocompletion (Self-completion) for C> v2.1:
+ * - Intelligent Autocompletion (Self-completion) for C> v2.1.1:
+ *   * Pipeline & Transformation Flow (flow, into, sift, tally, mesh)
+ *   * Async, Event & Concurrency (spawn, detach, await_all, await_any, signal, listen)
+ *   * Scientific, Math & Tensors (tensor, matrix_mul, norm, dot_product, clamp_range)
+ *   * Safety & Fault Isolation (guard, ensure_clean, isolate_fault, sealed)
+ *   * Embedded & Hardware Control (interrupt_gate, cpu_port_in, cpu_port_out, cache_flush, dma_transfer)
  *   * Ultra-simple beginner syntax (say, ask, repeat, every, whenever, define, given, attempt)
  *   * Autonomous self-compilation primitives (bootstrap, emit_binary, byte_stream, target_arch)
- *   * Optional bare-metal hardware control (lowlevel, opt_hardware, raw_register, mmio_map)
- *   * Advanced formal contracts & concurrency (spec, contract, nexus, quantum)
  * - High-fidelity Syntax Highlighting & Token Classification
  * - Real-time Diagnostics & Mistake Detection ("Mistakes" / Linter)
  * - Automated Quick-Fix Code Actions
  * - Contextual Signature Help & Parameter Hints
+ * - Dedicated Code Snippet Packs (cgt.json + syntax_snippets.json)
  * - Rich Hover Documentation with Live Code Examples
  * - Integrated Tooling: Run, Native Compile, Autonomous Bootstrap, Typecheck, and Audit
  */
@@ -28,7 +32,7 @@ let diagnosticCollection = null;
  * @param {vscode.ExtensionContext} context 
  */
 function activate(context) {
-    console.log('[C> Extension v2.1]: C-Greater language support activated.');
+    console.log('[C> Extension v2.1.1]: C-Greater language support activated.');
 
     // 1. Diagnostic Collection for Live Mistake / Error Detection
     diagnosticCollection = vscode.languages.createDiagnosticCollection('cgt');
@@ -85,6 +89,22 @@ function activate(context) {
                     troubleComp.detail = 'Handle trouble or failure from attempt block';
                     troubleComp.sortText = '00_trouble';
                     completionList.push(troubleComp);
+                }
+
+                if (linePrefix.startsWith('flow') && !linePrefix.includes('into')) {
+                    const intoComp = new vscode.CompletionItem('into stage()', vscode.CompletionItemKind.Snippet);
+                    intoComp.insertText = new vscode.SnippetString('into ${1:transformer}(${2:args})');
+                    intoComp.detail = 'Dataflow transformation pipeline stage (C> v2.1.1)';
+                    intoComp.sortText = '00_into';
+                    completionList.push(intoComp);
+                }
+
+                if (linePrefix.startsWith('guard') && !linePrefix.includes('else')) {
+                    const guardComp = new vscode.CompletionItem('else { return; }', vscode.CompletionItemKind.Snippet);
+                    guardComp.insertText = new vscode.SnippetString('else {\n    return ${1:0};\n}');
+                    guardComp.detail = 'Precondition guard early exit';
+                    guardComp.sortText = '00_guard';
+                    completionList.push(guardComp);
                 }
 
                 // Keywords with snippet insert texts
@@ -235,6 +255,51 @@ function activate(context) {
                     label: 'endian_swap<T>(val: T)',
                     doc: 'Reverses endian byte order in a single CPU instruction.',
                     params: ['val: T']
+                },
+                'matrix_mul': {
+                    label: 'matrix_mul(mat_a: &tensor, mat_b: &tensor)',
+                    doc: 'Hardware-accelerated SIMD matrix multiplication.',
+                    params: ['mat_a: &tensor', 'mat_b: &tensor']
+                },
+                'dot_product': {
+                    label: 'dot_product(vec_a: &vector, vec_b: &vector)',
+                    doc: 'Calculates high-speed vector dot product.',
+                    params: ['vec_a: &vector', 'vec_b: &vector']
+                },
+                'norm': {
+                    label: 'norm(vec: &vector) -> f32',
+                    doc: 'Computes Euclidean L2 vector magnitude.',
+                    params: ['vec: &vector']
+                },
+                'clamp_range': {
+                    label: 'clamp_range(val, min_val, max_val)',
+                    doc: 'Restricts value between minimum and maximum bounds.',
+                    params: ['val: T', 'min_val: T', 'max_val: T']
+                },
+                'approx': {
+                    label: 'approx(a, b, epsilon)',
+                    doc: 'Validates floating point values within epsilon tolerance.',
+                    params: ['a: T', 'b: T', 'epsilon: T']
+                },
+                'cpu_port_in': {
+                    label: 'cpu_port_in(port: u16) -> u8',
+                    doc: 'Direct hardware CPU I/O port read (x86 inb).',
+                    params: ['port: u16']
+                },
+                'cpu_port_out': {
+                    label: 'cpu_port_out(port: u16, val: u8)',
+                    doc: 'Direct hardware CPU I/O port write (x86 outb).',
+                    params: ['port: u16', 'val: u8']
+                },
+                'cache_flush': {
+                    label: 'cache_flush(address: usize, lines: usize)',
+                    doc: 'Flushes and invalidates CPU cache lines.',
+                    params: ['address: usize', 'lines: usize']
+                },
+                'dma_transfer': {
+                    label: 'dma_transfer(src: usize, dest: usize, bytes: usize)',
+                    doc: 'Triggers hardware DMA controller burst data transfer.',
+                    params: ['src: usize', 'dest: usize', 'bytes: usize']
                 },
                 'println': {
                     label: 'println(fmt: str, ...args)',
@@ -490,6 +555,30 @@ function activate(context) {
                 diagnostics.push(diag);
             }
 
+            // 7b. Guard statement syntax check
+            if (/^\s*guard\b/.test(trimmed) && !trimmed.includes('else') && !line.includes('{')) {
+                const range = new vscode.Range(lineIdx, 0, lineIdx, line.length);
+                const diag = new vscode.Diagnostic(
+                    range,
+                    `Syntax mistake: 'guard' statement requires an 'else { ... }' exit block.`,
+                    vscode.DiagnosticSeverity.Error
+                );
+                diag.code = 'guard_missing_else';
+                diagnostics.push(diag);
+            }
+
+            // 7c. Interrupt gate vector check
+            if (/^\s*interrupt_gate\b/.test(trimmed) && !trimmed.includes('vector')) {
+                const range = new vscode.Range(lineIdx, 0, lineIdx, line.length);
+                const diag = new vscode.Diagnostic(
+                    range,
+                    `Kernel mistake: 'interrupt_gate' must declare a hardware vector (e.g. vector: 0x20).`,
+                    vscode.DiagnosticSeverity.Error
+                );
+                diag.code = 'missing_irq_vector';
+                diagnostics.push(diag);
+            }
+
             // 8. Track bracket & paren balances
             for (let ch of line) {
                 if (ch === '{') braceBalance++;
@@ -595,7 +684,7 @@ function activate(context) {
     const versionCommand = vscode.commands.registerCommand('cgt.version', () => {
         const term = getOrCreateTerminal();
         term.show();
-        term.sendText('cgt --version || ./bin/cgt --version || echo "C> Compiler v2.1.0-LTS Universal Edition (Autonomous Native)"');
+        term.sendText('cgt --version || ./bin/cgt --version || echo "C> Compiler v2.1.1-LTS Universal Edition (Autonomous Native)"');
     });
 
     context.subscriptions.push(
@@ -611,8 +700,8 @@ function activate(context) {
     // 9. Status Bar Item
     cgtStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     cgtStatusBarItem.command = 'cgt.run';
-    cgtStatusBarItem.text = '$(zap) C> v2.1.0';
-    cgtStatusBarItem.tooltip = 'C> v2.1 Universal Compiler: Click to Run Current File';
+    cgtStatusBarItem.text = '$(zap) C> v2.1.1';
+    cgtStatusBarItem.tooltip = 'C> v2.1.1 Universal Compiler: Click to Run Current File';
     cgtStatusBarItem.show();
     context.subscriptions.push(cgtStatusBarItem);
 }

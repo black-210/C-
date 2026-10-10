@@ -967,8 +967,8 @@ export default function App() {
       <section id="vscode" className="section section-alt">
         <SectionTitle
           kicker="Developer Tooling"
-          title="Official VS Code &amp; Code-OSS Extension v2.1.0"
-          subtitle="Everything in C-Greater-VSCode is packaged in ready-to-use VSIX format: Automatic Suggestions, High-Fidelity Colors, and Real-Time Mistake Detection."
+          title="Official VS Code &amp; Code-OSS Extension v2.1.1"
+          subtitle="Everything in C-Greater-VSCode is packaged in ready-to-use VSIX format: Automatic Suggestions, High-Fidelity Colors, Dedicated Syntax Snippets, and Real-Time Mistake Detection."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -976,26 +976,27 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-bold text-white">Download VSIX Package</h3>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono border border-emerald-500/30">v2.1.0 VSIX</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono border border-emerald-500/30">v2.1.1 VSIX</span>
               </div>
               <p className="text-xs text-slate-400 mb-4">Packaged Open-VSIX archive compatible with VS Code, Code-OSS, and VSCodium:</p>
               
               <div className="font-mono text-xs bg-slate-950 p-4 rounded-xl text-slate-300 border border-slate-800 mb-4">
-                <span className="text-blue-400 font-bold">c-greater-2.1.0.vsix</span> (21.5 KB)<br />
-                ├── <span className="text-yellow-400">autocomplete.json</span> (v2.1 Suggestions)<br />
+                <span className="text-blue-400 font-bold">c-greater-2.1.1.vsix</span> (27.2 KB)<br />
+                ├── <span className="text-yellow-400">autocomplete.json</span> (v2.1.1 Suggestions)<br />
                 ├── <span className="text-emerald-400">syntaxes/cgt.tmLanguage.json</span> (Colors)<br />
-                ├── <span className="text-purple-400">snippets/cgt.json</span> (Rich templates)<br />
+                ├── <span className="text-purple-400">snippets/syntax_snippets.json</span> (Dedicated syntax)<br />
+                ├── <span className="text-purple-400">snippets/cgt.json</span> (Standard templates)<br />
                 └── <span className="text-cyan-400">extension.js</span> (Mistakes Linter)
               </div>
             </div>
 
             <div className="space-y-2">
               <a
-                href="/c-greater-2.1.0.vsix"
-                download="c-greater-2.1.0.vsix"
+                href="/c-greater-2.1.1.vsix"
+                download="c-greater-2.1.1.vsix"
                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition shadow-lg shadow-blue-600/30 cursor-pointer"
               >
-                <span>📦</span> Download c-greater-2.1.0.vsix
+                <span>📦</span> Download c-greater-2.1.1.vsix
               </a>
               <div className="text-center">
                 <span className="text-[11px] text-slate-500 font-mono">MD5 verified &amp; ready to install</span>
@@ -1008,11 +1009,11 @@ export default function App() {
             <ul className="space-y-3 text-sm text-slate-300">
               <li className="flex items-start gap-2">
                 <span className="text-blue-400 font-bold">1.</span>
-                <span><strong>Self-Completion (Automatic Suggestions):</strong> Context-aware autocompletion for all v2.1 keywords (<code className="text-yellow-400">say</code>, <code className="text-yellow-400">ask</code>, <code className="text-yellow-400">repeat</code>, <code className="text-yellow-400">bootstrap</code>, <code className="text-yellow-400">lowlevel</code>), type signatures, and local variables.</span>
+                <span><strong>Self-Completion (Automatic Suggestions):</strong> Autocompletion for new keywords (<code className="text-yellow-400">flow</code>, <code className="text-yellow-400">into</code>, <code className="text-yellow-400">sift</code>, <code className="text-yellow-400">guard</code>, <code className="text-yellow-400">spawn</code>, <code className="text-yellow-400">tensor</code>, <code className="text-yellow-400">interrupt_gate</code>) with parameters &amp; arrow hints.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-400 font-bold">2.</span>
-                <span><strong>High-Fidelity Colors (Syntax Highlighting):</strong> Accurate TextMate grammar scopes distinguishing beginner clauses, contract invariants, quantum fibers, and hardware registers.</span>
+                <span><strong>High-Fidelity Colors (Syntax Highlighting):</strong> Dedicated TextMate scopes distinguishing pipelines, async events, safety guards, scientific tensors, and hardware kernels.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 font-bold">3.</span>
@@ -1020,7 +1021,7 @@ export default function App() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-purple-400 font-bold">4.</span>
-                <span><strong>Signature Help &amp; Hover:</strong> Live parameter tooltips and markdown documentation for all intrinsic functions and compiler primitives.</span>
+                <span><strong>Dedicated Syntax Snippets Pack:</strong> <code className="text-white">snippets/syntax_snippets.json</code> brings 25+ language syntax snippets for dataflow, async spawn, tensor math, and interrupts.</span>
               </li>
             </ul>
           </div>
@@ -1034,7 +1035,7 @@ export default function App() {
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                   <span className="text-xs text-slate-400 block mb-1">Via VS Code command line:</span>
                   <div className="font-mono text-xs text-emerald-300">
-                    code --install-extension c-greater-2.1.0.vsix
+                    code --install-extension c-greater-2.1.1.vsix
                   </div>
                 </div>
 

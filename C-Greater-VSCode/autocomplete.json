@@ -1,7 +1,154 @@
 {
-  "version": "2.1.0",
+  "version": "2.1.1",
   "language": "cgt",
   "keywords": [
+    {
+      "label": "flow",
+      "kind": "Keyword",
+      "detail": "Dataflow Pipeline (C> v2.1.1)",
+      "documentation": "Directs a data stream through declarative transformation stages: `flow dataset into sift(valid) into tally();`.",
+      "insertText": "flow ${1:data}\n    into ${2:stage}();"
+    },
+    {
+      "label": "into",
+      "kind": "Keyword",
+      "detail": "Pipeline Transformation Stage (C> v2.1.1)",
+      "documentation": "Connects processing stages in a dataflow pipeline: `into sift(...) into map(...)`.",
+      "insertText": "into ${1:transformer}(${2:args})"
+    },
+    {
+      "label": "sift",
+      "kind": "Keyword",
+      "detail": "Stream Filtration Clause (C> v2.1.1)",
+      "documentation": "Filters a data stream intuitively: `sift items where value > 0`.",
+      "insertText": "sift ${1:collection} where ${2:item} > ${3:0};"
+    },
+    {
+      "label": "tally",
+      "kind": "Keyword",
+      "detail": "Aggregate Stream Counter (C> v2.1.1)",
+      "documentation": "Aggregates count or sum across a stream: `let total = tally items where active;`.",
+      "insertText": "tally ${1:stream} where ${2:condition};"
+    },
+    {
+      "label": "mesh",
+      "kind": "Keyword",
+      "detail": "Parallel Flow Convergence (C> v2.1.1)",
+      "documentation": "Splits a stream into parallel pipelines and converges results: `mesh stream { diverge a; diverge b; converge; }`.",
+      "insertText": "mesh ${1:stream} {\n    diverge ${2:branch_a} -> ${3:action_a()};\n    converge into ${4:hub};\n}"
+    },
+    {
+      "label": "spawn",
+      "kind": "Keyword",
+      "detail": "Lightweight Async Worker (C> v2.1.1)",
+      "documentation": "Launches an asynchronous concurrent worker: `let task = spawn { compute(); };`.",
+      "insertText": "spawn {\n    ${0}\n}"
+    },
+    {
+      "label": "detach",
+      "kind": "Keyword",
+      "detail": "Fire-and-Forget Async Task (C> v2.1.1)",
+      "documentation": "Launches a detached task that runs to completion independently without needing a join handle.",
+      "insertText": "detach {\n    ${0}\n};"
+    },
+    {
+      "label": "await_all",
+      "kind": "Keyword",
+      "detail": "Multi-Task Concurrent Join (C> v2.1.1)",
+      "documentation": "Waits on multiple asynchronous tasks to complete simultaneously: `let [a, b] = await_all(t1, t2);`.",
+      "insertText": "await_all(${1:task_a}, ${2:task_b})"
+    },
+    {
+      "label": "await_any",
+      "kind": "Keyword",
+      "detail": "Concurrent Race Selector (C> v2.1.1)",
+      "documentation": "Races multiple asynchronous tasks and resolves with the first completed result: `let fastest = await_any(t1, t2);`.",
+      "insertText": "await_any(${1:task_a}, ${2:task_b})"
+    },
+    {
+      "label": "signal",
+      "kind": "Keyword",
+      "detail": "Broadcast Event Signal (C> v2.1.1)",
+      "documentation": "Declares a typed event signal that can be emitted and listened to across threads and fibers.",
+      "insertText": "signal ${1:EventName} {\n    ${2:field}: ${3:Type}\n};"
+    },
+    {
+      "label": "listen",
+      "kind": "Keyword",
+      "detail": "Event Signal Listener (C> v2.1.1)",
+      "documentation": "Listens for broadcasts of a given event signal: `listen EventName as ev { ... }`.",
+      "insertText": "listen ${1:EventName} as ${2:event} {\n    ${0}\n}"
+    },
+    {
+      "label": "every_interval",
+      "kind": "Keyword",
+      "detail": "Periodic Recurring Task (C> v2.1.1)",
+      "documentation": "Executes recurring periodic tasks cleanly: `every_interval 1.second { poll(); }`.",
+      "insertText": "every_interval ${1:1}.${2:second} {\n    ${0}\n}"
+    },
+    {
+      "label": "guard",
+      "kind": "Keyword",
+      "detail": "Precondition Guard Statement (C> v2.1.1)",
+      "documentation": "Enforces a condition with guaranteed early exit on failure: `guard ready else { return 0; }`.",
+      "insertText": "guard ${1:condition} else {\n    return ${2:0};\n}"
+    },
+    {
+      "label": "ensure_clean",
+      "kind": "Keyword",
+      "detail": "Unwinding Guarantees Block (C> v2.1.1)",
+      "documentation": "Guarantees resource teardown execution even during stack unwinding or error recovery.",
+      "insertText": "ensure_clean {\n    ${0}\n}"
+    },
+    {
+      "label": "isolate_fault",
+      "kind": "Keyword",
+      "detail": "Sandboxed Fault Isolation (C> v2.1.1)",
+      "documentation": "Sandboxes untrusted or volatile execution so panics or hardware traps do not bring down the program.",
+      "insertText": "isolate_fault {\n    ${1}\n} on_fault ${2:err} {\n    ${0}\n}"
+    },
+    {
+      "label": "sealed",
+      "kind": "Keyword",
+      "detail": "Tamper-Proof Type Layout (C> v2.1.1)",
+      "documentation": "Prevents inheritance or external modification of a struct or module layout.",
+      "insertText": "sealed struct ${1:Name} {\n    ${0}\n}"
+    },
+    {
+      "label": "interrupt_gate",
+      "kind": "Keyword",
+      "detail": "Hardware Interrupt Handler (C> v2.1.1)",
+      "documentation": "Defines a hardware interrupt service routine with automatic CPU register state saving and restoration.",
+      "insertText": "interrupt_gate ${1:irq_handler}(vector: ${2:0x20}) {\n    ${0}\n}"
+    },
+    {
+      "label": "cpu_port_in",
+      "kind": "Keyword",
+      "detail": "Hardware Port I/O Read (x86 inb) (C> v2.1.1)",
+      "documentation": "Reads a byte directly from a hardware CPU I/O port for kernel and bootloader development.",
+      "insertText": "cpu_port_in(${1:0x3F8})"
+    },
+    {
+      "label": "cpu_port_out",
+      "kind": "Keyword",
+      "detail": "Hardware Port I/O Write (x86 outb) (C> v2.1.1)",
+      "documentation": "Writes a byte directly to a hardware CPU I/O port for peripheral hardware control.",
+      "insertText": "cpu_port_out(${1:0x3F8}, ${2:byte_val});"
+    },
+    {
+      "label": "cache_flush",
+      "kind": "Keyword",
+      "detail": "Hardware Cache Invalidation (C> v2.1.1)",
+      "documentation": "Flushes CPU cache lines for coherent DMA and memory-mapped hardware synchronization.",
+      "insertText": "cache_flush(${1:address}, ${2:lines});"
+    },
+    {
+      "label": "dma_transfer",
+      "kind": "Keyword",
+      "detail": "Direct Memory Access Controller Burst (C> v2.1.1)",
+      "documentation": "Triggers hardware DMA controller burst data transfers without CPU cycle consumption.",
+      "insertText": "dma_transfer(src: ${1:src_addr}, dest: ${2:dst_addr}, bytes: ${3:size});"
+    },
     {
       "label": "say",
       "kind": "Keyword",
@@ -400,9 +547,77 @@
     { "label": "v128_i32", "detail": "128-bit SIMD vector (4 x i32)", "kind": "Class" },
     { "label": "v256_f32", "detail": "256-bit SIMD vector (8 x f32)", "kind": "Class" },
     { "label": "v256_i32", "detail": "256-bit SIMD vector (8 x i32)", "kind": "Class" },
+    { "label": "tensor", "detail": "High-performance contiguous multi-dimensional tensor type", "kind": "Class" },
+    { "label": "signal_hub", "detail": "Concurrent event broadcast channel hub", "kind": "Class" },
+    { "label": "event_packet", "detail": "Structured asynchronous event payload container", "kind": "Class" },
+    { "label": "irq_handle", "detail": "Hardware interrupt line descriptor", "kind": "Class" },
+    { "label": "dma_channel", "detail": "Direct memory access controller burst channel", "kind": "Class" },
     { "label": "unmanaged", "detail": "Raw unmanaged memory reference for bare metal", "kind": "Class" }
   ],
   "functions": [
+    {
+      "label": "matrix_mul",
+      "detail": "fn matrix_mul<T, M, K, N>(a: &tensor<T, [M, K]>, b: &tensor<T, [K, N]>) -> tensor<T, [M, N]>",
+      "documentation": "Hardware-accelerated SIMD matrix multiplication.",
+      "kind": "Function",
+      "insertText": "matrix_mul(&${1:mat_a}, &${2:mat_b})"
+    },
+    {
+      "label": "dot_product",
+      "detail": "fn dot_product<T, N>(a: &vector<T, N>, b: &vector<T, N>) -> T",
+      "documentation": "Calculates dot product of two hardware vectors.",
+      "kind": "Function",
+      "insertText": "dot_product(&${1:vec_a}, &${2:vec_b})"
+    },
+    {
+      "label": "norm",
+      "detail": "fn norm<T, N>(v: &vector<T, N>) -> f32",
+      "documentation": "Computes Euclidean L2 magnitude of vector.",
+      "kind": "Function",
+      "insertText": "norm(&${1:vec})"
+    },
+    {
+      "label": "clamp_range",
+      "detail": "fn clamp_range<T>(val: T, min_val: T, max_val: T) -> T",
+      "documentation": "Restricts value between minimum and maximum bounds.",
+      "kind": "Function",
+      "insertText": "clamp_range(${1:val}, ${2:min_val}, ${3:max_val})"
+    },
+    {
+      "label": "approx",
+      "detail": "fn approx<T>(a: T, b: T, epsilon: T) -> bool",
+      "documentation": "Validates floating-point equality within tolerance margin.",
+      "kind": "Function",
+      "insertText": "approx(${1:a}, ${2:b}, ${3:1e-5})"
+    },
+    {
+      "label": "cpu_port_in",
+      "detail": "fn cpu_port_in(port: u16) -> u8",
+      "documentation": "Reads a byte directly from hardware CPU I/O port (x86 inb).",
+      "kind": "Function",
+      "insertText": "cpu_port_in(${1:port})"
+    },
+    {
+      "label": "cpu_port_out",
+      "detail": "fn cpu_port_out(port: u16, val: u8) -> void",
+      "documentation": "Writes a byte directly to hardware CPU I/O port (x86 outb).",
+      "kind": "Function",
+      "insertText": "cpu_port_out(${1:port}, ${2:val});"
+    },
+    {
+      "label": "cache_flush",
+      "detail": "fn cache_flush(addr: usize, lines: usize) -> void",
+      "documentation": "Invalidates and flushes CPU cache lines for DMA memory coherence.",
+      "kind": "Function",
+      "insertText": "cache_flush(${1:addr}, ${2:lines});"
+    },
+    {
+      "label": "dma_transfer",
+      "detail": "fn dma_transfer(src: usize, dest: usize, bytes: usize) -> void",
+      "documentation": "Triggers asynchronous DMA controller memory burst transfer.",
+      "kind": "Function",
+      "insertText": "dma_transfer(src: ${1:src}, dest: ${2:dest}, bytes: ${3:size});"
+    },
     {
       "label": "say",
       "detail": "say value, ... -> void",

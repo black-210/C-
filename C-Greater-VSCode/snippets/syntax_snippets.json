@@ -1,0 +1,221 @@
+{
+  "Dataflow Pipeline": {
+    "prefix": "flow",
+    "body": [
+      "flow ${1:dataset}",
+      "    into sift(item -> ${2:item.is_valid})",
+      "    into map(item -> ${3:item.transform()})",
+      "    into tally();"
+    ],
+    "description": "Stream data through declarative transformation stages (C> v2.1.1)"
+  },
+  "Pipeline Into Stage": {
+    "prefix": "into",
+    "body": [
+      "into ${1:transformer}(${2:args})"
+    ],
+    "description": "Pipe transformed data stream into next processing node"
+  },
+  "Sift Filter Expression": {
+    "prefix": "sift",
+    "body": [
+      "sift ${1:collection} where ${2:item} > ${3:0};"
+    ],
+    "description": "Intuitive stream filtration without verbose lambda syntax"
+  },
+  "Tally Aggregator": {
+    "prefix": "tally",
+    "body": [
+      "let ${1:total} = tally ${2:stream} where ${3:active};"
+    ],
+    "description": "Declarative aggregate counter and summer"
+  },
+  "Mesh Parallel Divergence": {
+    "prefix": "mesh",
+    "body": [
+      "mesh ${1:stream} {",
+      "    diverge branch_a -> ${2:process_alpha()};",
+      "    diverge branch_b -> ${3:process_beta()};",
+      "    converge into ${4:merged_hub};",
+      "}"
+    ],
+    "description": "Parallel dataflow branching and convergence pipeline"
+  },
+  "Async Worker Spawn": {
+    "prefix": "spawn",
+    "body": [
+      "let ${1:task} = spawn {",
+      "    ${0:// asynchronous background worker}",
+      "};"
+    ],
+    "description": "Spawns a lightweight asynchronous worker task"
+  },
+  "Async Detach": {
+    "prefix": "detach",
+    "body": [
+      "detach {",
+      "    ${0:// fire-and-forget background operation}",
+      "};"
+    ],
+    "description": "Launches a detached fire-and-forget background fiber"
+  },
+  "Await All Multi-Join": {
+    "prefix": "await_all",
+    "body": [
+      "let [${1:res_a}, ${2:res_b}] = await_all(${3:task_a}, ${4:task_b});"
+    ],
+    "description": "Waits on all concurrent tasks to complete"
+  },
+  "Await Any Race": {
+    "prefix": "await_any",
+    "body": [
+      "let ${1:first_completed} = await_any(${2:task_a}, ${3:task_b});"
+    ],
+    "description": "Races concurrent tasks and returns the first result"
+  },
+  "Event Signal Broadcast": {
+    "prefix": "signal",
+    "body": [
+      "signal ${1:EventName} {\n    ${2:payload}: ${3:Type}\n};",
+      "emit_event ${1:EventName} { ${2:payload}: ${4:val} };"
+    ],
+    "description": "Declares and broadcasts a structured event signal"
+  },
+  "Event Listener Hook": {
+    "prefix": "listen",
+    "body": [
+      "listen ${1:EventName} as ${2:event} {",
+      "    ${0:// handle incoming event}",
+      "}"
+    ],
+    "description": "Subscribes to an event signal stream"
+  },
+  "Every Interval Periodic Timer": {
+    "prefix": "every_interval",
+    "body": [
+      "every_interval ${1:1}.${2|second,millisecond,minute|} {",
+      "    ${0:// recurring periodic task}",
+      "}"
+    ],
+    "description": "Executes recurring periodic tasks without callback bloat"
+  },
+  "Guard Precondition Exit": {
+    "prefix": "guard",
+    "body": [
+      "guard ${1:condition} else {",
+      "    ${2:return ${3:0};}",
+      "}"
+    ],
+    "description": "Precondition guard requiring early exit on failure"
+  },
+  "Ensure Clean Scope": {
+    "prefix": "ensure_clean",
+    "body": [
+      "ensure_clean {",
+      "    ${0:// guaranteed execution even on unwinding or error}",
+      "}"
+    ],
+    "description": "Guarantees resource teardown during scope collapse"
+  },
+  "Fault Isolated Sandbox": {
+    "prefix": "isolate_fault",
+    "body": [
+      "isolate_fault {",
+      "    ${1:// untrusted or volatile execution section}",
+      "} on_fault err {",
+      "    say \"Fault contained safely: \", err;",
+      "}"
+    ],
+    "description": "Sandboxed execution containing panics and hardware faults safely"
+  },
+  "Sealed Struct Declaration": {
+    "prefix": "sealed",
+    "body": [
+      "sealed struct ${1:SecurityToken} {",
+      "    ${2:hash}: u64,",
+      "    ${3:timestamp}: u64,",
+      "}"
+    ],
+    "description": "Declares an unextendable, tamper-proof type layout"
+  },
+  "Interrupt Service Gate": {
+    "prefix": "interrupt_gate",
+    "body": [
+      "interrupt_gate ${1:irq_timer}(vector: ${2:0x20}) {",
+      "    ${0:// hardware interrupt servicing routine}",
+      "}"
+    ],
+    "description": "Native interrupt service handler with automatic register preservation"
+  },
+  "CPU Port Input (x86 inb)": {
+    "prefix": "cpu_port_in",
+    "body": [
+      "let ${1:byte_val}: u8 = cpu_port_in(${2:0x3F8});"
+    ],
+    "description": "Reads byte from hardware CPU I/O port"
+  },
+  "CPU Port Output (x86 outb)": {
+    "prefix": "cpu_port_out",
+    "body": [
+      "cpu_port_out(${1:0x3F8}, ${2:byte_val});"
+    ],
+    "description": "Writes byte to hardware CPU I/O port"
+  },
+  "Cache Line Flush": {
+    "prefix": "cache_flush",
+    "body": [
+      "cache_flush(${1:address}, ${2:line_count});"
+    ],
+    "description": "Flushes hardware CPU cache lines to physical memory"
+  },
+  "DMA Memory Transfer": {
+    "prefix": "dma_transfer",
+    "body": [
+      "dma_transfer(src: ${1:src_addr}, dest: ${2:dst_addr}, bytes: ${3:size});"
+    ],
+    "description": "Direct Memory Access hardware controller burst transfer"
+  },
+  "Tensor Mathematical Type": {
+    "prefix": "tensor",
+    "body": [
+      "let mut ${1:matrix}: tensor<${2:f32}, [${3:4}, ${4:4}]> = tensor::zeros();",
+      "${0}"
+    ],
+    "description": "High-performance contiguous multi-dimensional tensor"
+  },
+  "Matrix Multiplication": {
+    "prefix": "matrix_mul",
+    "body": [
+      "let ${1:c} = matrix_mul(&${2:mat_a}, &${3:mat_b});"
+    ],
+    "description": "Hardware-accelerated SIMD matrix multiplication"
+  },
+  "Vector Dot Product": {
+    "prefix": "dot_product",
+    "body": [
+      "let ${1:similarity} = dot_product(&${2:vec_a}, &${3:vec_b});"
+    ],
+    "description": "High-speed hardware SIMD dot product"
+  },
+  "Euclidean Vector Norm": {
+    "prefix": "norm",
+    "body": [
+      "let ${1:magnitude} = norm(&${2:vector});"
+    ],
+    "description": "Calculates Euclidean vector norm (L2 length)"
+  },
+  "Clamp Value In Range": {
+    "prefix": "clamp_range",
+    "body": [
+      "let ${1:clamped} = clamp_range(${2:val}, ${3:min_val}, ${4:max_val});"
+    ],
+    "description": "Clamps value between minimum and maximum bounds"
+  },
+  "Approximate Float Equality": {
+    "prefix": "approx",
+    "body": [
+      "check approx(${1:actual}, ${2:expected}, ${3:1e-5}), \"${4:floating point deviation}\";"
+    ],
+    "description": "Validates floating point values within epsilon tolerance"
+  }
+}

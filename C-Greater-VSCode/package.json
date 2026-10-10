@@ -1,8 +1,8 @@
 {
   "name": "c-greater",
   "displayName": "C> (C-Greater) Language Support",
-  "description": "Universal, self-compiling language support with ultra-simple beginner syntax, high-performance low-level hardware control, syntax highlighting, autocomplete, snippets, and live mistake detection for VS Code & Code-OSS",
-  "version": "2.1.0",
+  "description": "Universal, self-compiling language support with ultra-simple beginner syntax, high-performance low-level hardware control, dedicated syntax snippets, intelligent autocomplete, and live mistake detection for VS Code & Code-OSS",
+  "version": "2.1.1",
   "publisher": "cgt-lang",
   "author": {
     "name": "C> Language Development Team"
@@ -63,6 +63,10 @@
       {
         "language": "cgt",
         "path": "./snippets/cgt.json"
+      },
+      {
+        "language": "cgt",
+        "path": "./snippets/syntax_snippets.json"
       }
     ],
     "commands": [
