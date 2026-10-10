@@ -764,6 +764,118 @@
       "documentation": "Writes a 32-bit value to a hardware register via volatile memory-mapped I/O.",
       "kind": "Function",
       "insertText": "mmio_write32(${1:addr}, ${2:val});"
+    },
+    {
+      "label": "inspect",
+      "detail": "Universal State Inspection (C> v2.1.1)",
+      "documentation": "Formatted, color-coded diagnostic inspection of any expression or object structure.",
+      "kind": "Function",
+      "insertText": "inspect(${1:variable});"
+    },
+    {
+      "label": "announce",
+      "detail": "Structured Status Broadcast (C> v2.1.1)",
+      "documentation": "Broadcasts a structured system milestone or notification to standard output and event log.",
+      "kind": "Keyword",
+      "insertText": "announce \"${1:Category}\", \"${2:Message}\";"
+    },
+    {
+      "label": "gather",
+      "detail": "Parallel & Stream Aggregator (C> v2.1.1)",
+      "documentation": "Gathers multiple streams, fibers, or collection slices into an aligned unified array.",
+      "kind": "Keyword",
+      "insertText": "let ${1:results} = gather [${2:task1}, ${3:task2}];"
+    },
+    {
+      "label": "step_by",
+      "detail": "Range Stepper Modifier (C> v2.1.1)",
+      "documentation": "Specifies the step stride increment for numerical range iteration.",
+      "kind": "Keyword",
+      "insertText": "step_by(${1:stride})"
+    },
+    {
+      "label": "batch",
+      "detail": "Vectorized Stream Batcher (C> v2.1.1)",
+      "documentation": "Chunks incoming pipeline stream into fixed-size batches for vectorized SIMD execution.",
+      "kind": "Keyword",
+      "insertText": "batch(${1:size})"
+    },
+    {
+      "label": "chunk",
+      "detail": "Zero-Copy Slice Chunker (C> v2.1.1)",
+      "documentation": "Splits a continuous memory buffer into contiguous non-overlapping chunks.",
+      "kind": "Keyword",
+      "insertText": "chunk(${1:length})"
+    },
+    {
+      "label": "cascade",
+      "detail": "Ordered Pipeline Cascade (C> v2.1.1)",
+      "documentation": "Cascades transformations through a sequenced processing pipeline with automatic error bypass.",
+      "kind": "Keyword",
+      "insertText": "cascade {\n    ${1:stage1}();\n    ${2:stage2}();\n}"
+    },
+    {
+      "label": "channel",
+      "detail": "Lock-Free Async Channel (C> v2.1.1)",
+      "documentation": "Declares a lock-free, bounded asynchronous communication channel.",
+      "kind": "Keyword",
+      "insertText": "let (${1:tx}, ${2:rx}) = channel::<${3:Type}>(${4:capacity});"
+    },
+    {
+      "label": "pulse",
+      "detail": "Hardware Heartbeat Timer (C> v2.1.1)",
+      "documentation": "Recurring high-precision hardware pulse loop triggered at fixed real-time intervals.",
+      "kind": "Keyword",
+      "insertText": "pulse ${1:heartbeat} every ${2:100}.millisecond {\n    ${0}\n}"
+    },
+    {
+      "label": "timeout_after",
+      "detail": "Async Timeout Guard (C> v2.1.1)",
+      "documentation": "Executes an asynchronous block with strict hardware or software timeout cancellation.",
+      "kind": "Keyword",
+      "insertText": "timeout_after(${1:duration}) {\n    ${0}\n}"
+    },
+    {
+      "label": "audit_bounds",
+      "detail": "Static/Dynamic Memory Bounds Guard (C> v2.1.1)",
+      "documentation": "Verifies memory slice boundaries with zero runtime cost in release mode.",
+      "kind": "Keyword",
+      "insertText": "audit_bounds(${1:buffer}, ${2:size}) else {\n    ${3:return Err(\"Out of bounds\");}\n};"
+    },
+    {
+      "label": "fail_safe",
+      "detail": "Deterministic Fail-Safe Block (C> v2.1.1)",
+      "documentation": "Provides guaranteed mission-critical dual-path redundancy with automated fallback.",
+      "kind": "Keyword",
+      "insertText": "fail_safe {\n    ${1:// primary path}\n} fallback {\n    ${2:// safe fallback}\n}"
+    },
+    {
+      "label": "object_format",
+      "detail": "Target Binary Object Specification (C> v2.1.1)",
+      "documentation": "Specifies native object format (elf64, pe64, macho64, wasm) for autonomous compilation.",
+      "kind": "Keyword",
+      "insertText": "object_format(\"${1|elf64,pe64,macho64,wasm|}\");"
+    },
+    {
+      "label": "reloc_table",
+      "detail": "Native Relocation Table Emitter (C> v2.1.1)",
+      "documentation": "Emits direct ELF/PE relocation entries during autonomous binary generation.",
+      "kind": "Keyword",
+      "insertText": "reloc_table::generate(&${1:symbol_table});"
+    },
+    {
+      "label": "memory_barrier",
+      "detail": "CPU Hardware Memory Fence (C> v2.1.1)",
+      "documentation": "Issues a CPU hardware memory serialization fence barrier (mfence/dmb).",
+      "kind": "Keyword",
+      "insertText": "memory_barrier(${1|full_sync,read_sync,write_sync|});"
+    },
+    {
+      "label": "simd_lane",
+      "detail": "Direct Vector Register Lane (C> v2.1.1)",
+      "documentation": "Directly accesses or mutates an individual lane of a SIMD hardware register.",
+      "kind": "Keyword",
+      "insertText": "simd_lane(${1:vector_reg}, ${2:lane_index})"
     }
   ]
 }

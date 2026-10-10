@@ -1,0 +1,223 @@
+{
+  "name": "C> Vibrant Dark Theme",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#0b0f19",
+    "editor.foreground": "#e2e8f0",
+    "activityBar.background": "#0f172a",
+    "sideBar.background": "#090d16",
+    "statusBar.background": "#0f172a",
+    "editorLineNumber.foreground": "#475569",
+    "editorLineNumber.activeForeground": "#38bdf8",
+    "editorCursor.foreground": "#38bdf8",
+    "editor.selectionBackground": "#334155aa",
+    "editor.lineHighlightBackground": "#1e293b55"
+  },
+  "tokenColors": [
+    {
+      "name": "C> Comments",
+      "scope": [
+        "comment",
+        "comment.line",
+        "comment.block",
+        "comment.line.double-slash.cgt",
+        "comment.block.cgt"
+      ],
+      "settings": {
+        "foreground": "#94a3b8",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "C> Strings & Character Escapes",
+      "scope": [
+        "string",
+        "string.quoted",
+        "string.quoted.double.cgt",
+        "string.quoted.single.cgt",
+        "constant.character.escape.cgt"
+      ],
+      "settings": {
+        "foreground": "#4ade80",
+        "fontStyle": "normal"
+      }
+    },
+    {
+      "name": "C> Numbers & Numeric Constants",
+      "scope": [
+        "constant.numeric",
+        "constant.numeric.hex.cgt",
+        "constant.numeric.binary.cgt",
+        "constant.numeric.float.cgt",
+        "constant.numeric.decimal.cgt"
+      ],
+      "settings": {
+        "foreground": "#fb923c",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Beginner Universal Keywords (say, ask, repeat, whenever, etc.)",
+      "scope": [
+        "keyword.control.beginner.cgt",
+        "keyword.beginner.cgt",
+        "support.function.beginner.cgt"
+      ],
+      "settings": {
+        "foreground": "#facc15",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Low-Level & Bare-Metal Hardware Keywords",
+      "scope": [
+        "keyword.other.hardware.cgt",
+        "keyword.other.lowlevel.cgt",
+        "keyword.other.kernel.cgt",
+        "keyword.hardware.cgt",
+        "storage.modifier.hardware.cgt"
+      ],
+      "settings": {
+        "foreground": "#f43f5e",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Autonomous Self-Host & Bootstrapping",
+      "scope": [
+        "keyword.control.selfhost.cgt",
+        "keyword.selfhost.cgt",
+        "keyword.control.directive.selfhost.cgt"
+      ],
+      "settings": {
+        "foreground": "#38bdf8",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Pipeline & Dataflow Streaming",
+      "scope": [
+        "keyword.control.flow.cgt",
+        "keyword.pipeline.cgt"
+      ],
+      "settings": {
+        "foreground": "#c084fc",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Async, Events & Concurrency",
+      "scope": [
+        "keyword.control.async.cgt",
+        "keyword.control.concurrency.cgt",
+        "keyword.async.cgt"
+      ],
+      "settings": {
+        "foreground": "#a855f7",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Safety Guards & Fault Isolation",
+      "scope": [
+        "keyword.control.guard.cgt",
+        "keyword.safety.cgt"
+      ],
+      "settings": {
+        "foreground": "#34d399",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Formal Contracts & Specifications",
+      "scope": [
+        "keyword.control.contract.cgt",
+        "keyword.contract.cgt"
+      ],
+      "settings": {
+        "foreground": "#2dd4bf",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Control Flow Keywords (if, else, while, for, match, defer)",
+      "scope": [
+        "keyword.control",
+        "keyword.control.cgt"
+      ],
+      "settings": {
+        "foreground": "#e879f9",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Declarations & Modifiers (fn, let, mut, struct, trait, impl)",
+      "scope": [
+        "keyword.declaration.cgt",
+        "storage.type.function",
+        "storage.modifier",
+        "storage.modifier.memory.cgt"
+      ],
+      "settings": {
+        "foreground": "#818cf8",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Builtin Primitive & Hardware Types",
+      "scope": [
+        "storage.type",
+        "storage.type.primitive.cgt",
+        "storage.type.hardware.cgt",
+        "entity.name.type"
+      ],
+      "settings": {
+        "foreground": "#67e8f9",
+        "fontStyle": "normal"
+      }
+    },
+    {
+      "name": "C> Functions & Calls",
+      "scope": [
+        "entity.name.function",
+        "entity.name.function.cgt",
+        "entity.name.function.call.cgt",
+        "support.function",
+        "support.function.cgt"
+      ],
+      "settings": {
+        "foreground": "#60a5fa",
+        "fontStyle": "normal"
+      }
+    },
+    {
+      "name": "C> Operators & Delimiters",
+      "scope": [
+        "keyword.operator",
+        "keyword.operator.arrow.cgt",
+        "keyword.operator.comparison.cgt",
+        "keyword.operator.assignment.cgt",
+        "keyword.operator.arithmetic.cgt",
+        "keyword.operator.bitwise.cgt",
+        "keyword.operator.logical.cgt",
+        "keyword.operator.range.cgt"
+      ],
+      "settings": {
+        "foreground": "#f472b6",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "C> Boolean & Null Constants",
+      "scope": [
+        "constant.language",
+        "constant.language.boolean.cgt",
+        "constant.language.null.cgt"
+      ],
+      "settings": {
+        "foreground": "#f97316",
+        "fontStyle": "bold"
+      }
+    }
+  ]
+}

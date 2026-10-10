@@ -90,7 +90,7 @@
       "patterns": [
         {
           "name": "keyword.control.beginner.cgt",
-          "match": "\\b(say|ask|repeat|every|whenever|otherwise|define|given|when|attempt|trouble|check|hold|times)\\b"
+          "match": "\\b(say|ask|repeat|every|whenever|otherwise|define|given|when|attempt|trouble|check|hold|times|inspect|announce|gather|step_by)\\b"
         }
       ]
     },
@@ -98,7 +98,7 @@
       "patterns": [
         {
           "name": "keyword.control.flow.cgt",
-          "match": "\\b(flow|into|pipe|sift|tally|mesh|diverge|converge)\\b"
+          "match": "\\b(flow|into|pipe|sift|tally|mesh|diverge|converge|batch|chunk|cascade)\\b"
         }
       ]
     },
@@ -106,7 +106,7 @@
       "patterns": [
         {
           "name": "keyword.control.async.cgt",
-          "match": "\\b(spawn|detach|await_all|await_any|signal|listen|emit_event|every_interval)\\b"
+          "match": "\\b(spawn|detach|await_all|await_any|signal|listen|emit_event|every_interval|channel|pulse|timeout_after)\\b"
         }
       ]
     },
@@ -114,7 +114,7 @@
       "patterns": [
         {
           "name": "keyword.control.guard.cgt",
-          "match": "\\b(guard|ensure_clean|isolate_fault|on_fault|sealed)\\b"
+          "match": "\\b(guard|ensure_clean|isolate_fault|on_fault|sealed|audit_bounds|fail_safe)\\b"
         }
       ]
     },
@@ -122,7 +122,7 @@
       "patterns": [
         {
           "name": "keyword.other.kernel.cgt",
-          "match": "\\b(interrupt_gate|cpu_port_in|cpu_port_out|cache_flush|dma_transfer)\\b"
+          "match": "\\b(interrupt_gate|cpu_port_in|cpu_port_out|cache_flush|dma_transfer|memory_barrier|simd_lane)\\b"
         }
       ]
     },
@@ -130,7 +130,7 @@
       "patterns": [
         {
           "name": "keyword.control.selfhost.cgt",
-          "match": "\\b(bootstrap|emit_binary|emit_native|byte_stream|lex_stream|parse_tree|target_arch|sym_table|link_native)\\b"
+          "match": "\\b(bootstrap|emit_binary|emit_native|byte_stream|lex_stream|parse_tree|target_arch|sym_table|link_native|object_format|reloc_table)\\b"
         }
       ]
     },
@@ -138,7 +138,7 @@
       "patterns": [
         {
           "name": "keyword.other.hardware.cgt",
-          "match": "\\b(lowlevel|opt_hardware|raw_register|mmio_map|fence_sync|direct_reg|bit_slice|endian_swap|unmanaged|bare_metal)\\b"
+          "match": "\\b(lowlevel|opt_hardware|raw_register|mmio_map|fence_sync|direct_reg|bit_slice|endian_swap|unmanaged|bare_metal|memory_barrier|simd_lane)\\b"
         }
       ]
     },

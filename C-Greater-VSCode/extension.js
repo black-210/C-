@@ -107,6 +107,22 @@ function activate(context) {
                     completionList.push(guardComp);
                 }
 
+                if (linePrefix.startsWith('fail_safe') && !linePrefix.includes('fallback')) {
+                    const failSafeComp = new vscode.CompletionItem('fallback { ... }', vscode.CompletionItemKind.Snippet);
+                    failSafeComp.insertText = new vscode.SnippetString('fallback {\n    ${0}\n}');
+                    failSafeComp.detail = 'Deterministic safe fallback block (C> v2.1.1)';
+                    failSafeComp.sortText = '00_fallback';
+                    completionList.push(failSafeComp);
+                }
+
+                if (linePrefix.startsWith('pulse') && !linePrefix.includes('every')) {
+                    const pulseComp = new vscode.CompletionItem('every interval { ... }', vscode.CompletionItemKind.Snippet);
+                    pulseComp.insertText = new vscode.SnippetString('every ${1:100}.millisecond {\n    ${0}\n}');
+                    pulseComp.detail = 'Hardware pulse interval execution';
+                    pulseComp.sortText = '00_pulse';
+                    completionList.push(pulseComp);
+                }
+
                 // Keywords with snippet insert texts
                 (autocompleteData.keywords || []).forEach(item => {
                     const comp = new vscode.CompletionItem(item.label, vscode.CompletionItemKind.Keyword);

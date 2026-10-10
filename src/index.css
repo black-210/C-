@@ -317,12 +317,23 @@ body {
 }
 .code-block code { display: block; white-space: pre; }
 
-.tok-comment { color: #4a5568; font-style: italic; }
-.tok-string  { color: #9ece6a; }
-.tok-keyword { color: #7aa2f7; font-weight: 600; }
-.tok-type    { color: #e0af68; }
-.tok-number  { color: #ff9e64; }
-.tok-fn      { color: #7dcfff; }
+.tok-comment   { color: #94a3b8; font-style: italic; }
+.tok-string    { color: #4ade80; font-weight: 500; }
+.tok-number    { color: #fb923c; font-weight: 600; }
+.tok-beginner  { color: #facc15; font-weight: 700; text-shadow: 0 0 12px rgba(250, 204, 21, 0.35); }
+.tok-hardware  { color: #f43f5e; font-weight: 700; text-shadow: 0 0 12px rgba(244, 63, 94, 0.35); }
+.tok-selfhost  { color: #38bdf8; font-weight: 700; text-shadow: 0 0 12px rgba(56, 189, 248, 0.35); }
+.tok-control   { color: #c084fc; font-weight: 700; }
+.tok-guard     { color: #34d399; font-weight: 700; }
+.tok-async     { color: #a855f7; font-weight: 700; }
+.tok-contract  { color: #2dd4bf; font-weight: 700; }
+.tok-declaration { color: #818cf8; font-weight: 700; }
+.tok-type      { color: #67e8f9; font-weight: 600; }
+.tok-fn        { color: #60a5fa; font-weight: 600; }
+.tok-const     { color: #f97316; font-weight: 700; }
+.tok-operator  { color: #f472b6; font-weight: 600; }
+.tok-punct     { color: #94a3b8; font-weight: 400; }
+.tok-ident     { color: #e2e8f0; font-weight: 400; }
 
 /* ─── Examples ───────────────────────────────────────────────────────────────── */
 

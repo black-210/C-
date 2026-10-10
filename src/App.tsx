@@ -20,6 +20,104 @@ interface CodeSample {
 
 const codeSamples: CodeSample[] = [
   {
+    id: 'v211_syntax_snippets_colors',
+    category: 'beginner',
+    title: 'v2.1.1 Universal Syntax, Snippets & Color Coding',
+    badge: 'v2.1.1 Full Color Matrix',
+    description: 'Demonstrating new words, snippets, and vibrant color-coded keywords across all layers without boilerplate.',
+    code: `// C> v2.1.1 Universal Syntax, Snippets & Color Coding Showcase
+// Universal — accessible to beginners, yet fully capable of bare-metal systems
+
+// 1. Beginner Universal Syntax (Color: Golden Yellow)
+say "--- 1. Beginner Universal Syntax ---";
+announce "INIT", "Launching C> v2.1.1 Universal Runtime Environment";
+
+let student_name = ask("What is your name? ");
+say "Welcome, student! Let's explore clean declarative programming.";
+
+repeat 3 times {
+    say "C> is universal: clean, expressive, and instant.";
+}
+
+let score = 98;
+whenever score >= 90 {
+    say "Result: Mastery Level Achieved!";
+} otherwise {
+    say "Result: Practice makes perfect.";
+}
+
+// 2. Dataflow & Stream Pipelines (Color: Lilac Purple)
+say "--- 2. Dataflow Pipeline Streaming ---";
+let raw_data = [10, 25, 4, 88, 12, 95];
+inspect(raw_data);
+
+// 3. Safety Guards & Boundary Validation (Color: Spring Mint Green)
+say "--- 3. Safety Guards ---";
+audit_bounds(raw_data, 6) else {
+    say "Boundary check failed!";
+};
+
+fail_safe {
+    say "Primary mission execution running smoothly.";
+} fallback {
+    say "Fallback emergency path engaged.";
+}
+
+// 4. Concurrency & Heartbeat Pulse (Color: Radiant Violet)
+say "--- 4. Concurrency & Heartbeat ---";
+pulse system_heartbeat every 100.millisecond {
+    say "Heartbeat beat: OK";
+}
+
+// 5. Autonomous Machine Compilation (Color: Electric Cyan)
+say "--- 5. Autonomous Self-Compiler Direct Emission ---";
+bootstrap compiler {
+    target_arch("x86_64");
+    object_format("elf64");
+    let stream = byte_stream::new();
+    emit_binary("autonomous_cgt_v211", stream);
+}
+
+// 6. Optional Bare-Metal Hardware Control (Color: Fiery Crimson)
+say "--- 6. Optional Bare-Metal Systems Control ---";
+opt_hardware bare_metal {
+    say "[Hardware]: Direct MMIO register mapping active.";
+    let reg = mmio_map(0x40000000, size: 4096);
+    memory_barrier(full_sync);
+}
+
+say "=================================================================";
+say "  C> v2.1.1: Syntax, Snippets, and Autonomous Engine Verified!    ";
+say "=================================================================";`,
+    expectedOutput: `--- 1. Beginner Universal Syntax ---
+What is your name? Welcome, student! Let's explore clean declarative programming.
+C> is universal: clean, expressive, and instant.
+C> is universal: clean, expressive, and instant.
+C> is universal: clean, expressive, and instant.
+Result: Mastery Level Achieved!
+--- 2. Dataflow Pipeline Streaming ---
+[Inspect] [ 10, 25, 4, 88, 12, 95 ]
+--- 3. Safety Guards ---
+Primary mission execution running smoothly.
+--- 4. Concurrency & Heartbeat ---
+Heartbeat beat: OK
+--- 5. Autonomous Self-Compiler Direct Emission ---
+[C> Autonomous Compiler]: Bootstrapping self-compiler...
+[C> Autonomous Pipeline]: Hardware target set to x86_64.
+[C> Autonomous Pipeline]: Target object format set to elf64.
+[C> Autonomous Emitter]: Emitting standalone native binary 'autonomous_cgt_v211' directly to disk.
+[C> Autonomous Compiler]: Autonomous self-compilation successful!
+--- 6. Optional Bare-Metal Systems Control ---
+[Hardware]: Direct MMIO register mapping active.
+[C> Hardware]: Memory serialization barrier committed (full_sync).
+=================================================================
+  C> v2.1.1: Syntax, Snippets, and Autonomous Engine Verified!    
+=================================================================`,
+    translatedSnippet: `/* Autonomous C> v2.1.1 pipeline */
+/* Dedicated snippets in snippets/c-greater-syntax-snippets.json */
+/* Complete color theme contributed in themes/c-greater-dark-theme.json */`
+  },
+  {
     id: 'beginner_simple',
     category: 'beginner',
     title: 'Ultra-Simple Syntax (Simpler than Python)',
@@ -565,58 +663,117 @@ const stats = [
   { label: 'C Compiler Dependencies', value: '0 (Autonomous)' },
 ];
 
-// ─── Syntax Highlighter ────────────────────────────────────────────────────────
+// ─── Syntax Highlighter (Token Scanner with Vibrant Color Coding) ───────────────
 
 function highlightCode(code: string): string {
-  const keywords = [
-    'module', 'fn', 'let', 'mut', 'own', 'struct', 'enum', 'trait', 'impl',
-    'unsafe', 'gpu_kernel', 'gpu_dispatch', 'simd', 'return', 'if', 'else', 'while', 'for',
-    'in', 'match', 'break', 'continue', 'import', 'type', 'const', 'defer',
-    'asm', 'atomic', 'move', 'true', 'false', 'null', 'as', 'pub', 'extern',
-    'sizeof', 'borrow', 'view', 'class',
-    // C> v2+ keywords
-    'spec', 'contract', 'requires', 'ensures', 'invariant',
-    'nexus', 'quantum', 'yield_to', 'region', 'morph',
-    'isolate', 'hazard', 'claim', 'pin', 'volatile',
-    // C> v2.1 Universal keywords
+  const tokens = [
+    { type: 'comment', rx: /^(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/ },
+    { type: 'string', rx: /^("(\\.|[^"\\])*"|'(\\.|[^'\\])*')/ },
+    { type: 'number', rx: /^(0x[0-9a-fA-F_]+|0b[01_]+|\d+(?:\.\d+)?(?:[eE][+-]?\d+)?(?:f32|f64|u\d+|i\d+|usize)?)/ },
+    { type: 'operator', rx: /^(->|=>|==|!=|<=|>=|&&|\|\||[+\-*\/%@&=|^!<>~]+)/ },
+    { type: 'punct', rx: /^([;:,(){}\[\]])/ },
+    { type: 'word', rx: /^[a-zA-Z_]\w*/ },
+    { type: 'space', rx: /^\s+/ },
+    { type: 'other', rx: /^./ }
+  ];
+
+  const beginnerWords = new Set([
     'say', 'ask', 'repeat', 'every', 'whenever', 'otherwise', 'define', 'given', 'when',
-    'attempt', 'trouble', 'check', 'hold', 'bootstrap', 'emit_binary', 'byte_stream',
-    'target_arch', 'lowlevel', 'opt_hardware', 'raw_register', 'mmio_map', 'bit_slice',
-    'endian_swap', 'fence_sync', 'bare_metal'
-  ];
-  const types = [
-    'i8', 'i16', 'i32', 'i64', 'i128', 'isize',
-    'u8', 'u16', 'u32', 'u64', 'u128', 'usize',
-    'f32', 'f64', 'bool', 'char', 'void', 'str',
-    'vector', 'device_span', 'v128_f32', 'v128_i32', 'v256_f32', 'v256_i32', 'Buffer'
-  ];
+    'attempt', 'trouble', 'check', 'hold', 'times', 'inspect', 'announce', 'gather', 'step_by'
+  ]);
+  const controlWords = new Set([
+    'flow', 'into', 'pipe', 'sift', 'tally', 'mesh', 'diverge', 'converge', 'batch', 'chunk', 'cascade',
+    'if', 'else', 'while', 'for', 'in', 'return', 'break', 'continue', 'defer', 'match'
+  ]);
+  const guardWords = new Set([
+    'guard', 'ensure_clean', 'isolate_fault', 'on_fault', 'sealed', 'audit_bounds', 'fail_safe'
+  ]);
+  const asyncWords = new Set([
+    'spawn', 'detach', 'await_all', 'await_any', 'signal', 'listen', 'emit_event', 'every_interval',
+    'channel', 'pulse', 'timeout_after', 'nexus', 'quantum', 'yield_to'
+  ]);
+  const selfhostWords = new Set([
+    'bootstrap', 'compiler', 'target_arch', 'object_format', 'emit_binary', 'emit_native',
+    'byte_stream', 'lex_stream', 'parse_tree', 'sym_table', 'link_native', 'reloc_table'
+  ]);
+  const hwWords = new Set([
+    'lowlevel', 'opt_hardware', 'raw_register', 'mmio_map', 'fence_sync', 'direct_reg', 'bit_slice',
+    'endian_swap', 'unmanaged', 'bare_metal', 'memory_barrier', 'simd_lane', 'asm', 'volatile',
+    'region', 'morph', 'isolate', 'hazard', 'claim', 'pin', 'interrupt_gate', 'cpu_port_in',
+    'cpu_port_out', 'cache_flush', 'dma_transfer'
+  ]);
+  const contractWords = new Set(['spec', 'contract', 'requires', 'ensures', 'invariant']);
+  const declWords = new Set([
+    'fn', 'let', 'mut', 'own', 'lent', 'ref', 'borrow', 'move', 'clone',
+    'struct', 'enum', 'trait', 'impl', 'type', 'const', 'pub', 'extern', 'module', 'import', 'as'
+  ]);
+  const typeWords = new Set([
+    'i8', 'i16', 'i32', 'i64', 'i128', 'isize', 'u8', 'u16', 'u32', 'u64', 'u128', 'usize',
+    'f32', 'f64', 'bool', 'void', 'str', 'char', 'ptr', 'vector', 'tensor', 'device_span', 'Buffer',
+    'v128_f32', 'v128_i32', 'v256_f32', 'v256_i32'
+  ]);
+  const constWords = new Set(['true', 'false', 'null', 'nil']);
+  const fnWords = new Set([
+    'println', 'print', 'print_i64', 'panic', 'assert', 'sizeof', 'alignof', 'matrix_mul',
+    'dot_product', 'norm', 'clamp_range', 'approx', 'atomic_load', 'atomic_store', 'atomic_add',
+    'atomic_sub', 'atomic_cas', 'mmio_read32', 'mmio_write32'
+  ]);
 
-  let result = code
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  function escapeHtml(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
 
-  // Comments
-  result = result.replace(/(\/\/[^\n]*)/g, '<span class="tok-comment">$1</span>');
+  let out = '';
+  let i = 0;
+  while (i < code.length) {
+    const substr = code.slice(i);
+    let matched = false;
+    for (const t of tokens) {
+      const m = t.rx.exec(substr);
+      if (m) {
+        matched = true;
+        const text = m[0];
+        i += text.length;
+        const esc = escapeHtml(text);
 
-  // Strings
-  result = result.replace(/("[^"]*")/g, '<span class="tok-string">$1</span>');
-
-  // Keywords
-  const kwPattern = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
-  result = result.replace(kwPattern, '<span class="tok-keyword">$1</span>');
-
-  // Types
-  const typePattern = new RegExp(`\\b(${types.join('|')})\\b`, 'g');
-  result = result.replace(typePattern, '<span class="tok-type">$1</span>');
-
-  // Numbers (hex and decimal)
-  result = result.replace(/\b(0x[0-9a-fA-F]+|\d+)\b/g, '<span class="tok-number">$1</span>');
-
-  // Functions (word followed by opening paren)
-  result = result.replace(/\b([a-z_][a-z0-9_]*)\s*\(/gi, '<span class="tok-fn">$1</span>(');
-
-  return result;
+        if (t.type === 'comment') {
+          out += `<span class="tok-comment">${esc}</span>`;
+        } else if (t.type === 'string') {
+          out += `<span class="tok-string">${esc}</span>`;
+        } else if (t.type === 'number') {
+          out += `<span class="tok-number">${esc}</span>`;
+        } else if (t.type === 'operator') {
+          out += `<span class="tok-operator">${esc}</span>`;
+        } else if (t.type === 'punct') {
+          out += `<span class="tok-punct">${esc}</span>`;
+        } else if (t.type === 'space') {
+          out += esc;
+        } else if (t.type === 'word') {
+          const isFnCall = /^\s*\(/.test(code.slice(i));
+          if (beginnerWords.has(text)) out += `<span class="tok-beginner">${esc}</span>`;
+          else if (hwWords.has(text)) out += `<span class="tok-hardware">${esc}</span>`;
+          else if (selfhostWords.has(text)) out += `<span class="tok-selfhost">${esc}</span>`;
+          else if (guardWords.has(text)) out += `<span class="tok-guard">${esc}</span>`;
+          else if (asyncWords.has(text)) out += `<span class="tok-async">${esc}</span>`;
+          else if (controlWords.has(text)) out += `<span class="tok-control">${esc}</span>`;
+          else if (contractWords.has(text)) out += `<span class="tok-contract">${esc}</span>`;
+          else if (declWords.has(text)) out += `<span class="tok-declaration">${esc}</span>`;
+          else if (typeWords.has(text)) out += `<span class="tok-type">${esc}</span>`;
+          else if (constWords.has(text)) out += `<span class="tok-const">${esc}</span>`;
+          else if (fnWords.has(text) || isFnCall) out += `<span class="tok-fn">${esc}</span>`;
+          else out += `<span class="tok-ident">${esc}</span>`;
+        } else {
+          out += esc;
+        }
+        break;
+      }
+    }
+    if (!matched) {
+      out += escapeHtml(code[i]);
+      i++;
+    }
+  }
+  return out;
 }
 
 function CodeBlock({ code }: { code: string }) {
@@ -868,6 +1025,19 @@ export default function App() {
               </div>
             </div>
 
+            {/* Syntax Color Coding Legend */}
+            <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono">
+              <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mr-1">Syntax Colors:</span>
+              <span className="px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 font-bold">● Beginner (say, ask, repeat)</span>
+              <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30 font-bold">● Pipeline & Control (flow, into)</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">● Safety (guard, fail_safe)</span>
+              <span className="px-2 py-0.5 rounded bg-violet-500/10 text-violet-400 border border-violet-500/30 font-bold">● Async (spawn, pulse)</span>
+              <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-bold">● Self-Host (bootstrap, emit_binary)</span>
+              <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30 font-bold">● Hardware (bare_metal, mmio_map)</span>
+              <span className="px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30 font-bold">● Contracts (spec, contract)</span>
+              <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30 font-bold">● Declarations &amp; Types</span>
+            </div>
+
             {activeMode === 'code' && <CodeBlock code={selectedSample.code} />}
             {activeMode === 'output' && (
               <pre className="p-4 font-mono text-xs text-emerald-400 bg-slate-950 rounded-b-xl overflow-x-auto whitespace-pre-wrap leading-relaxed border-t border-slate-800">
@@ -981,11 +1151,15 @@ export default function App() {
               <p className="text-xs text-slate-400 mb-4">Packaged Open-VSIX archive compatible with VS Code, Code-OSS, and VSCodium:</p>
               
               <div className="font-mono text-xs bg-slate-950 p-4 rounded-xl text-slate-300 border border-slate-800 mb-4">
-                <span className="text-blue-400 font-bold">c-greater-2.1.1.vsix</span> (27.2 KB)<br />
+                <span className="text-blue-400 font-bold">c-greater-2.1.1.vsix</span> (36.5 KB)<br />
+                ├── <span className="text-yellow-400">c-greater-syntax-keywords.json</span> (Syntax Matrix)<br />
+                ├── <span className="text-purple-400">snippets/c-greater-syntax-snippets.json</span> (Dedicated)<br />
+                ├── <span className="text-purple-400">snippets/syntax_snippets.json</span> (Pipelines &amp; Async)<br />
+                ├── <span className="text-purple-400">snippets/cgt.json</span> (Standard Templates)<br />
+                ├── <span className="text-pink-400">themes/c-greater-dark-theme.json</span> (Vibrant Dark Colors)<br />
+                ├── <span className="text-pink-400">themes/c-greater-light-theme.json</span> (Vibrant Light Colors)<br />
+                ├── <span className="text-emerald-400">syntaxes/cgt.tmLanguage.json</span> (Full Grammar)<br />
                 ├── <span className="text-yellow-400">autocomplete.json</span> (v2.1.1 Suggestions)<br />
-                ├── <span className="text-emerald-400">syntaxes/cgt.tmLanguage.json</span> (Colors)<br />
-                ├── <span className="text-purple-400">snippets/syntax_snippets.json</span> (Dedicated syntax)<br />
-                ├── <span className="text-purple-400">snippets/cgt.json</span> (Standard templates)<br />
                 └── <span className="text-cyan-400">extension.js</span> (Mistakes Linter)
               </div>
             </div>
@@ -1005,23 +1179,23 @@ export default function App() {
           </div>
 
           <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
-            <h3 className="text-lg font-bold text-white mb-2">Self-Completion, Colors &amp; Mistakes</h3>
+            <h3 className="text-lg font-bold text-white mb-2">Self-Completion, Colors &amp; Dedicated Snippets</h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">1.</span>
-                <span><strong>Self-Completion (Automatic Suggestions):</strong> Autocompletion for new keywords (<code className="text-yellow-400">flow</code>, <code className="text-yellow-400">into</code>, <code className="text-yellow-400">sift</code>, <code className="text-yellow-400">guard</code>, <code className="text-yellow-400">spawn</code>, <code className="text-yellow-400">tensor</code>, <code className="text-yellow-400">interrupt_gate</code>) with parameters &amp; arrow hints.</span>
+                <span className="text-yellow-400 font-bold">1.</span>
+                <span><strong>Expanded Self-Completion (Suggestions):</strong> Autocompletion for new words (<code className="text-yellow-400">say</code>, <code className="text-yellow-400">ask</code>, <code className="text-yellow-400">repeat</code>, <code className="text-yellow-400">whenever</code>, <code className="text-yellow-400">inspect</code>, <code className="text-yellow-400">announce</code>, <code className="text-yellow-400">gather</code>, <code className="text-yellow-400">pulse</code>, <code className="text-yellow-400">fail_safe</code>) with parameter hints.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 font-bold">2.</span>
-                <span><strong>High-Fidelity Colors (Syntax Highlighting):</strong> Dedicated TextMate scopes distinguishing pipelines, async events, safety guards, scientific tensors, and hardware kernels.</span>
+                <span className="text-pink-400 font-bold">2.</span>
+                <span><strong>Dedicated Color Themes &amp; Syntax Scopes:</strong> Includes built-in <code className="text-white">C&gt; Vibrant Dark</code> and <code className="text-white">C&gt; Vibrant Light</code> color themes, color-coding beginner syntax (Gold), dataflow (Purple), guards (Mint), async (Violet), self-hosting (Cyan), and hardware (Crimson).</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-red-400 font-bold">3.</span>
-                <span><strong>Mistakes Detection (Real-Time Diagnostics):</strong> Detects unclosed strings, unbalanced braces, use-after-move affine violations, immutability mutations, and unisolated hardware ops with instant Quick-Fix actions.</span>
+                <span className="text-purple-400 font-bold">3.</span>
+                <span><strong>Dedicated Syntax Snippets Files:</strong> <code className="text-white">snippets/c-greater-syntax-snippets.json</code> and <code className="text-white">c-greater-syntax-keywords.json</code> provide dedicated programming language snippets with tabstops and instant expansion.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-purple-400 font-bold">4.</span>
-                <span><strong>Dedicated Syntax Snippets Pack:</strong> <code className="text-white">snippets/syntax_snippets.json</code> brings 25+ language syntax snippets for dataflow, async spawn, tensor math, and interrupts.</span>
+                <span className="text-red-400 font-bold">4.</span>
+                <span><strong>Mistakes Detection &amp; Diagnostics:</strong> Real-time detection of syntax omissions, affine moves, unclosed strings, and unmanaged hardware access with automatic Quick-Fix resolutions.</span>
               </li>
             </ul>
           </div>

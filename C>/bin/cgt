@@ -285,6 +285,35 @@ function initBuiltins(ctx) {
         console.log(`[C> Autonomous Pipeline]: Hardware target set to ${arch}.`);
         return 0;
     });
+
+    ctx.setFunction('inspect', (val) => {
+        const out = typeof val === 'object' && val !== null ? JSON.stringify(val, null, 2) : String(val);
+        console.log(`\x1b[36m[Inspect]\x1b[0m ${out}`);
+        return val;
+    });
+
+    ctx.setFunction('announce', (category, msg) => {
+        console.log(`\x1b[33m[ANNOUNCE :: ${category}]\x1b[0m ${msg}`);
+        return 0;
+    });
+
+    ctx.setFunction('gather', (...items) => {
+        return items.flat();
+    });
+
+    ctx.setFunction('object_format', (fmt) => {
+        console.log(`[C> Autonomous Pipeline]: Target object format set to ${fmt}.`);
+        return 0;
+    });
+
+    ctx.setFunction('memory_barrier', (type) => {
+        console.log(`[C> Hardware]: Memory serialization barrier committed (${type || 'full_sync'}).`);
+        return 0;
+    });
+
+    ctx.setFunction('simd_lane', (vec, lane) => {
+        return typeof vec === 'object' && vec && vec[lane] !== undefined ? vec[lane] : 0;
+    });
 }
 
 function runSource(source, filePath, verbose = false) {

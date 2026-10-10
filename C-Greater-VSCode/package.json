@@ -67,6 +67,24 @@
       {
         "language": "cgt",
         "path": "./snippets/syntax_snippets.json"
+      },
+      {
+        "language": "cgt",
+        "path": "./snippets/c-greater-syntax-snippets.json"
+      }
+    ],
+    "themes": [
+      {
+        "id": "cgt-vibrant-dark",
+        "label": "C> Vibrant Dark Theme",
+        "uiTheme": "vs-dark",
+        "path": "./themes/c-greater-dark-theme.json"
+      },
+      {
+        "id": "cgt-vibrant-light",
+        "label": "C> Vibrant Light Theme",
+        "uiTheme": "vs",
+        "path": "./themes/c-greater-light-theme.json"
       }
     ],
     "commands": [

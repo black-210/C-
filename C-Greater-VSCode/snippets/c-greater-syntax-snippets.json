@@ -1,0 +1,276 @@
+{
+  "Universal Say Print": {
+    "prefix": "say",
+    "body": [
+      "say \"${1:Hello, World!}\";"
+    ],
+    "description": "Universal beginner output statement — simpler and cleaner than Python print()"
+  },
+  "Universal Ask Prompt": {
+    "prefix": "ask",
+    "body": [
+      "let ${1:userName} = ask(\"${2:What is your name? }\");"
+    ],
+    "description": "Universal console prompt for user input with automatic type inference"
+  },
+  "Universal Repeat Loop": {
+    "prefix": "repeat",
+    "body": [
+      "repeat ${1:5} times {",
+      "    say \"${2:Executing step}\";",
+      "}"
+    ],
+    "description": "Clean, natural-language iteration without loop counter boilerplate"
+  },
+  "Universal Whenever Branch": {
+    "prefix": "whenever",
+    "body": [
+      "whenever ${1:condition} {",
+      "    ${2:say \"Condition met!\";}",
+      "} otherwise {",
+      "    ${3:say \"Alternative path taken.\";}",
+      "}"
+    ],
+    "description": "Natural declarative branching (replaces if/else with intuitive syntax)"
+  },
+  "Universal Define Function": {
+    "prefix": "define",
+    "body": [
+      "define ${1:calculateTotal}(${2:price}, ${3:taxRate}) {",
+      "    return ${2:price} * (1.0 + ${3:taxRate});",
+      "}"
+    ],
+    "description": "Intuitive function definition syntax for beginner-to-advanced programmers"
+  },
+  "Universal Given-When Match": {
+    "prefix": "given",
+    "body": [
+      "given ${1:status} {",
+      "    when ${2:\"active\"} => say \"System is operational\";",
+      "    when ${3:\"idle\"} => say \"System is waiting\";",
+      "    when ${4:\"error\"} => say \"Trouble detected\";",
+      "    otherwise => say \"Unknown status\";",
+      "}"
+    ],
+    "description": "Declarative pattern matching without cryptic symbols"
+  },
+  "Universal Attempt-Trouble Guard": {
+    "prefix": "attempt",
+    "body": [
+      "attempt {",
+      "    ${1:// resilient execution block}",
+      "} trouble err {",
+      "    say \"Safe recovery from: \", err;",
+      "}"
+    ],
+    "description": "Zero-cost, structured error recovery that keeps execution safe"
+  },
+  "Universal Check Assertion": {
+    "prefix": "check",
+    "body": [
+      "check ${1:amount} > 0, \"${2:Amount must be positive}\";"
+    ],
+    "description": "Runtime invariant check with descriptive message"
+  },
+  "Universal Hold Variable": {
+    "prefix": "hold",
+    "body": [
+      "hold ${1:sessionToken} = ${2:generateToken()};"
+    ],
+    "description": "Immutable scoped variable holding value across current scope"
+  },
+  "Universal Inspect Debug": {
+    "prefix": "inspect",
+    "body": [
+      "inspect(${1:dataStructure});"
+    ],
+    "description": "Colorized formatted inspection of any variable or state structure"
+  },
+  "Universal Announce Broadcast": {
+    "prefix": "announce",
+    "body": [
+      "announce \"${1:Mission}\", \"${2:Completed successfully!}\";"
+    ],
+    "description": "Global structured status announcement to application log and stdout"
+  },
+  "Universal Gather Batch": {
+    "prefix": "gather",
+    "body": [
+      "let ${1:results} = gather [${2:sourceA}, ${3:sourceB}, ${4:sourceC}];"
+    ],
+    "description": "Gathers multiple streams or values into a unified coherent collection"
+  },
+  "Universal Step-By Range": {
+    "prefix": "step_by",
+    "body": [
+      "for ${1:i} in (${2:0}..${3:100}).step_by(${4:10}) {",
+      "    say \"Step: \", ${1:i};",
+      "}"
+    ],
+    "description": "Stepped numerical range traversal without manual increment"
+  },
+  "Dataflow Flow Pipeline": {
+    "prefix": "flow_pipe",
+    "body": [
+      "flow ${1:raw_stream}",
+      "    into sift(record -> record.${2:is_valid})",
+      "    into batch(${3:64})",
+      "    into map(batch_data -> ${4:process_batch(batch_data)})",
+      "    into tally();"
+    ],
+    "description": "High-throughput declarative dataflow pipeline with zero heap allocation"
+  },
+  "Pipeline Sift Filter": {
+    "prefix": "sift_where",
+    "body": [
+      "let ${1:filtered} = sift ${2:items} where ${3:item.priority} >= ${4:5};"
+    ],
+    "description": "Declarative stream filtering syntax"
+  },
+  "Pipeline Batch Chunker": {
+    "prefix": "batch",
+    "body": [
+      "into batch(${1:32})"
+    ],
+    "description": "Chunks incoming stream into fixed-size batches for vectorized SIMD execution"
+  },
+  "Pipeline Mesh Divergence": {
+    "prefix": "mesh_parallel",
+    "body": [
+      "mesh ${1:workload} {",
+      "    diverge lane_a -> ${2:fast_lane_worker()};",
+      "    diverge lane_b -> ${3:deep_analysis_worker()};",
+      "    converge into ${4:aggregated_hub};",
+      "}"
+    ],
+    "description": "Parallel branching and convergence pipeline stage"
+  },
+  "Async Task Channel": {
+    "prefix": "channel",
+    "body": [
+      "let (${1:tx}, ${2:rx}) = channel::<${3:i32}>(${4:128});",
+      "${1:tx}.send(${5:42});",
+      "let ${6:val} = ${2:rx}.recv();"
+    ],
+    "description": "Lock-free bounded async channel for thread and fiber communication"
+  },
+  "Async Pulse Heartbeat": {
+    "prefix": "pulse",
+    "body": [
+      "pulse ${1:heartbeat_timer} every ${2:500}.millisecond {",
+      "    ${0:// emit periodic alive beacon}",
+      "}"
+    ],
+    "description": "High-precision hardware timer heartbeat loop"
+  },
+  "Async Timeout Guard": {
+    "prefix": "timeout_after",
+    "body": [
+      "let ${1:result} = timeout_after(${2:2}.second) {",
+      "    ${3:// perform potentially blocking async operation}",
+      "};"
+    ],
+    "description": "Executes asynchronous block with strict timeout cancellation"
+  },
+  "Safety Audit Bounds": {
+    "prefix": "audit_bounds",
+    "body": [
+      "audit_bounds(${1:buffer_slice}, ${2:requested_len}) else {",
+      "    return Err(\"Buffer overrun prevented!\");",
+      "};"
+    ],
+    "description": "Static & dynamic boundary checker verifying memory spans"
+  },
+  "Safety Fail-Safe Fallback": {
+    "prefix": "fail_safe",
+    "body": [
+      "fail_safe {",
+      "    ${1:// primary critical path}",
+      "} fallback {",
+      "    ${2:// guaranteed deterministic safe backup path}",
+      "}"
+    ],
+    "description": "Mission-critical dual-path redundancy with automatic fallback"
+  },
+  "Autonomous Compiler Bootstrap": {
+    "prefix": "bootstrap_compiler",
+    "body": [
+      "bootstrap compiler {",
+      "    target_arch(\"${1|x86_64,aarch64,riscv64,wasm32|}\");",
+      "    object_format(\"${2|elf64,pe64,macho64|}\");",
+      "    let stream = byte_stream::new();",
+      "    ${0:// Direct self-compilation — Zero C compiler dependency}",
+      "    emit_binary(\"${3:output_executable}\", stream);",
+      "}"
+    ],
+    "description": "Self-compilation directive that builds compiler executable autonomously"
+  },
+  "Autonomous Emit Binary": {
+    "prefix": "emit_binary",
+    "body": [
+      "emit_binary(\"${1:binary_name}\", ${2:stream_or_size});"
+    ],
+    "description": "Directly writes standalone machine executable without intermediate C code"
+  },
+  "Autonomous Target Arch": {
+    "prefix": "target_arch",
+    "body": [
+      "target_arch(\"${1|x86_64,aarch64,riscv64,wasm32|}\");"
+    ],
+    "description": "Sets the hardware CPU instruction target for machine code generation"
+  },
+  "Lowlevel Hardware Direct Block": {
+    "prefix": "bare_metal_block",
+    "body": [
+      "opt_hardware bare_metal {",
+      "    raw_register rax = direct_reg(0);",
+      "    mmio_map(0x${1:40000000}, size: ${2:4096});",
+      "    fence_sync();",
+      "    ${0}",
+      "}"
+    ],
+    "description": "Optional direct bare-metal hardware control block for kernel/embedded developers"
+  },
+  "Hardware MMIO Map": {
+    "prefix": "mmio_map",
+    "body": [
+      "let ${1:dev} = mmio_map(0x${2:FE000000}, size: ${3:0x1000});"
+    ],
+    "description": "Memory-Mapped I/O physical peripheral mapping"
+  },
+  "Hardware Memory Barrier": {
+    "prefix": "memory_barrier",
+    "body": [
+      "memory_barrier(full_sync);"
+    ],
+    "description": "Full hardware CPU memory ordering and pipeline barrier"
+  },
+  "Hardware Bit Slice": {
+    "prefix": "bit_slice",
+    "body": [
+      "let ${1:field} = bit_slice(${2:register_val}, ${3:low_bit}..${4:high_bit});"
+    ],
+    "description": "Single-cycle hardware bitfield extraction without manual shift masks"
+  },
+  "Hardware Endian Swap": {
+    "prefix": "endian_swap",
+    "body": [
+      "let ${1:be_val} = endian_swap(${2:le_val});"
+    ],
+    "description": "Hardware-accelerated byte-order reversal (bswap)"
+  },
+  "Formal Contract Specification": {
+    "prefix": "contract_spec",
+    "body": [
+      "spec fn ${1:safe_transfer}(from: &mut ${2:Account}, to: &mut ${2:Account}, amount: u64)",
+      "    requires amount > 0 && from.balance >= amount",
+      "    ensures from.balance == old(from.balance) - amount",
+      "    ensures to.balance == old(to.balance) + amount",
+      "{",
+      "    from.balance -= amount;",
+      "    to.balance += amount;",
+      "}"
+    ],
+    "description": "Formal Hoare-logic contract specification verified by static analyzer"
+  }
+}

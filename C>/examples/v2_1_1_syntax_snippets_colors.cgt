@@ -1,0 +1,66 @@
+// ============================================================================
+// C> v2.1.1 Universal Syntax, Snippets & Color Coding Showcase
+// Universal — accessible to beginners, yet fully capable of bare-metal systems
+// ============================================================================
+
+// 1. Beginner Universal Syntax (Color: Golden Yellow)
+say "--- 1. Beginner Universal Syntax ---";
+announce "INIT", "Launching C> v2.1.1 Universal Runtime Environment";
+
+let student_name = ask("What is your name? ");
+say "Welcome, student! Let's explore clean declarative programming.";
+
+repeat 3 times {
+    say "C> is universal: clean, expressive, and instant.";
+}
+
+let score = 98;
+whenever score >= 90 {
+    say "Result: Mastery Level Achieved!";
+} otherwise {
+    say "Result: Practice makes perfect.";
+}
+
+// 2. Dataflow & Stream Pipelines (Color: Lilac Purple)
+say "--- 2. Dataflow Pipeline Streaming ---";
+let raw_data = [10, 25, 4, 88, 12, 95];
+inspect(raw_data);
+
+// 3. Safety Guards & Boundary Validation (Color: Spring Mint Green)
+say "--- 3. Safety Guards ---";
+audit_bounds(raw_data, 6) else {
+    say "Boundary check failed!";
+};
+
+fail_safe {
+    say "Primary mission execution running smoothly.";
+} fallback {
+    say "Fallback emergency path engaged.";
+}
+
+// 4. Asynchronous Events & Heartbeat Pulse (Color: Radiant Violet)
+say "--- 4. Concurrency & Heartbeat ---";
+pulse system_heartbeat every 100.millisecond {
+    say "Heartbeat beat: OK";
+}
+
+// 5. Autonomous Machine Compilation (Color: Electric Cyan)
+say "--- 5. Autonomous Self-Compiler Direct Emission ---";
+bootstrap compiler {
+    target_arch("x86_64");
+    object_format("elf64");
+    let stream = byte_stream::new();
+    emit_binary("autonomous_cgt_v211", stream);
+}
+
+// 6. Optional Bare-Metal Hardware Control (Color: Fiery Crimson)
+say "--- 6. Optional Bare-Metal Systems Control ---";
+opt_hardware bare_metal {
+    say "[Hardware]: Direct MMIO register mapping active.";
+    let reg = mmio_map(0x40000000, size: 4096);
+    memory_barrier(full_sync);
+}
+
+say "=================================================================";
+say "  C> v2.1.1: Syntax, Snippets, and Autonomous Engine Verified!    ";
+say "=================================================================";
