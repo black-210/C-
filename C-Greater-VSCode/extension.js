@@ -1,9 +1,9 @@
 /**
  * C> (C-Greater) Language Extension for VS Code and Code-OSS
- * Version: 2.1.1-LTS Universal Edition
+ * Version: 2.1.2-LTS Universal Edition
  * 
  * Provides:
- * - Intelligent Autocompletion (Self-completion) for C> v2.1.1:
+ * - Intelligent Autocompletion (Self-completion) for C> v2.1.2:
  *   * Pipeline & Transformation Flow (flow, into, sift, tally, mesh)
  *   * Async, Event & Concurrency (spawn, detach, await_all, await_any, signal, listen)
  *   * Scientific, Math & Tensors (tensor, matrix_mul, norm, dot_product, clamp_range)
@@ -32,7 +32,7 @@ let diagnosticCollection = null;
  * @param {vscode.ExtensionContext} context 
  */
 function activate(context) {
-    console.log('[C> Extension v2.1.1]: C-Greater language support activated.');
+    console.log('[C> Extension v2.1.2]: C-Greater language support activated.');
 
     // 1. Diagnostic Collection for Live Mistake / Error Detection
     diagnosticCollection = vscode.languages.createDiagnosticCollection('cgt');
@@ -672,102 +672,207 @@ function activate(context) {
     });
     context.subscriptions.push(codeActionProvider);
 
-    // 8. Register Commands for Compilation, Run, Bootstrap, and Translation
-    const exploreAddonItemsCommand = vscode.commands.registerCommand('cgt.exploreAddonItems', async () => {
-        const addonItems = [
-            {
-                label: 'say — Universal Console Output',
-                category: 'Beginner Universal (Golden Yellow)',
-                code: 'say "Hello, World!";',
-                template: 'say "${1:Hello, World!}";\n',
-                explanation: 'Universal beginner output statement. Simpler than Python print() with zero parentheses required. Outputs any string, number, or variable directly.'
-            },
-            {
-                label: 'ask — User Input Prompt',
-                category: 'Beginner Universal (Golden Yellow)',
-                code: 'let name = ask("What is your name? ");',
-                template: 'let ${1:userName} = ask("${2:What is your name? }");\n',
-                explanation: 'Clean user input prompt. Binds console input directly to a variable with automatic type inference.'
-            },
-            {
-                label: 'repeat — Natural Repetition Loop',
-                category: 'Beginner Universal (Golden Yellow)',
-                code: 'repeat 3 times {\n    say "Universal execution!";\n}',
-                template: 'repeat ${1:3} times {\n    say "${2:Executing clean iteration step}";\n}\n',
-                explanation: 'Declarative iteration loop. Repeats a block N times without manual loop index counters (like i = 0; i < N; i++) or off-by-one errors.'
-            },
-            {
-                label: 'whenever — Declarative Branching',
-                category: 'Beginner Universal (Golden Yellow)',
-                code: 'whenever score >= 90 {\n    say "Mastery achieved!";\n} otherwise {\n    say "Keep practicing!";\n}',
-                template: 'whenever ${1:condition} {\n    ${2:say "Condition satisfied!";}\n} otherwise {\n    ${3:say "Alternative branch taken";}\n}\n',
-                explanation: 'Intuitive natural-language alternative to cryptic if/else keywords, making conditional logic readable for everyone.'
-            },
-            {
-                label: 'define — Clean Function Definition',
-                category: 'Beginner Universal (Golden Yellow)',
-                code: 'define add(a, b) {\n    return a + b;\n}',
-                template: 'define ${1:calculateTotal}(${2:price}, ${3:taxRate}) {\n    return ${2:price} * (1.0 + ${3:taxRate});\n}\n',
-                explanation: 'Universal function syntax. Clear parameter passing without boilerplate decorators.'
-            },
-            {
-                label: 'given — Declarative Pattern Match',
-                category: 'Beginner Universal (Golden Yellow)',
-                code: 'given state {\n    when "ready" => say "Go!";\n    otherwise => say "Wait";\n}',
-                template: 'given ${1:status} {\n    when ${2:"active"} => say "System is operational";\n    when ${3:"idle"} => say "System is idle";\n    otherwise => say "Unknown status";\n}\n',
-                explanation: 'Readable pattern matching that replaces complex nested switch/case statements with simple when arrows.'
-            },
-            {
-                label: 'attempt — Safe Trouble Recovery',
-                category: 'Safety & Beginner (Mint Green)',
-                code: 'attempt {\n    // resilient execution\n} trouble err {\n    say "Safe recovery: ", err;\n}',
-                template: 'attempt {\n    ${1:// resilient work block}\n} trouble ${2:err} {\n    say "Safe recovery from: ", ${2:err};\n}\n',
-                explanation: 'Zero-panic structured error containment. Catches unexpected issues safely without crashing the program.'
-            },
-            {
-                label: 'flow — Dataflow Streaming Pipeline',
-                category: 'Pipeline (Lilac Purple)',
-                code: 'flow data into sift(x -> x > 10) into tally();',
-                template: 'flow ${1:raw_stream}\n    into sift(item -> item.${2:is_valid})\n    into batch(${3:32})\n    into tally();\n',
-                explanation: 'High-speed stream pipeline. Chains transformations into a single zero-copy data pass.'
-            },
-            {
-                label: 'pulse — Concurrency Heartbeat',
-                category: 'Async & Concurrency (Radiant Violet)',
-                code: 'pulse heartbeat every 100.millisecond {\n    say "System OK";\n}',
-                template: 'pulse ${1:system_heartbeat} every ${2:100}.millisecond {\n    ${3:say "Heartbeat alive";}\n}\n',
-                explanation: 'Cooperative recurring pulse. Automatically triggers recurring tasks without thread sleep locks.'
-            },
-            {
-                label: 'guard — Precondition Early-Exit',
-                category: 'Safety & Verification (Mint Green)',
-                code: 'guard user_id > 0 else { return 0; };',
-                template: 'guard ${1:token != null} else {\n    say "${2:Invalid token, aborting.}";\n    return ${3:0};\n};\n',
-                explanation: 'Defensive early exit. Protects functions from invalid arguments without nested if-statement pyramids.'
-            },
-            {
-                label: 'fail_safe — Deterministic Fallback Block',
-                category: 'Safety & Fault Isolation (Mint Green)',
-                code: 'fail_safe {\n    primary_task();\n} fallback {\n    safe_mode();\n}',
-                template: 'fail_safe {\n    ${1:primary_action();}\n} fallback {\n    ${2:safe_emergency_fallback();}\n}\n',
-                explanation: 'Guarantees execution safety. If the primary task encounters a hardware or logic fault, the fallback runs instantly.'
-            },
-            {
-                label: 'bootstrap — Autonomous Self-Compiler',
-                category: 'Self-Hosting (Electric Cyan)',
-                code: 'bootstrap compiler {\n    target_arch("x86_64");\n    emit_binary("app", stream);\n}',
-                template: 'bootstrap compiler {\n    target_arch("${1:x86_64}");\n    object_format("${2:elf64}");\n    let stream = byte_stream::new();\n    emit_binary("${3:my_app_standalone}", stream);\n}\n',
-                explanation: 'Autonomous native machine code generator. Directly compiles and links native executables with zero C dependencies.'
-            },
-            {
-                label: 'lowlevel — Isolated Bare-Metal Hardware',
-                category: 'Hardware Control (Crimson Red)',
-                code: 'lowlevel {\n    raw_register(0x4000, 1);\n    let p = mmio_map(0x4000, 4096);\n}',
-                template: 'lowlevel {\n    say "[Hardware]: Direct MMIO mapping active";\n    let reg = mmio_map(${1:0x40000000}, ${2:4096});\n    memory_barrier(full_sync);\n}\n',
-                explanation: 'Scoped bare-metal control block. Isolates direct registers, memory fences, and MMIO pointers safely from high-level application code.'
+    // 8. Register Commands for Compilation, Run, Bootstrap, Translation, and Tailored Templates (v2.1.2)
+    const addonItems = [
+        {
+            keyword: 'say',
+            label: 'say — Universal Console Output',
+            category: 'Beginner Universal (Golden Yellow)',
+            code: 'say "Hello, World!";\nsay "Result: ", total, " | Status: Active";',
+            explanation: 'Universal beginner output statement. Simpler than Python print() with zero parentheses required. Outputs any string, number, or variable directly with automatic line break.',
+            basicTemplate: 'say "${1:Hello, World!}";\n',
+            practicalTemplate: '// Practical C> Output with Multiple Values\nlet ${1:userName} = "Developer";\nlet ${2:taskCount} = 42;\nsay "User: ", ${1:userName}, " | Tasks Pending: ", ${2:taskCount};\n',
+            productionTemplate: '// Production-Hardened Output with Timestamp & Context\nsay "[INFO] [", ${1:system_clock()}, "] Module ${2:Engine} initialized successfully: status=", ${3:0};\n',
+            buildTailored: (sel) => {
+                const target = sel || 'user_data';
+                return `// Tailored output for your code\nsay "[Debug ${target}]: ", ${target};\n`;
             }
-        ];
+        },
+        {
+            keyword: 'ask',
+            label: 'ask — User Input Prompt',
+            category: 'Beginner Universal (Golden Yellow)',
+            code: 'let name = ask("What is your name? ");\nsay "Welcome, ", name, "!";',
+            explanation: 'Clean user input prompt. Binds console input directly to a variable with automatic type inference and zero formatting ceremony.',
+            basicTemplate: 'let ${1:userName} = ask("${2:Please enter your name: }");\nsay "Hello, ", ${1:userName}, "!";\n',
+            practicalTemplate: '// Practical Input with Validation\nlet ${1:userAgeInput} = ask("${2:Enter age: }");\nwhenever ${1:userAgeInput} != "" {\n    say "Registered value: ", ${1:userAgeInput};\n} otherwise {\n    say "No input supplied, using default.";\n}\n',
+            productionTemplate: '// Defensive Input Guarding\nlet ${1:rawInput} = ask("${2:Enter command (start/stop): }");\nguard ${1:rawInput} != "" else {\n    say "Fatal: Input prompt aborted by user.";\n    return ${3:1};\n};\nsay "Processing command: ", ${1:rawInput};\n',
+            buildTailored: (sel) => {
+                const target = sel || 'config_setting';
+                return `// Tailored input prompt for your variable\nlet ${target} = ask("Enter value for ${target}: ");\nsay "${target} bound to: ", ${target};\n`;
+            }
+        },
+        {
+            keyword: 'repeat',
+            label: 'repeat — Natural Repetition Loop',
+            category: 'Beginner Universal (Golden Yellow)',
+            code: 'repeat 3 times {\n    say "Universal execution!";\n}',
+            explanation: 'Declarative iteration loop. Repeats a block N times without manual loop index counters (like i = 0; i < N; i++) or off-by-one errors.',
+            basicTemplate: 'repeat ${1:5} times {\n    say "${2:Executing clean iteration step}";\n}\n',
+            practicalTemplate: '// Practical Batched Processing Loop\nlet mut ${1:progress} = 0;\nrepeat ${2:10} times {\n    ${1:progress} = ${1:progress} + 10;\n    say "Syncing chunk: ", ${1:progress}, "%";\n}\nsay "Batch processing completed successfully!";\n',
+            productionTemplate: '// Defensive Monitored Execution Loop\nlet ${1:maxRetries} = 3;\nrepeat ${1:maxRetries} times {\n    fail_safe {\n        ${2:execute_network_handshake();}\n        break;\n    } fallback {\n        say "Handshake retry attempt...";\n    }\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'item_batch';
+                return `// Tailored repeat loop for your context\nrepeat 4 times {\n    say "Processing slice for ${target}...";\n    ${target}_step();\n}\n`;
+            }
+        },
+        {
+            keyword: 'whenever',
+            label: 'whenever — Declarative Branching',
+            category: 'Beginner Universal (Golden Yellow)',
+            code: 'whenever score >= 90 {\n    say "Mastery achieved!";\n} otherwise {\n    say "Keep practicing!";\n}',
+            explanation: 'Intuitive natural-language alternative to cryptic if/else keywords, making conditional logic readable for everyone.',
+            basicTemplate: 'whenever ${1:condition} {\n    ${2:say "Condition satisfied!";}\n} otherwise {\n    ${3:say "Alternative branch taken";}\n}\n',
+            practicalTemplate: '// Practical Multi-Condition Branching\nlet ${1:status} = "active";\nwhenever ${1:status} == "active" {\n    say "Service is operational and handling requests.";\n} otherwise whenever ${1:status} == "standby" {\n    say "Service is in warm standby mode.";\n} otherwise {\n    say "Service state unknown or offline.";\n}\n',
+            productionTemplate: '// Production Guarded Branching with Assertion\nwhenever ${1:connection_health} >= 95 {\n    say "[OK] Telemetry green: health=", ${1:connection_health};\n    ${2:dispatch_normal_workload();}\n} otherwise {\n    say "[ALERT] Degraded performance detected: failover active";\n    ${3:activate_backup_cluster();}\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'is_authenticated';
+                return `// Tailored branch for your variable\nwhenever ${target} {\n    say "[Verified]: Proceeding with ${target}";\n} otherwise {\n    say "[Rejected]: Cannot proceed without ${target}";\n}\n`;
+            }
+        },
+        {
+            keyword: 'define',
+            label: 'define — Clean Function Definition',
+            category: 'Beginner Universal (Golden Yellow)',
+            code: 'define add(a, b) {\n    return a + b;\n}',
+            explanation: 'Universal function syntax. Clear parameter passing without boilerplate decorators.',
+            basicTemplate: 'define ${1:calculateTotal}(${2:price}, ${3:taxRate}) {\n    return ${2:price} * (1.0 + ${3:taxRate});\n}\n\nlet ${4:total} = ${1:calculateTotal}(${5:100}, ${6:0.05});\nsay "Result: ", ${4:total};\n',
+            practicalTemplate: '// Practical Function with Internal State\ndefine ${1:formatUserProfile}(${2:userId}, ${3:role}) {\n    let ${4:prefix} = "C>-USER";\n    return ${4:prefix} + "-" + ${2:userId} + " [" + ${3:role} + "]";\n}\n\nlet ${5:profile} = ${1:formatUserProfile}(1024, "Admin");\nsay "Generated Profile: ", ${5:profile};\n',
+            productionTemplate: '// Production Function with Precondition Guard & Logging\ndefine ${1:safeTransfer}(${2:amount}, ${3:recipientId}) {\n    guard ${2:amount} > 0 else {\n        say "[Error]: Transfer amount must be positive";\n        return false;\n    };\n    say "[Ledger]: Transferred ", ${2:amount}, " to ", ${3:recipientId};\n    return true;\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'custom_helper';
+                return `// Tailored function generated for your code\ndefine ${target}(param1, param2) {\n    say "Running ${target} on: ", param1;\n    return param1 + param2;\n}\n`;
+            }
+        },
+        {
+            keyword: 'given',
+            label: 'given — Declarative Pattern Match',
+            category: 'Beginner Universal (Golden Yellow)',
+            code: 'given state {\n    when "ready" => say "Go!";\n    otherwise => say "Wait";\n}',
+            explanation: 'Readable pattern matching that replaces complex nested switch/case statements with simple when arrows.',
+            basicTemplate: 'given ${1:status} {\n    when ${2:"active"} => say "System is operational";\n    when ${3:"idle"} => say "System is idle";\n    otherwise => say "Unknown status";\n}\n',
+            practicalTemplate: '// Practical HTTP Code Pattern Match\nlet ${1:responseCode} = 200;\ngiven ${1:responseCode} {\n    when 200 => say "Status 200: OK / Success";\n    when 404 => say "Status 404: Resource Not Found";\n    when 500 => say "Status 500: Internal Engine Fault";\n    otherwise => say "Received HTTP Status: ", ${1:responseCode};\n}\n',
+            productionTemplate: '// Production Command Router with Exhaustive Handling\ngiven ${1:eventPayload.kind} {\n    when "INGEST" => ${2:process_incoming_data(eventPayload);}\n    when "PURGE"  => ${3:evict_stale_cache_entries();}\n    when "SYNC"   => ${4:synchronize_replicated_state();}\n    otherwise     => say "[Router]: Ignored unhandled event kind";\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'message_kind';
+                return `// Tailored pattern match for ${target}\ngiven ${target} {\n    when "START" => say "Started ${target}";\n    when "STOP"  => say "Stopped ${target}";\n    otherwise    => say "Default handler for ${target}";\n}\n`;
+            }
+        },
+        {
+            keyword: 'attempt',
+            label: 'attempt — Safe Trouble Recovery',
+            category: 'Safety & Beginner (Mint Green)',
+            code: 'attempt {\n    // resilient execution\n} trouble err {\n    say "Safe recovery: ", err;\n}',
+            explanation: 'Zero-panic structured error containment. Catches unexpected issues safely without crashing the program.',
+            basicTemplate: 'attempt {\n    ${1:// resilient work block}\n    say "Completed cleanly without trouble.";\n} trouble ${2:err} {\n    say "Safe recovery from trouble: ", ${2:err};\n}\n',
+            practicalTemplate: '// Practical Resilient I/O with Diagnostics\nattempt {\n    say "Connecting to remote stream...";\n    ${1:fetch_remote_configuration();}\n    say "Configuration loaded.";\n} trouble ${2:err} {\n    say "[Recovery]: Fallback to embedded default settings: ", ${2:err};\n    ${3:apply_embedded_defaults();}\n}\n',
+            productionTemplate: '// Production Fault Containment with Metric Reporting\nattempt {\n    ${1:critical_subsystem_step();}\n} trouble ${2:err} {\n    say "[CRITICAL]: Fault intercepted in subsystem: ", ${2:err};\n    ${3:telemetry_record_incident(err);}\n    ${4:graceful_degradation();}\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'risky_operation';
+                return `// Tailored resilient wrapper for ${target}\nattempt {\n    ${target}();\n} trouble err {\n    say "[Safe Catch in ${target}]: ", err;\n}\n`;
+            }
+        },
+        {
+            keyword: 'flow',
+            label: 'flow — Dataflow Streaming Pipeline',
+            category: 'Pipeline (Lilac Purple)',
+            code: 'flow data into sift(x -> x > 10) into tally();',
+            explanation: 'High-speed stream pipeline. Chains transformations into a single zero-copy data pass without intermediate allocations.',
+            basicTemplate: 'flow ${1:raw_stream}\n    into sift(item -> item.${2:is_valid})\n    into batch(${3:32})\n    into tally();\n',
+            practicalTemplate: '// Practical Pipeline: Sift, Map, and Aggregate\nlet ${1:measurements} = [12, 45, 8, 92, 104, 3, 77];\nlet ${2:processed} = flow ${1:measurements}\n    into sift(n -> n >= 10)\n    into map(n -> n * 2)\n    into batch(4)\n    into tally();\nsay "Total processed high-value entries: ", ${2:processed};\n',
+            productionTemplate: '// Zero-Copy High-Throughput Ingestion Pipeline\nflow ${1:network_incoming_buffer}\n    into parse_frames()\n    into sift(frame -> frame.checksum_valid)\n    into transform_to_records()\n    into batch(1024)\n    into emit_to_storage_nexus(${2:storageHub});\n',
+            buildTailored: (sel) => {
+                const target = sel || 'data_records';
+                return `// Tailored dataflow pipeline for ${target}\nflow ${target}\n    into sift(x -> x != 0)\n    into batch(64)\n    into tally();\n`;
+            }
+        },
+        {
+            keyword: 'pulse',
+            label: 'pulse — Concurrency Heartbeat',
+            category: 'Async & Concurrency (Radiant Violet)',
+            code: 'pulse heartbeat every 100.millisecond {\n    say "System OK";\n}',
+            explanation: 'Cooperative recurring pulse. Automatically triggers recurring tasks without thread sleep locks or spinlocks.',
+            basicTemplate: 'pulse ${1:system_heartbeat} every ${2:100}.millisecond {\n    say "${3:Heartbeat alive}";\n}\n',
+            practicalTemplate: '// Practical Telemetry Pulse\nlet mut ${1:pulseCount} = 0;\npulse ${2:statusMonitor} every ${3:500}.millisecond {\n    ${1:pulseCount} = ${1:pulseCount} + 1;\n    say "[Heartbeat #", ${1:pulseCount}, "] Subsystems running at nominal frequency.";\n}\n',
+            productionTemplate: '// Mission-Critical Health Checking Pulse with Watchdog\npulse ${1:watchdogPulse} every ${2:1000}.millisecond {\n    let ${3:isHealthy} = ${4:check_kernel_health()};\n    guard ${3:isHealthy} else {\n        say "[ALERT]: Watchdog detected unresponsive service, triggering reboot";\n        ${5:emergency_service_cycle();}\n    };\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'sensor_sampler';
+                return `// Tailored timer pulse for ${target}\npulse ${target} every 250.millisecond {\n    say "[Sampling ${target}]...";\n}\n`;
+            }
+        },
+        {
+            keyword: 'guard',
+            label: 'guard — Precondition Early-Exit',
+            category: 'Safety & Verification (Mint Green)',
+            code: 'guard user_id > 0 else { return 0; };\nsay "Verified: ", user_id;',
+            explanation: 'Defensive early exit. Protects functions from invalid arguments without nested if-statement pyramids.',
+            basicTemplate: 'guard ${1:token != null} else {\n    say "${2:Invalid token, aborting.}";\n    return ${3:0};\n};\n',
+            practicalTemplate: '// Practical Guard Validating Request Credentials\nguard ${1:userRole} == "admin" else {\n    say "[Security Notice]: Access denied. Requires administrator credentials.";\n    return false;\n};\nsay "[Security Cleared]: Proceeding with privileged operation.";\n',
+            productionTemplate: '// Defensive Multi-Boundary Precondition Validation\nguard (${1:bufferLength} > 0 && ${1:bufferLength} <= 65536) else {\n    say "[FATAL]: Buffer size boundary violation: ", ${1:bufferLength};\n    fail_safe_halt();\n    return -1;\n};\n',
+            buildTailored: (sel) => {
+                const target = sel || 'validated_ptr';
+                return `// Tailored precondition guard for ${target}\nguard ${target} != 0 else {\n    say "Validation failed for ${target}!";\n    return 0;\n};\n`;
+            }
+        },
+        {
+            keyword: 'fail_safe',
+            label: 'fail_safe — Deterministic Fallback Block',
+            category: 'Safety & Fault Isolation (Mint Green)',
+            code: 'fail_safe {\n    primary_task();\n} fallback {\n    safe_mode();\n}',
+            explanation: 'Guarantees execution safety. If the primary task encounters a hardware or logic fault, the fallback runs instantly.',
+            basicTemplate: 'fail_safe {\n    ${1:primary_action();}\n} fallback {\n    ${2:safe_emergency_fallback();}\n}\n',
+            practicalTemplate: '// Practical Primary/Secondary Failover Pattern\nfail_safe {\n    say "Attempting fast hardware accelerated render...";\n    ${1:gpu_hardware_rasterize();}\n} fallback {\n    say "Hardware accelerator unavailable: smoothly falling back to CPU software rasterizer";\n    ${2:cpu_software_rasterize();}\n}\n',
+            productionTemplate: '// Mission-Critical Isolated Control Loop\nfail_safe {\n    ${1:execute_automated_flight_guidance();}\n} fallback {\n    say "[FAIL-SAFE ENGAGED]: Swapped instantly to isolated backup inertial guidance.";\n    ${2:engage_redundant_inertial_navigation();}\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'primary_pipeline';
+                return `// Tailored fail-safe fallback for ${target}\nfail_safe {\n    ${target}();\n} fallback {\n    say "Fallback engaged for ${target}";\n}\n`;
+            }
+        },
+        {
+            keyword: 'bootstrap',
+            label: 'bootstrap — Autonomous Self-Compiler',
+            category: 'Self-Hosting (Electric Cyan)',
+            code: 'bootstrap compiler {\n    target_arch("x86_64");\n    emit_binary("app", stream);\n}',
+            explanation: 'Autonomous native machine code generator. Directly compiles and links native executables with zero C dependencies.',
+            basicTemplate: 'bootstrap compiler {\n    target_arch("${1:x86_64}");\n    object_format("${2:elf64}");\n    let stream = byte_stream::new();\n    emit_binary("${3:my_app_standalone}", stream);\n}\n',
+            practicalTemplate: '// Practical Cross-Compilation Configuration\nbootstrap compiler {\n    target_arch("${1:riscv64}");\n    opt_level(3);\n    strip_symbols(true);\n    let outStream = byte_stream::new();\n    emit_binary("${2:embedded_firmware_native}", outStream);\n    say "Emitted native standalone binary successfully.";\n}\n',
+            productionTemplate: '// Full Production Bootstrapping Specification\nbootstrap compiler {\n    target_arch("${1:native}");\n    object_format("native_executable");\n    codegen_backend(cgt_direct_machine);\n    memory_model(affine_regions);\n    let bin = emit_binary("${2:production_server}", byte_stream::new());\n    say "[BOOTSTRAP]: Standalone executable produced with 0 external C dependencies.";\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'standalone_service';
+                return `// Tailored autonomous compiler setup for ${target}\nbootstrap compiler {\n    target_arch("x86_64");\n    emit_binary("${target}", byte_stream::new());\n}\n`;
+            }
+        },
+        {
+            keyword: 'lowlevel',
+            label: 'lowlevel — Isolated Bare-Metal Hardware',
+            category: 'Hardware Control (Crimson Red)',
+            code: 'lowlevel {\n    raw_register(0x4000, 1);\n    let p = mmio_map(0x4000, 4096);\n}',
+            explanation: 'Scoped bare-metal control block. Isolates direct registers, memory fences, and MMIO pointers safely from high-level application code.',
+            basicTemplate: 'lowlevel {\n    say "[Hardware]: Direct MMIO mapping active";\n    let reg = mmio_map(${1:0x40000000}, ${2:4096});\n    memory_barrier(full_sync);\n}\n',
+            practicalTemplate: '// Practical Embedded Peripheral Register Access\nlowlevel {\n    // Pin GPIO Port D Base Address\n    let gpio_base = mmio_map(${1:0x48000C00}, 1024);\n    // Enable Clock Gate & Pin 7 Output Mode\n    raw_register(${1:0x48000C00} + 0x04, 0x01);\n    raw_register(${1:0x48000C00} + 0x14, 0x80);\n    memory_barrier(full_sync);\n    say "Peripheral GPIO initialized directly on silicon.";\n}\n',
+            productionTemplate: '// Defensive Bare-Metal DMA Transfer Channel Block\nlowlevel {\n    guard has_hardware_privilege() else { return -1; };\n    let dma_ctrl = mmio_map(0x40026000, 256);\n    raw_register(0x40026008, ${1:source_physical_addr});\n    raw_register(0x4002600C, ${2:dest_physical_addr});\n    raw_register(0x40026010, ${3:transfer_length_bytes});\n    cpu_bus_flush();\n    memory_barrier(full_sync);\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'peripheral_device';
+                return `// Tailored lowlevel block for ${target}\nlowlevel {\n    let base = mmio_map(0x40000000, 4096);\n    say "Direct silicon access active for ${target}";\n}\n`;
+            }
+        },
+        {
+            keyword: 'contract',
+            label: 'contract — Formal Mathematical Verification',
+            category: 'Formal Contracts (Bright Teal)',
+            code: 'contract SafeMath {\n    requires(b != 0);\n    ensures(result >= 0);\n}',
+            explanation: 'Declares mathematical invariants, function preconditions (requires), and postconditions (ensures) verified at compile time.',
+            basicTemplate: 'contract ${1:OperationSafety} {\n    requires(1);\n    ensures(1);\n    invariant(1);\n}\n\nfn ${2:guarded_action}(${3:param}: i32) -> i32 {\n    requires(${3:param} > 0);\n    ensures(${3:param} > 0);\n    return ${3:param};\n}\n',
+            practicalTemplate: '// Practical Mathematical Proof Contract\ncontract ${1:AccountBalanceInvariants} {\n    invariant(total_balance >= 0);\n}\n\nfn ${2:withdraw}(${3:amount}: i32) -> i32 {\n    requires(${3:amount} > 0);\n    requires(${3:amount} <= balance);\n    ensures(balance >= 0);\n    balance = balance - ${3:amount};\n    return balance;\n}\n',
+            productionTemplate: '// Production Critical Spec Verification Contract\nspec contract ${1:BufferBoundsSafety} {\n    requires(buffer_len > 0);\n    requires(offset + length <= buffer_len);\n    ensures(written_bytes == length);\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'custom_algorithm';
+                return `// Tailored verification contract for ${target}\ncontract ${target}_Contract {\n    requires(1);\n    ensures(1);\n}\n`;
+            }
+        }
+    ];
 
+    const exploreAddonItemsCommand = vscode.commands.registerCommand('cgt.exploreAddonItems', async () => {
         const selected = await vscode.window.showQuickPick(
             addonItems.map(item => ({
                 label: item.label,
@@ -777,35 +882,76 @@ function activate(context) {
             })),
             {
                 placeHolder: 'Select any C> Add-on item to view its explanation first...',
-                title: 'C> Add-on Codes & Snippets Explorer'
+                title: 'C> Add-on Codes & Snippets Explorer (v2.1.2)'
             }
         );
 
         if (!selected) return;
 
         const it = selected.item;
+        const editor = vscode.window.activeTextEditor;
+        const selectedText = editor ? editor.document.getText(editor.selection).trim() : '';
+
         // Show explanation along with code preview first!
-        const modalMessage = `📘 C> Add-on Item: ${it.label}\n\n• Category: ${it.category}\n• Explanation: ${it.explanation}\n\nCode Preview:\n${it.code}\n\nClick "✨ Insert Ready-Made Template" to insert this template into your editor.`;
+        const modalMessage = `📘 C> Add-on Item: ${it.label}\n\n• Category: ${it.category}\n• Explanation: ${it.explanation}\n\nCode Preview:\n${it.code}\n\nChoose your preferred template according to your code:`;
         
         const action = await vscode.window.showInformationMessage(
             modalMessage,
             { modal: true },
-            '✨ Insert Ready-Made Template',
-            '📋 Copy Template to Clipboard'
+            '✨ Basic Template',
+            '⚡ Practical Template',
+            '🛡️ Production Safe Template',
+            '🎯 Tailor to My Code'
         );
 
-        if (action === '✨ Insert Ready-Made Template') {
-            const editor = vscode.window.activeTextEditor;
+        let chosenSnippet = '';
+        if (action === '✨ Basic Template') {
+            chosenSnippet = it.basicTemplate;
+        } else if (action === '⚡ Practical Template') {
+            chosenSnippet = it.practicalTemplate;
+        } else if (action === '🛡️ Production Safe Template') {
+            chosenSnippet = it.productionTemplate;
+        } else if (action === '🎯 Tailor to My Code') {
+            const customVar = await vscode.window.showInputBox({
+                prompt: `Enter custom identifier / variable name for ${it.keyword}:`,
+                value: selectedText || 'my_variable'
+            });
+            chosenSnippet = it.buildTailored(customVar || selectedText);
+        }
+
+        if (chosenSnippet) {
             if (editor) {
-                editor.insertSnippet(new vscode.SnippetString(it.template));
-                vscode.window.showInformationMessage(`Inserted template for ${it.label}`);
+                editor.insertSnippet(new vscode.SnippetString(chosenSnippet));
+                vscode.window.showInformationMessage(`Inserted ${action} for ${it.label}!`);
             } else {
-                const doc = await vscode.workspace.openTextDocument({ language: 'cgt', content: it.template });
+                const doc = await vscode.workspace.openTextDocument({ language: 'cgt', content: chosenSnippet });
                 await vscode.window.showTextDocument(doc);
             }
-        } else if (action === '📋 Copy Template to Clipboard') {
-            await vscode.env.clipboard.writeText(it.template);
-            vscode.window.showInformationMessage(`Copied ${it.label} template to clipboard!`);
+        }
+    });
+
+    const tailoredTemplateCommand = vscode.commands.registerCommand('cgt.tailoredTemplate', async () => {
+        const editor = vscode.window.activeTextEditor;
+        const selectedText = editor ? editor.document.getText(editor.selection).trim() : '';
+
+        const picked = await vscode.window.showQuickPick(
+            addonItems.map(i => ({ label: i.keyword, description: i.label, item: i })),
+            { title: 'Generate Tailored Template According to Your Code (v2.1.2)', placeHolder: 'Select construct...' }
+        );
+        if (!picked) return;
+
+        const varName = await vscode.window.showInputBox({
+            prompt: `Customize variable / target for '${picked.label}' (on according to your code):`,
+            value: selectedText || 'user_data'
+        });
+
+        const template = picked.item.buildTailored(varName);
+        if (editor) {
+            editor.insertSnippet(new vscode.SnippetString(template));
+            vscode.window.showInformationMessage(`Inserted tailored ${picked.label} template!`);
+        } else {
+            await vscode.env.clipboard.writeText(template);
+            vscode.window.showInformationMessage(`Copied tailored template to clipboard!`);
         }
     });
 
@@ -836,11 +982,12 @@ function activate(context) {
     const versionCommand = vscode.commands.registerCommand('cgt.version', () => {
         const term = getOrCreateTerminal();
         term.show();
-        term.sendText('cgt --version || ./bin/cgt --version || echo "C> Compiler v2.1.1-LTS Universal Edition (Autonomous Native)"');
+        term.sendText('cgt --version || ./bin/cgt --version || echo "C> Compiler v2.1.2-LTS Universal Edition (Autonomous Native)"');
     });
 
     context.subscriptions.push(
         exploreAddonItemsCommand,
+        tailoredTemplateCommand,
         runCommand,
         compileCommand,
         bootstrapCommand,
@@ -853,8 +1000,8 @@ function activate(context) {
     // 9. Status Bar Item
     cgtStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     cgtStatusBarItem.command = 'cgt.run';
-    cgtStatusBarItem.text = '$(zap) C> v2.1.1';
-    cgtStatusBarItem.tooltip = 'C> v2.1.1 Universal Compiler: Click to Run Current File';
+    cgtStatusBarItem.text = '$(zap) C> v2.1.2';
+    cgtStatusBarItem.tooltip = 'C> v2.1.2 Universal Compiler: Click to Run Current File';
     cgtStatusBarItem.show();
     context.subscriptions.push(cgtStatusBarItem);
 }

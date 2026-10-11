@@ -2,7 +2,7 @@
   "name": "c-greater",
   "displayName": "C> (C-Greater) Language Support",
   "description": "Universal, self-compiling language support with ultra-simple beginner syntax, high-performance low-level hardware control, dedicated syntax snippets, intelligent autocomplete, and live mistake detection for VS Code & Code-OSS",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "publisher": "cgt-lang",
   "author": {
     "name": "C> Language Development Team"
@@ -91,6 +91,11 @@
       {
         "command": "cgt.exploreAddonItems",
         "title": "C>: Explore Add-on Snippets & Codes with Explanations",
+        "category": "C>"
+      },
+      {
+        "command": "cgt.tailoredTemplate",
+        "title": "C>: Insert Tailored Template According to Your Code (v2.1.2)",
         "category": "C>"
       },
       {

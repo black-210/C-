@@ -1051,6 +1051,14 @@ interface AddonItem {
   };
   codePreview: string;
   readyMadeTemplate: string;
+  templateBasic: string;
+  templatePractical: string;
+  templateProduction: string;
+  customPromptLabel: string;
+  customValLabel: string;
+  defaultCustomVar: string;
+  defaultCustomVal: string;
+  generateTailored: (varName: string, valOrExpr: string) => string;
 }
 
 const addonItems: AddonItem[] = [
@@ -1077,7 +1085,23 @@ const addonItems: AddonItem[] = [
 say "Score: ", 95, " | Status: Active";`,
     readyMadeTemplate: `// Add-on Template: Universal Say Statement
 say "\${1:Hello, World!}";
-say "\${2:Label: }", \${3:value};`
+say "\${2:Label: }", \${3:value};`,
+    templateBasic: `// Basic C> Output Statement
+say "\${1:Hello, World!}";
+say "\${2:Result: }", \${3:42};`,
+    templatePractical: `// Practical C> Console Output with Multiple Variables
+let \${1:userName} = "Developer";
+let \${2:completedTasks} = 15;
+say "User: ", \${1:userName}, " | Tasks Done: ", \${2:completedTasks}, " | Status: Active";`,
+    templateProduction: `// Production Structured Log Output with Diagnostics
+say "[INFO] [", \${1:system_timestamp()}, "] Subsystem \${2:CoreEngine} initialized: status=", \${3:0};`,
+    customPromptLabel: 'Variable / Label Name:',
+    customValLabel: 'Value / Expression to print:',
+    defaultCustomVar: 'player_score',
+    defaultCustomVal: '100',
+    generateTailored: (varName, val) => `// Tailored C> Output Template for your code
+let ${varName || 'my_variable'} = ${val || '"Success"'};
+say "[Data]: ${varName || 'my_variable'} = ", ${varName || 'my_variable'};`
   },
   {
     id: 'ask',
@@ -1102,7 +1126,31 @@ say "\${2:Label: }", \${3:value};`
 say "Welcome, ", student_name, "!";`,
     readyMadeTemplate: `// Add-on Template: Console Input Binding
 let \${1:userName} = ask("\${2:Please enter your name: }");
-say "Received input: ", \${1:userName};`
+say "Received input: ", \${1:userName};`,
+    templateBasic: `// Basic Input Prompt
+let \${1:userInput} = ask("\${2:Enter value: }");
+say "You entered: ", \${1:userInput};`,
+    templatePractical: `// Practical Input Prompt with Fallback Validation
+let \${1:userAge} = ask("\${2:Enter age: }");
+whenever \${1:userAge} != "" {
+    say "Registered user age: ", \${1:userAge};
+} otherwise {
+    say "No input entered, applying default: 18";
+}`,
+    templateProduction: `// Defensive Input Prompt with Precondition Guard
+let \${1:authToken} = ask("\${2:Enter authorization token: }");
+guard \${1:authToken} != "" else {
+    say "[SECURITY ABORT]: Authentication token cannot be blank.";
+    return \${3:1};
+};
+say "[AUTHENTICATED]: Session established.";`,
+    customPromptLabel: 'Target Variable Name:',
+    customValLabel: 'Prompt Question Text:',
+    defaultCustomVar: 'user_email',
+    defaultCustomVal: 'Enter your email address: ',
+    generateTailored: (varName, val) => `// Tailored Input Prompt for your code
+let ${varName || 'user_data'} = ask("${val || 'Please input value: '}");
+say "Bound ${varName || 'user_data'} = ", ${varName || 'user_data'};`
   },
   {
     id: 'repeat',
@@ -1129,6 +1177,33 @@ say "Received input: ", \${1:userName};`
     readyMadeTemplate: `// Add-on Template: Repetition Loop
 repeat \${1:5} times {
     say "\${2:Executing automated step}";
+}`,
+    templateBasic: `// Basic Repetition Loop
+repeat \${1:3} times {
+    say "\${2:Universal C> iteration step}";
+}`,
+    templatePractical: `// Practical Batched Progress Loop
+let mut \${1:percentage} = 0;
+repeat \${2:5} times {
+    \${1:percentage} = \${1:percentage} + 20;
+    say "Processing dataset chunk: ", \${1:percentage}, "%";
+}
+say "All processing completed!";`,
+    templateProduction: `// Monitored Retry Loop with Fail-Safe Protection
+let \${1:maxRetries} = 3;
+repeat \${1:maxRetries} times {
+    fail_safe {
+        \${2:dispatch_network_ping();}\n        break;\n    } fallback {
+        say "[Warning]: Ping attempt failed, retrying...";
+    }
+}`,
+    customPromptLabel: 'Context / Target Task:',
+    customValLabel: 'Iteration Count:',
+    defaultCustomVar: 'backup_archive',
+    defaultCustomVal: '4',
+    generateTailored: (varName, val) => `// Tailored Repetition Loop for your code
+repeat ${val || '5'} times {
+    say "Executing step for ${varName || 'process'}...";
 }`
   },
   {
@@ -1161,6 +1236,37 @@ whenever \${1:condition} {
     say "\${2:Condition satisfied successfully!}";
 } otherwise {
     say "\${3:Alternative branch executed.}";
+}`,
+    templateBasic: `// Basic Declarative Branch
+whenever \${1:score >= 50} {
+    say "\${2:Success! Passed evaluation.}";
+} otherwise {
+    say "\${3:Did not pass, retry required.}";
+}`,
+    templatePractical: `// Practical Tiered Branching
+let \${1:userTier} = "pro";
+whenever \${1:userTier} == "pro" {
+    say "Access level: Full features with dedicated priority.";
+} otherwise whenever \${1:userTier} == "standard" {
+    say "Access level: Standard features active.";
+} otherwise {
+    say "Access level: Guest mode.";
+}`,
+    templateProduction: `// Defensive Mission-Critical Telemetry Branching
+whenever \${1:system_voltage} >= 11.8 && \${1:system_voltage} <= 12.6 {
+    say "[POWER NOMINAL]: Voltage within regulated safe band: ", \${1:system_voltage}, "V";
+    \${2:run_nominal_workload();}\n} otherwise {
+    say "[POWER FAULT]: Voltage outside tolerance! Engaging auxiliary power bus.";
+    \${3:swap_to_auxiliary_power();}\n}`,
+    customPromptLabel: 'Variable to Check:',
+    customValLabel: 'Condition Comparison:',
+    defaultCustomVar: 'temperature',
+    defaultCustomVal: '< 75.0',
+    generateTailored: (varName, val) => `// Tailored Conditional Logic for your code
+whenever ${varName || 'condition_var'} ${val || '== true'} {
+    say "[OK]: ${varName || 'condition_var'} satisfied!";
+} otherwise {
+    say "[Notice]: ${varName || 'condition_var'} alternative branch taken.";
 }`
   },
   {
@@ -1193,7 +1299,40 @@ define \${1:calculateTotal}(\${2:price}, \${3:taxRate}) {
 }
 
 let \${4:result} = \${1:calculateTotal}(\${5:100}, \${6:0.05});
-say "Calculation result: ", \${4:result};`
+say "Calculation result: ", \${4:result};`,
+    templateBasic: `// Basic Function Definition
+define \${1:multiplyNumbers}(\${2:a}, \${3:b}) {
+    return \${2:a} * \${3:b};
+}
+
+let \${4:answer} = \${1:multiplyNumbers}(6, 7);
+say "Result: ", \${4:answer};`,
+    templatePractical: `// Practical String & Data Processing Function
+define \${1:formatCustomerCard}(\${2:id}, \${3:name}, \${4:city}) {
+    let \${5:tag} = "C>-CLIENT";
+    return \${5:tag} + "#" + \${2:id} + " [" + \${3:name} + " - " + \${4:city} + "]";
+}
+
+let \${6:card} = \${1:formatCustomerCard}(101, "Sofia", "Madrid");
+say "Client summary: ", \${6:card};`,
+    templateProduction: `// Defensive Function with Precondition Guard & Logging
+define \${1:processOrder}(\${2:orderId}, \${3:totalAmount}) {
+    guard \${3:totalAmount} > 0.0 else {
+        say "[Validation Error]: Order amount must be positive!";
+        return false;
+    };
+    say "[Order Confirmed]: #", \${2:orderId}, " totaling $", \${3:totalAmount};
+    return true;
+}`,
+    customPromptLabel: 'Function Name:',
+    customValLabel: 'Parameters (comma-separated):',
+    defaultCustomVar: 'calculateDiscount',
+    defaultCustomVal: 'price, percentage',
+    generateTailored: (varName, val) => `// Tailored Function for your code
+define ${varName || 'customFunction'}(${val || 'param1, param2'}) {
+    say "Executing ${varName || 'customFunction'}...";
+    return ${val ? val.split(',')[0].trim() : 'param1'};
+}`
   },
   {
     id: 'given',
@@ -1225,6 +1364,34 @@ given \${1:status} {
     when \${2:"active"} => say "Status: System is running smoothly";
     when \${3:"paused"} => say "Status: System paused by user";
     otherwise => say "Status: Default fallback handler";
+}`,
+    templateBasic: `// Basic Pattern Match
+given \${1:code} {
+    when 1 => say "Option 1 chosen";
+    when 2 => say "Option 2 chosen";
+    otherwise => say "Other option selected";
+}`,
+    templatePractical: `// Practical Web Status Pattern Matcher
+let \${1:httpCode} = 200;
+given \${1:httpCode} {
+    when 200 => say "HTTP 200: Request processed successfully";
+    when 401 => say "HTTP 401: Unauthorized access";
+    when 404 => say "HTTP 404: Endpoint not found";
+    when 500 => say "HTTP 500: Subsystem internal fault";
+    otherwise => say "Received unexpected HTTP status: ", \${1:httpCode};
+}`,
+    templateProduction: `// Exhaustive Subsystem State Dispatcher
+given \${1:engineState} {
+    when "BOOT"        => \${2:initialize_hardware_clocks();}\n    when "RUNNING"     => \${3:process_continuous_fiber_batch();}\n    when "THROTTLED"   => \${4:apply_dynamic_power_saving();}\n    when "SAFE_HALT"   => \${5:flush_buffers_and_power_down();}\n    otherwise          => say "[Kernel Alert]: Unhandled state event!";
+}`,
+    customPromptLabel: 'Target Variable to Match:',
+    customValLabel: 'Primary Expected Value:',
+    defaultCustomVar: 'command_verb',
+    defaultCustomVal: '"START"',
+    generateTailored: (varName, val) => `// Tailored Pattern Matching for your code
+given ${varName || 'target_variable'} {
+    when ${val || '"READY"'} => say "${varName || 'target_variable'} is ${val || '"READY"'}";
+    otherwise => say "Default fallback for ${varName || 'target_variable'}";
 }`
   },
   {
@@ -1258,6 +1425,35 @@ attempt {
     say "Operation finished without issues.";
 } trouble \${2:err} {
     say "Safely caught and resolved trouble: ", \${2:err};
+}`,
+    templateBasic: `// Basic Resilient Trouble Recovery
+attempt {
+    \${1:say "Executing calculation...";}\n} trouble \${2:err} {
+    say "Safely handled issue: ", \${2:err};
+}`,
+    templatePractical: `// Practical Resilient Network Fetch with Fallback
+attempt {
+    say "Fetching remote configuration parameters...";
+    \${1:load_cloud_configuration();}\n    say "Cloud configuration synced.";
+} trouble \${2:err} {
+    say "[Notice]: Cloud connection failed: ", \${2:err};
+    say "Using embedded default profile.";
+    \${3:apply_local_defaults();}\n}`,
+    templateProduction: `// Defensive Subsystem Isolation with Metric Logging
+attempt {
+    \${1:execute_untrusted_plugin();}\n} trouble \${2:err} {
+    say "[SANDBOX FAULT]: Plugin error intercepted safely: ", \${2:err};
+    \${3:log_security_audit_event(err);}\n    \${4:restore_checkpoint();}\n}`,
+    customPromptLabel: 'Operation to Protect:',
+    customValLabel: 'Error Variable Name:',
+    defaultCustomVar: 'network_sync',
+    defaultCustomVal: 'err',
+    generateTailored: (varName, val) => `// Tailored Trouble Containment for your code
+attempt {
+    say "Running ${varName || 'critical_task'}...";
+    ${varName || 'critical_task'}();
+} trouble ${val || 'err'} {
+    say "Intercepted error in ${varName || 'critical_task'}: ", ${val || 'err'};
 }`
   },
   {
@@ -1288,6 +1484,34 @@ flow data
 flow \${1:source_collection}
     into sift(\${2:item} -> \${2:item}.\${3:is_valid})
     into batch(\${4:64})
+    into tally();`,
+    templateBasic: `// Basic Dataflow Pipeline
+flow \${1:numbers}
+    into sift(n -> n > 0)
+    into batch(16)
+    into tally();`,
+    templatePractical: `// Practical Stream Processing Pipeline
+let \${1:sensorReadings} = [14, 55, 3, 99, 120, 8, 42];
+let \${2:highValueCount} = flow \${1:sensorReadings}
+    into sift(val -> val >= 50)
+    into map(val -> val * 1.1)
+    into batch(4)
+    into tally();
+say "Total processed high-value items: ", \${2:highValueCount};`,
+    templateProduction: `// High-Throughput Ingestion Stream Pipeline
+flow \${1:raw_network_buffer}
+    into parse_frames()
+    into sift(frame -> frame.crc_valid)
+    into batch(1024)
+    into emit_to_nexus_hub(\${2:eventHub});`,
+    customPromptLabel: 'Source Stream / Array:',
+    customValLabel: 'Filter Expression:',
+    defaultCustomVar: 'user_transactions',
+    defaultCustomVal: 'tx -> tx.amount > 100',
+    generateTailored: (varName, val) => `// Tailored Zero-Copy Pipeline for your code
+flow ${varName || 'my_stream'}
+    into sift(${val || 'item -> item != 0'})
+    into batch(64)
     into tally();`
   },
   {
@@ -1315,6 +1539,33 @@ flow \${1:source_collection}
     readyMadeTemplate: `// Add-on Template: Concurrency Heartbeat Pulse
 pulse \${1:heartbeat_timer} every \${2:250}.millisecond {
     say "\${3:Heartbeat status: Active}";
+}`,
+    templateBasic: `// Basic Timer Pulse
+pulse \${1:heartbeat} every \${2:500}.millisecond {
+    say "\${3:Pulse alive}";
+}`,
+    templatePractical: `// Practical Telemetry Monitor Pulse
+let mut \${1:cycleCounter} = 0;
+pulse \${2:telemetryTimer} every \${3:200}.millisecond {
+    \${1:cycleCounter} = \${1:cycleCounter} + 1;
+    whenever \${1:cycleCounter} % 5 == 0 {
+        say "[Pulse Monitor]: System running smoothly at cycle #", \${1:cycleCounter};
+    }
+}`,
+    templateProduction: `// Mission-Critical Watchdog Heartbeat with Hardware Check
+pulse \${1:hardwareWatchdog} every \${2:1000}.millisecond {
+    let \${3:isResponsive} = \${4:hardware_ping()};
+    guard \${3:isResponsive} else {
+        say "[ALERT]: Hardware peripheral watchdog timeout! Resetting channel.";
+        \${5:emergency_peripheral_cycle();}\n    };
+}`,
+    customPromptLabel: 'Pulse Task Name:',
+    customValLabel: 'Interval Duration:',
+    defaultCustomVar: 'sensor_pulse',
+    defaultCustomVal: '250.millisecond',
+    generateTailored: (varName, val) => `// Tailored Heartbeat Pulse for your code
+pulse ${varName || 'worker_pulse'} every ${val || '100.millisecond'} {
+    say "[Pulse]: Running ${varName || 'worker_pulse'} step";
 }`
   },
   {
@@ -1346,7 +1597,34 @@ say "User verified: ", user_id;`,
 guard \${1:input != null} else {
     say "\${2:Precondition failed: input cannot be null}";
     return \${3:0};
-};`
+};`,
+    templateBasic: `// Basic Safety Guard
+guard \${1:val > 0} else {
+    say "Value must be positive!";
+    return \${2:0};
+};`,
+    templatePractical: `// Practical Access Control Guard
+guard \${1:userRole} == "admin" else {
+    say "[Security Notice]: Access denied. Administrator privilege required.";
+    return false;
+};
+say "[Access Permitted]: Proceeding with privileged operation.";`,
+    templateProduction: `// Defensive Memory & Boundary Enforcement Guard
+guard (\${1:bufferLength} > 0 && \${1:bufferLength} <= \${2:MAX_SAFE_BUFFER}) else {
+    say "[FATAL]: Buffer length out of acceptable safety envelope: ", \${1:bufferLength};
+    fail_safe_halt();
+    return -1;
+};`,
+    customPromptLabel: 'Variable to Validate:',
+    customValLabel: 'Precondition Rule:',
+    defaultCustomVar: 'token',
+    defaultCustomVal: '!= null',
+    generateTailored: (varName, val) => `// Tailored Precondition Guard for your code
+guard ${varName || 'input'} ${val || '> 0'} else {
+    say "Validation failed for ${varName || 'input'}!";
+    return 0;
+};
+say "${varName || 'input'} validated successfully.";`
   },
   {
     id: 'fail_safe',
@@ -1375,7 +1653,35 @@ guard \${1:input != null} else {
     readyMadeTemplate: `// Add-on Template: Deterministic Safe Fallback
 fail_safe {
     \${1:execute_primary_mission();}\n} fallback {
-    \${2:engage_safe_mode_fallback();}\n}`
+    \${2:engage_safe_mode_fallback();}\n}`,
+    templateBasic: `// Basic Fail-Safe Block
+fail_safe {
+    \${1:primary_action();}\n} fallback {
+    say "Swapped to fallback mode";
+}`,
+    templatePractical: `// Practical Primary/Secondary Failover Routine
+fail_safe {
+    say "Attempting GPU accelerated rasterization...";
+    \${1:gpu_hardware_render();}\n} fallback {
+    say "GPU hardware busy: smoothly swapped to software CPU rasterizer";
+    \${2:cpu_software_render();}\n}`,
+    templateProduction: `// Autonomous Flight Control Fail-Safe Unit
+fail_safe {
+    \${1:run_primary_autonomous_flight_guidance();}\n} fallback {
+    say "[CRITICAL FAIL-SAFE]: Primary guidance fault! Swapping instantly to isolated secondary guidance.";
+    \${2:engage_secondary_inertial_guidance();}\n}`,
+    customPromptLabel: 'Primary Action Task:',
+    customValLabel: 'Fallback Action Task:',
+    defaultCustomVar: 'cloud_data_sync',
+    defaultCustomVal: 'local_disk_cache',
+    generateTailored: (varName, val) => `// Tailored Fail-Safe System for your code
+fail_safe {
+    say "Attempting ${varName || 'primary_task'}...";
+    ${varName || 'primary_task'}();
+} fallback {
+    say "Fallback engaged: invoking ${val || 'fallback_task'}...";
+    ${val || 'fallback_task'}();
+}`
   },
   {
     id: 'bootstrap',
@@ -1409,6 +1715,40 @@ bootstrap compiler {
     object_format("\${2:elf64}");
     let stream = byte_stream::new();
     emit_binary("\${3:my_program_standalone}", stream);
+}`,
+    templateBasic: `// Basic Autonomous Self-Compiler Configuration
+bootstrap compiler {
+    target_arch("x86_64");
+    emit_binary("\${1:my_app}", byte_stream::new());
+}`,
+    templatePractical: `// Practical Autonomous Compiler Output Configuration
+bootstrap compiler {
+    target_arch("\${1:x86_64}");
+    object_format("\${2:elf64}");
+    opt_level(3);
+    strip_symbols(true);
+    let stream = byte_stream::new();
+    emit_binary("\${3:standalone_cgt_app}", stream);
+    say "Native executable built autonomously with 0 C dependencies!";
+}`,
+    templateProduction: `// Full Production Cross-Target Bootstrapping Specification
+bootstrap compiler {
+    target_arch("\${1:native}");
+    object_format("native_executable");
+    codegen_backend(cgt_direct_machine);
+    memory_model(affine_regions);
+    emit_binary("\${2:production_server_bin}", byte_stream::new());
+    say "[BOOTSTRAP SUCCESS]: 100% autonomous native build generated.";
+}`,
+    customPromptLabel: 'Target Binary Name:',
+    customValLabel: 'Target Architecture:',
+    defaultCustomVar: 'my_standalone_service',
+    defaultCustomVal: 'x86_64',
+    generateTailored: (varName, val) => `// Tailored Autonomous Self-Compiler for your code
+bootstrap compiler {
+    target_arch("${val || 'x86_64'}");
+    let stream = byte_stream::new();
+    emit_binary("${varName || 'my_app'}", stream);
 }`
   },
   {
@@ -1441,6 +1781,43 @@ lowlevel {
     let reg = mmio_map(\${1:0x40000000}, size: \${2:4096});
     raw_register(\${3:0x40000004}, \${4:0x01});
     memory_barrier(full_sync);
+}`,
+    templateBasic: `// Basic Bare-Metal Hardware Block
+lowlevel {
+    let reg = mmio_map(\${1:0x40000000}, \${2:4096});
+    raw_register(\${1:0x40000000}, \${3:0x01});
+    memory_barrier(full_sync);
+}`,
+    templatePractical: `// Practical Embedded GPIO Controller Block
+lowlevel {
+    // Map GPIO Port Base Address
+    let gpio_base = mmio_map(\${1:0x48000C00}, 1024);
+    // Write Configuration Registers
+    raw_register(\${1:0x48000C00} + 0x04, 0x01);
+    raw_register(\${1:0x48000C00} + 0x14, 0x80);
+    memory_barrier(full_sync);
+    say "Embedded GPIO registers written directly on silicon.";
+}`,
+    templateProduction: `// Defensive Bare-Metal DMA Channel Block
+lowlevel {
+    guard has_hardware_privilege() else { return -1; };
+    let dma = mmio_map(0x40026000, 256);
+    raw_register(0x40026008, \${1:source_physical_addr});
+    raw_register(0x4002600C, \${2:dest_physical_addr});
+    raw_register(0x40026010, \${3:transfer_length});
+    cpu_bus_flush();
+    memory_barrier(full_sync);
+}`,
+    customPromptLabel: 'Device Label / Peripheral:',
+    customValLabel: 'MMIO Memory Base Address:',
+    defaultCustomVar: 'uart_device',
+    defaultCustomVal: '0x40002000',
+    generateTailored: (varName, val) => `// Tailored Bare-Metal Hardware Block for your code
+lowlevel {
+    let dev_base = mmio_map(${val || '0x40000000'}, 4096);
+    raw_register(${val || '0x40000000'}, 0x01);
+    memory_barrier(full_sync);
+    say "Silicon hardware ready for ${varName || 'peripheral'}";
 }`
   },
   {
@@ -1481,6 +1858,54 @@ fn \${2:guarded_action}(\${3:param}: i32) -> i32 {
     requires(\${3:param} > 0);
     ensures(\${3:param} > 0);
     return \${3:param};
+}`,
+    templateBasic: `// Basic Formal Contract Specification
+contract \${1:SafetySpec} {
+    requires(1);
+    ensures(1);
+}
+
+fn \${2:action}(\${3:x}: i32) -> i32 {
+    requires(\${3:x} > 0);
+    ensures(\${3:x} > 0);
+    return \${3:x};
+}`,
+    templatePractical: `// Practical Account Balance Invariant Contract
+contract \${1:AccountBalanceInvariants} {
+    invariant(total_balance >= 0);
+}
+
+fn \${2:withdraw}(\${3:amount}: i32) -> i32 {
+    requires(\${3:amount} > 0);
+    requires(\${3:amount} <= balance);
+    ensures(balance >= 0);
+    balance = balance - \${3:amount};
+    return balance;
+}`,
+    templateProduction: `// Mission-Critical Buffer Bounds Proof Contract
+spec contract \${1:BufferBoundsSafety} {
+    requires(buffer_len > 0);
+    requires(offset + length <= buffer_len);
+    ensures(written_bytes == length);
+}
+
+fn \${2:safe_write_buffer}(buf: &mut [u8], offset: usize, length: usize) -> usize {
+    requires(offset + length <= buf.len);
+    ensures(written_bytes == length);
+    return length;
+}`,
+    customPromptLabel: 'Contract Name:',
+    customValLabel: 'Precondition Rule (requires):',
+    defaultCustomVar: 'PaymentSafety',
+    defaultCustomVal: 'amount > 0 && balance >= amount',
+    generateTailored: (varName, val) => `// Tailored Formal Contract for your code
+contract ${varName || 'LogicSafety'}_Spec {
+    requires(${val || 'x > 0'});
+    ensures(1);
+}
+
+fn execute_guarded() {
+    requires(${val || 'x > 0'});
 }`
   }
 ];
@@ -1562,7 +1987,7 @@ const pipelineStages: PipelineStage[] = [
 ];
 
 const stats = [
-  { label: 'Language Version', value: 'v2.1.0-LTS Universal' },
+  { label: 'Language Version', value: 'v2.1.2-LTS Universal' },
   { label: 'Compiler Pipeline Stages', value: '10' },
   { label: 'Working Examples', value: '32+' },
   { label: 'C Compiler Dependencies', value: '0 (Autonomous)' },
@@ -1713,11 +2138,24 @@ export default function App() {
   const [showSampleTemplate, setShowSampleTemplate] = useState(false);
   const [copiedSampleTemplate, setCopiedSampleTemplate] = useState(false);
 
-  // Add-on Codes & Snippets Explorer state
+  // Add-on Codes & Snippets Explorer state (v2.1.2)
   const [selectedAddonItem, setSelectedAddonItem] = useState<AddonItem>(addonItems[0]);
   const [addonCategoryFilter, setAddonCategoryFilter] = useState<string>('all');
   const [showAddonTemplate, setShowAddonTemplate] = useState(false);
   const [copiedAddonTemplate, setCopiedAddonTemplate] = useState(false);
+
+  // Template suite selection & tailored code generator states (v2.1.2)
+  const [activeTemplateTab, setActiveTemplateTab] = useState<'basic' | 'practical' | 'production' | 'tailored'>('basic');
+  const [customVarName, setCustomVarName] = useState<string>(addonItems[0].defaultCustomVar);
+  const [customValOrExpr, setCustomValOrExpr] = useState<string>(addonItems[0].defaultCustomVal);
+  const [copiedTailored, setCopiedTailored] = useState(false);
+  const [sentToSimulator, setSentToSimulator] = useState(false);
+
+  // Sync custom input defaults when user switches selected addon item
+  useEffect(() => {
+    setCustomVarName(selectedAddonItem.defaultCustomVar);
+    setCustomValOrExpr(selectedAddonItem.defaultCustomVal);
+  }, [selectedAddonItem]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -1745,6 +2183,21 @@ export default function App() {
     setTimeout(() => setCopiedAddonTemplate(false), 2000);
   };
 
+  const handleCopyTailoredTemplate = (codeText: string) => {
+    navigator.clipboard.writeText(codeText);
+    setCopiedTailored(true);
+    setTimeout(() => setCopiedTailored(false), 2000);
+  };
+
+  const handleSendToLiveViewer = () => {
+    const target = document.getElementById('snippets');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+    setSentToSimulator(true);
+    setTimeout(() => setSentToSimulator(false), 2500);
+  };
+
   const navItems = [
     { label: 'Features', href: '#features' },
     { label: 'v2+ Snippets', href: '#snippets' },
@@ -1768,7 +2221,7 @@ export default function App() {
         <div className="nav-inner">
           <a href="#" className="nav-logo">
             <span className="logo-icon">{'>'}</span>
-            <span className="logo-text">C-Greater v2.1</span>
+            <span className="logo-text">C-Greater v2.1.2</span>
           </a>
           <div className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
             {navItems.map((item) => (
@@ -1803,7 +2256,7 @@ export default function App() {
         <div className="hero-content">
           <div className="hero-badge">
             <span className="badge-dot" />
-            C{'>'} v2.1.0-LTS Universal — Accessible for Everyone, Simpler than Python &amp; Autonomous
+            C{'>'} v2.1.2-LTS Universal — Accessible for Everyone, Simpler than Python &amp; Autonomous
           </div>
           <h1 className="hero-title">
             <span className="hero-symbol">C{'>'}</span>
@@ -1813,7 +2266,7 @@ export default function App() {
             <span className="hero-gradient">Simpler than Python &amp; Self-Compiling.</span>
           </h1>
           <p className="hero-subtitle">
-            C{'>'} v2.1 is designed for everyone. From ultra-simple syntax (<code className="text-yellow-400">say</code>, <code className="text-yellow-400">ask</code>, <code className="text-yellow-400">repeat</code>) to <strong>autonomous self-compilation without C dependencies</strong>, formal contract verification, and optional bare-metal hardware control.
+            C{'>'} v2.1.2 is designed for everyone. From ultra-simple syntax (<code className="text-yellow-400">say</code>, <code className="text-yellow-400">ask</code>, <code className="text-yellow-400">repeat</code>) to <strong>autonomous self-compilation without C dependencies</strong>, formal contract verification, and optional bare-metal hardware control.
           </p>
           <div className="hero-actions">
             <a href="#snippets" className="btn btn-primary">
@@ -2172,8 +2625,8 @@ export default function App() {
       <section id="vscode" className="section section-alt">
         <SectionTitle
           kicker="Developer Tooling"
-          title="Official VS Code &amp; Code-OSS Extension v2.1.1"
-          subtitle="Everything in C-Greater-VSCode is packaged in ready-to-use VSIX format: Automatic Suggestions, High-Fidelity Colors, Dedicated Syntax Snippets, and Real-Time Mistake Detection."
+          title="Official VS Code &amp; Code-OSS Extension v2.1.2"
+          subtitle="Everything in C-Greater-VSCode is packaged in ready-to-use VSIX format: Automatic Suggestions, High-Fidelity Colors, Dedicated Syntax Snippets, Real-Time Mistake Detection, and Tailored Templates."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -2181,12 +2634,12 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-bold text-white">Download VSIX Package</h3>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono border border-emerald-500/30">v2.1.1 VSIX</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono border border-emerald-500/30">v2.1.2 VSIX</span>
               </div>
               <p className="text-xs text-slate-400 mb-4">Packaged Open-VSIX archive compatible with VS Code, Code-OSS, and VSCodium:</p>
               
               <div className="font-mono text-xs bg-slate-950 p-4 rounded-xl text-slate-300 border border-slate-800 mb-4">
-                <span className="text-blue-400 font-bold">c-greater-2.1.1.vsix</span> (36.5 KB)<br />
+                <span className="text-blue-400 font-bold">c-greater-2.1.2.vsix</span> (43.3 KB)<br />
                 ├── <span className="text-yellow-400">c-greater-syntax-keywords.json</span> (Syntax Matrix)<br />
                 ├── <span className="text-purple-400">snippets/c-greater-syntax-snippets.json</span> (Dedicated)<br />
                 ├── <span className="text-purple-400">snippets/syntax_snippets.json</span> (Pipelines &amp; Async)<br />
@@ -2194,21 +2647,25 @@ export default function App() {
                 ├── <span className="text-pink-400">themes/c-greater-dark-theme.json</span> (Vibrant Dark Colors)<br />
                 ├── <span className="text-pink-400">themes/c-greater-light-theme.json</span> (Vibrant Light Colors)<br />
                 ├── <span className="text-emerald-400">syntaxes/cgt.tmLanguage.json</span> (Full Grammar)<br />
-                ├── <span className="text-yellow-400">autocomplete.json</span> (v2.1.1 Suggestions)<br />
-                └── <span className="text-cyan-400">extension.js</span> (Mistakes Linter)
+                ├── <span className="text-yellow-400">autocomplete.json</span> (v2.1.2 Suggestions)<br />
+                └── <span className="text-cyan-400">extension.js</span> (Tailored Templates &amp; Linter)
               </div>
             </div>
 
             <div className="space-y-2">
               <a
-                href="/c-greater-2.1.1.vsix"
-                download="c-greater-2.1.1.vsix"
+                href="/c-greater-2.1.2.vsix"
+                download="c-greater-2.1.2.vsix"
                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition shadow-lg shadow-blue-600/30 cursor-pointer"
               >
-                <span>📦</span> Download c-greater-2.1.1.vsix
+                <span>📦</span> Download c-greater-2.1.2.vsix (Latest)
               </a>
-              <div className="text-center">
-                <span className="text-[11px] text-slate-500 font-mono">MD5 verified &amp; ready to install</span>
+              <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-mono">
+                <span>MD5 verified</span>
+                <span>•</span>
+                <a href="/c-greater-2.1.1.vsix" download="c-greater-2.1.1.vsix" className="text-slate-400 hover:text-white underline">v2.1.1</a>
+                <span>•</span>
+                <a href="/c-greater-2.1.0.vsix" download="c-greater-2.1.0.vsix" className="text-slate-400 hover:text-white underline">v2.1.0</a>
               </div>
             </div>
           </div>
@@ -2226,7 +2683,7 @@ export default function App() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-purple-400 font-bold">3.</span>
-                <span><strong>Dedicated Syntax Snippets Files:</strong> <code className="text-white">snippets/c-greater-syntax-snippets.json</code> and <code className="text-white">c-greater-syntax-keywords.json</code> provide dedicated programming language snippets with tabstops and instant expansion.</span>
+                <span><strong>Tailored Template Generators (v2.1.2):</strong> Command <code className="text-white">C&gt;: Insert Tailored Template According to Your Code</code> customizes snippet variables dynamically to match your active editor selection.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 font-bold">4.</span>
@@ -2244,7 +2701,7 @@ export default function App() {
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                   <span className="text-xs text-slate-400 block mb-1">Via VS Code command line:</span>
                   <div className="font-mono text-xs text-emerald-300">
-                    code --install-extension c-greater-2.1.1.vsix
+                    code --install-extension c-greater-2.1.2.vsix
                   </div>
                 </div>
 
@@ -2276,24 +2733,24 @@ export default function App() {
           </div>
         </div>
 
-        {/* ─── Codes & Items Inside the Add-on (Interactive Beginner Explorer) ─── */}
+        {/* ─── Codes & Items Inside the Add-on (Interactive Beginner Explorer with Tailored Templates) ─── */}
         <div className="mt-12 pt-10 border-t border-slate-800">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 font-mono inline-block mb-3">
-              🎯 Interactive Add-on Codes &amp; Snippets Explorer
+              🎯 Interactive Add-on Codes &amp; Tailored Templates Explorer (v2.1.2)
             </span>
             <h3 className="text-2xl font-bold text-white mb-2">
               Codes &amp; Items Inside the C&gt; Add-on
             </h3>
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-              Click any code or item below. When a beginner clicks one, you don&apos;t get a ready-made template right away; instead, <strong>you see a friendly explanation along with the syntax-colored code preview first</strong>, and the template appears only after you click the reveal button!
+              Click any code or item below. When a beginner clicks one, you don&apos;t get a ready-made template right away; instead, <strong>you see a friendly explanation along with the syntax-colored code preview first</strong>, and full templates appear only after you click the reveal button — complete with <strong>customization tailored to your code!</strong>
             </p>
           </div>
 
           {/* Add-on Category Filter Bar */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
             {[
-              { id: 'all', label: 'All Add-on Items (11)' },
+              { id: 'all', label: 'All Add-on Items (14)' },
               { id: 'Beginner Universal', label: 'Beginner Universal (say, ask, repeat, whenever, define, given)' },
               { id: 'Safety & Faults', label: 'Safety & Faults (attempt, guard, fail_safe)' },
               { id: 'Pipelines & Streams', label: 'Pipelines & Streams (flow)' },
@@ -2326,7 +2783,10 @@ export default function App() {
                   className={`example-tab ${selectedAddonItem.id === item.id ? 'active' : ''}`}
                   onClick={() => {
                     setSelectedAddonItem(item);
-                    setShowAddonTemplate(false); // Crucial: Hide ready-made template on click so beginner sees explanation + code first!
+                    setShowAddonTemplate(false); // Retain requirement: beginner sees explanation + code first!
+                    setActiveTemplateTab('basic');
+                    setCustomVarName(item.defaultCustomVar);
+                    setCustomValOrExpr(item.defaultCustomVal);
                   }}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -2345,7 +2805,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* Right Column: Explanation along with the Code First, and Template only after clicking */}
+            {/* Right Column: Explanation along with Code First, and Comprehensive Templates only after clicking */}
             <div className="example-viewer">
               {/* Add-on Item Header */}
               <div className="p-4 bg-slate-900 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
@@ -2373,7 +2833,7 @@ export default function App() {
                     className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-blue-600/20"
                   >
                     <span>
-                      {showAddonTemplate ? '▲ Hide Ready-Made Template' : '✨ Click to Reveal Ready-Made Template'}
+                      {showAddonTemplate ? '▲ Hide Ready-Made Templates' : '✨ Click to Reveal Ready-Made Templates'}
                     </span>
                   </button>
                 </div>
@@ -2423,7 +2883,7 @@ export default function App() {
 
                 <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
                   <span>
-                    👇 <em>Inspect the syntax-highlighted code preview below. When ready, click the blue button above to reveal the ready-made template.</em>
+                    👇 <em>Inspect the syntax-highlighted code preview below. When ready, click the blue button above to reveal the ready-made templates!</em>
                   </span>
                 </div>
               </div>
@@ -2437,37 +2897,211 @@ export default function App() {
                 <CodeBlock code={selectedAddonItem.codePreview} />
               </div>
 
-              {/* 3. Ready-Made Template (Appears ONLY AFTER clicking the reveal button!) */}
+              {/* 3. Ready-Made Templates Suite (Appears ONLY AFTER clicking the reveal button!) */}
               {showAddonTemplate && (
-                <div className="p-4 sm:p-5 bg-slate-950 border-t-2 border-dashed border-blue-500/50 space-y-3">
+                <div className="p-4 sm:p-5 bg-slate-950 border-t-2 border-dashed border-blue-500/50 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                        🎉 Ready-Made Template Unlocked:
-                      </span>
-                      <span className="text-[11px] text-slate-400">
-                        (Includes snippet tabstops $1, $2 for quick filling in VS Code)
-                      </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                          🎉 Complete Templates Suite Unlocked:
+                        </span>
+                        <span className="text-[11px] text-slate-400">
+                          (Select any template style or customize according to your code)
+                        </span>
+                      </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleSendToLiveViewer}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 text-emerald-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                      >
+                        <span>{sentToSimulator ? '✓ Scrolled to Viewer!' : '🚀 Test in Live Code Viewer'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Template Style Tabs */}
+                  <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-900 rounded-xl border border-slate-800">
                     <button
-                      onClick={() => handleCopyAddonTemplate(selectedAddonItem.readyMadeTemplate)}
-                      className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                      onClick={() => setActiveTemplateTab('basic')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
+                        activeTemplateTab === 'basic'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
                     >
-                      <span>{copiedAddonTemplate ? '✓ Copied!' : '📋 Copy Ready-Made Template'}</span>
+                      <span>🏷️ Basic Template</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTemplateTab('practical')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
+                        activeTemplateTab === 'practical'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <span>⚡ Practical Real-World</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTemplateTab('production')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
+                        activeTemplateTab === 'production'
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <span>🛡️ Production Safe</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTemplateTab('tailored')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                        activeTemplateTab === 'tailored'
+                          ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-md shadow-yellow-500/20'
+                          : 'text-yellow-400 hover:text-yellow-300'
+                      }`}
+                    >
+                      <span>🎯 Tailored to Your Code (على حسب كودك)</span>
                     </button>
                   </div>
 
-                  <CodeBlock code={selectedAddonItem.readyMadeTemplate} />
+                  {/* Tab 1: Basic Template */}
+                  {activeTemplateTab === 'basic' && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-xs text-slate-400">
+                        <span>🏷️ <strong>Basic / Minimal Snippet:</strong> Cleanest code pattern with standard tabstops.</span>
+                        <button
+                          onClick={() => handleCopyAddonTemplate(selectedAddonItem.templateBasic)}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                        >
+                          <span>{copiedAddonTemplate ? '✓ Copied!' : '📋 Copy Basic Template'}</span>
+                        </button>
+                      </div>
+                      <CodeBlock code={selectedAddonItem.templateBasic} />
+                    </div>
+                  )}
 
-                  <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+                  {/* Tab 2: Practical Template */}
+                  {activeTemplateTab === 'practical' && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-xs text-slate-400">
+                        <span>⚡ <strong>Practical Real-World:</strong> Expanded logic with multiple variables and condition branches.</span>
+                        <button
+                          onClick={() => handleCopyAddonTemplate(selectedAddonItem.templatePractical)}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                        >
+                          <span>{copiedAddonTemplate ? '✓ Copied!' : '📋 Copy Practical Template'}</span>
+                        </button>
+                      </div>
+                      <CodeBlock code={selectedAddonItem.templatePractical} />
+                    </div>
+                  )}
+
+                  {/* Tab 3: Production Safe Template */}
+                  {activeTemplateTab === 'production' && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-xs text-slate-400">
+                        <span>🛡️ <strong>Production &amp; Defensive:</strong> Hardened with precondition guards, fail-safe recovery, and telemetry.</span>
+                        <button
+                          onClick={() => handleCopyAddonTemplate(selectedAddonItem.templateProduction)}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                        >
+                          <span>{copiedAddonTemplate ? '✓ Copied!' : '📋 Copy Production Template'}</span>
+                        </button>
+                      </div>
+                      <CodeBlock code={selectedAddonItem.templateProduction} />
+                    </div>
+                  )}
+
+                  {/* Tab 4: Interactive Tailored Template Generator (على حسب كود حقك) */}
+                  {activeTemplateTab === 'tailored' && (
+                    <div className="space-y-4 p-4 rounded-xl bg-slate-900/90 border border-yellow-500/30">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                        <div>
+                          <span className="text-xs font-bold text-yellow-400 flex items-center gap-1.5">
+                            <span>✨</span> Live Template Builder (تخصيص القالب على حسب كودك)
+                          </span>
+                          <p className="text-[11px] text-slate-400 mt-0.5">
+                            Type your own variable name and custom expression below — the template generates dynamically in real time!
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setCustomVarName(selectedSample.id.replace(/-/g, '_'));
+                              setCustomValOrExpr('42');
+                            }}
+                            className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-yellow-300 text-xs transition cursor-pointer font-mono"
+                          >
+                            🪄 Use Sample &apos;{selectedSample.id}&apos;
+                          </button>
+                          <button
+                            onClick={() => {
+                              setCustomVarName(selectedAddonItem.defaultCustomVar);
+                              setCustomValOrExpr(selectedAddonItem.defaultCustomVal);
+                            }}
+                            className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition cursor-pointer"
+                          >
+                            🔄 Reset
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Interactive Custom Inputs */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[11px] font-semibold text-slate-300 block mb-1">
+                            {selectedAddonItem.customPromptLabel}
+                          </label>
+                          <input
+                            type="text"
+                            value={customVarName}
+                            onChange={(e) => setCustomVarName(e.target.value)}
+                            placeholder="e.g. user_account"
+                            className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white font-mono focus:outline-none focus:border-yellow-400"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[11px] font-semibold text-slate-300 block mb-1">
+                            {selectedAddonItem.customValLabel}
+                          </label>
+                          <input
+                            type="text"
+                            value={customValOrExpr}
+                            onChange={(e) => setCustomValOrExpr(e.target.value)}
+                            placeholder="e.g. 100 or 'Success'"
+                            className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white font-mono focus:outline-none focus:border-yellow-400"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Real-time Generated Code Preview */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-[11px] font-mono text-emerald-400 font-semibold">
+                            Generated C&gt; Code (Live Preview):
+                          </span>
+                          <button
+                            onClick={() => handleCopyTailoredTemplate(selectedAddonItem.generateTailored(customVarName, customValOrExpr))}
+                            className="px-3 py-1 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold text-xs transition cursor-pointer font-mono flex items-center gap-1.5 shadow-md shadow-yellow-500/20"
+                          >
+                            <span>{copiedTailored ? '✓ Copied!' : '📋 Copy Tailored Template'}</span>
+                          </button>
+                        </div>
+                        <CodeBlock code={selectedAddonItem.generateTailored(customVarName, customValOrExpr)} />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
                     <span>
-                      💡 <em>In VS Code, type <code className="text-yellow-400 font-mono">{selectedAddonItem.keyword}</code> and press Tab to insert and jump through placeholders!</em>
+                      💡 <em>In VS Code, press <code className="text-white font-mono">Ctrl+Shift+P</code> &gt; <code className="text-yellow-400 font-mono">C&gt;: Insert Tailored Template According to Your Code</code> to insert directly into your file!</em>
                     </span>
                     <button
                       onClick={() => setShowAddonTemplate(false)}
                       className="text-slate-400 hover:text-white underline cursor-pointer text-xs"
                     >
-                      Hide Template
+                      Hide Templates
                     </button>
                   </div>
                 </div>
