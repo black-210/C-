@@ -89,6 +89,11 @@
     ],
     "commands": [
       {
+        "command": "cgt.exploreAddonItems",
+        "title": "C>: Explore Add-on Snippets & Codes with Explanations",
+        "category": "C>"
+      },
+      {
         "command": "cgt.run",
         "title": "C>: Run Current File (cgt -r)",
         "category": "C>"
@@ -126,6 +131,11 @@
     ],
     "menus": {
       "editor/context": [
+        {
+          "when": "editorLangId == cgt",
+          "command": "cgt.exploreAddonItems",
+          "group": "cgt_commands@0"
+        },
         {
           "when": "editorLangId == cgt",
           "command": "cgt.run",

@@ -673,6 +673,142 @@ function activate(context) {
     context.subscriptions.push(codeActionProvider);
 
     // 8. Register Commands for Compilation, Run, Bootstrap, and Translation
+    const exploreAddonItemsCommand = vscode.commands.registerCommand('cgt.exploreAddonItems', async () => {
+        const addonItems = [
+            {
+                label: 'say — Universal Console Output',
+                category: 'Beginner Universal (Golden Yellow)',
+                code: 'say "Hello, World!";',
+                template: 'say "${1:Hello, World!}";\n',
+                explanation: 'Universal beginner output statement. Simpler than Python print() with zero parentheses required. Outputs any string, number, or variable directly.'
+            },
+            {
+                label: 'ask — User Input Prompt',
+                category: 'Beginner Universal (Golden Yellow)',
+                code: 'let name = ask("What is your name? ");',
+                template: 'let ${1:userName} = ask("${2:What is your name? }");\n',
+                explanation: 'Clean user input prompt. Binds console input directly to a variable with automatic type inference.'
+            },
+            {
+                label: 'repeat — Natural Repetition Loop',
+                category: 'Beginner Universal (Golden Yellow)',
+                code: 'repeat 3 times {\n    say "Universal execution!";\n}',
+                template: 'repeat ${1:3} times {\n    say "${2:Executing clean iteration step}";\n}\n',
+                explanation: 'Declarative iteration loop. Repeats a block N times without manual loop index counters (like i = 0; i < N; i++) or off-by-one errors.'
+            },
+            {
+                label: 'whenever — Declarative Branching',
+                category: 'Beginner Universal (Golden Yellow)',
+                code: 'whenever score >= 90 {\n    say "Mastery achieved!";\n} otherwise {\n    say "Keep practicing!";\n}',
+                template: 'whenever ${1:condition} {\n    ${2:say "Condition satisfied!";}\n} otherwise {\n    ${3:say "Alternative branch taken";}\n}\n',
+                explanation: 'Intuitive natural-language alternative to cryptic if/else keywords, making conditional logic readable for everyone.'
+            },
+            {
+                label: 'define — Clean Function Definition',
+                category: 'Beginner Universal (Golden Yellow)',
+                code: 'define add(a, b) {\n    return a + b;\n}',
+                template: 'define ${1:calculateTotal}(${2:price}, ${3:taxRate}) {\n    return ${2:price} * (1.0 + ${3:taxRate});\n}\n',
+                explanation: 'Universal function syntax. Clear parameter passing without boilerplate decorators.'
+            },
+            {
+                label: 'given — Declarative Pattern Match',
+                category: 'Beginner Universal (Golden Yellow)',
+                code: 'given state {\n    when "ready" => say "Go!";\n    otherwise => say "Wait";\n}',
+                template: 'given ${1:status} {\n    when ${2:"active"} => say "System is operational";\n    when ${3:"idle"} => say "System is idle";\n    otherwise => say "Unknown status";\n}\n',
+                explanation: 'Readable pattern matching that replaces complex nested switch/case statements with simple when arrows.'
+            },
+            {
+                label: 'attempt — Safe Trouble Recovery',
+                category: 'Safety & Beginner (Mint Green)',
+                code: 'attempt {\n    // resilient execution\n} trouble err {\n    say "Safe recovery: ", err;\n}',
+                template: 'attempt {\n    ${1:// resilient work block}\n} trouble ${2:err} {\n    say "Safe recovery from: ", ${2:err};\n}\n',
+                explanation: 'Zero-panic structured error containment. Catches unexpected issues safely without crashing the program.'
+            },
+            {
+                label: 'flow — Dataflow Streaming Pipeline',
+                category: 'Pipeline (Lilac Purple)',
+                code: 'flow data into sift(x -> x > 10) into tally();',
+                template: 'flow ${1:raw_stream}\n    into sift(item -> item.${2:is_valid})\n    into batch(${3:32})\n    into tally();\n',
+                explanation: 'High-speed stream pipeline. Chains transformations into a single zero-copy data pass.'
+            },
+            {
+                label: 'pulse — Concurrency Heartbeat',
+                category: 'Async & Concurrency (Radiant Violet)',
+                code: 'pulse heartbeat every 100.millisecond {\n    say "System OK";\n}',
+                template: 'pulse ${1:system_heartbeat} every ${2:100}.millisecond {\n    ${3:say "Heartbeat alive";}\n}\n',
+                explanation: 'Cooperative recurring pulse. Automatically triggers recurring tasks without thread sleep locks.'
+            },
+            {
+                label: 'guard — Precondition Early-Exit',
+                category: 'Safety & Verification (Mint Green)',
+                code: 'guard user_id > 0 else { return 0; };',
+                template: 'guard ${1:token != null} else {\n    say "${2:Invalid token, aborting.}";\n    return ${3:0};\n};\n',
+                explanation: 'Defensive early exit. Protects functions from invalid arguments without nested if-statement pyramids.'
+            },
+            {
+                label: 'fail_safe — Deterministic Fallback Block',
+                category: 'Safety & Fault Isolation (Mint Green)',
+                code: 'fail_safe {\n    primary_task();\n} fallback {\n    safe_mode();\n}',
+                template: 'fail_safe {\n    ${1:primary_action();}\n} fallback {\n    ${2:safe_emergency_fallback();}\n}\n',
+                explanation: 'Guarantees execution safety. If the primary task encounters a hardware or logic fault, the fallback runs instantly.'
+            },
+            {
+                label: 'bootstrap — Autonomous Self-Compiler',
+                category: 'Self-Hosting (Electric Cyan)',
+                code: 'bootstrap compiler {\n    target_arch("x86_64");\n    emit_binary("app", stream);\n}',
+                template: 'bootstrap compiler {\n    target_arch("${1:x86_64}");\n    object_format("${2:elf64}");\n    let stream = byte_stream::new();\n    emit_binary("${3:my_app_standalone}", stream);\n}\n',
+                explanation: 'Autonomous native machine code generator. Directly compiles and links native executables with zero C dependencies.'
+            },
+            {
+                label: 'lowlevel — Isolated Bare-Metal Hardware',
+                category: 'Hardware Control (Crimson Red)',
+                code: 'lowlevel {\n    raw_register(0x4000, 1);\n    let p = mmio_map(0x4000, 4096);\n}',
+                template: 'lowlevel {\n    say "[Hardware]: Direct MMIO mapping active";\n    let reg = mmio_map(${1:0x40000000}, ${2:4096});\n    memory_barrier(full_sync);\n}\n',
+                explanation: 'Scoped bare-metal control block. Isolates direct registers, memory fences, and MMIO pointers safely from high-level application code.'
+            }
+        ];
+
+        const selected = await vscode.window.showQuickPick(
+            addonItems.map(item => ({
+                label: item.label,
+                description: item.category,
+                detail: item.explanation,
+                item: item
+            })),
+            {
+                placeHolder: 'Select any C> Add-on item to view its explanation first...',
+                title: 'C> Add-on Codes & Snippets Explorer'
+            }
+        );
+
+        if (!selected) return;
+
+        const it = selected.item;
+        // Show explanation along with code preview first!
+        const modalMessage = `📘 C> Add-on Item: ${it.label}\n\n• Category: ${it.category}\n• Explanation: ${it.explanation}\n\nCode Preview:\n${it.code}\n\nClick "✨ Insert Ready-Made Template" to insert this template into your editor.`;
+        
+        const action = await vscode.window.showInformationMessage(
+            modalMessage,
+            { modal: true },
+            '✨ Insert Ready-Made Template',
+            '📋 Copy Template to Clipboard'
+        );
+
+        if (action === '✨ Insert Ready-Made Template') {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                editor.insertSnippet(new vscode.SnippetString(it.template));
+                vscode.window.showInformationMessage(`Inserted template for ${it.label}`);
+            } else {
+                const doc = await vscode.workspace.openTextDocument({ language: 'cgt', content: it.template });
+                await vscode.window.showTextDocument(doc);
+            }
+        } else if (action === '📋 Copy Template to Clipboard') {
+            await vscode.env.clipboard.writeText(it.template);
+            vscode.window.showInformationMessage(`Copied ${it.label} template to clipboard!`);
+        }
+    });
+
     const runCommand = vscode.commands.registerCommand('cgt.run', () => {
         executeCgtCompiler('-r');
     });
@@ -704,6 +840,7 @@ function activate(context) {
     });
 
     context.subscriptions.push(
+        exploreAddonItemsCommand,
         runCommand,
         compileCommand,
         bootstrapCommand,

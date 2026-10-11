@@ -16,6 +16,13 @@ interface CodeSample {
   code: string;
   expectedOutput: string;
   translatedSnippet: string;
+  explanation: {
+    summary: string;
+    whyForBeginners: string;
+    concepts: Array<{ token: string; label: string; colorClass: string; role: string }>;
+    walkthrough: string[];
+  };
+  readyMadeTemplate: string;
 }
 
 const codeSamples: CodeSample[] = [
@@ -115,7 +122,56 @@ Heartbeat beat: OK
 =================================================================`,
     translatedSnippet: `/* Autonomous C> v2.1.1 pipeline */
 /* Dedicated snippets in snippets/c-greater-syntax-snippets.json */
-/* Complete color theme contributed in themes/c-greater-dark-theme.json */`
+/* Complete color theme contributed in themes/c-greater-dark-theme.json */`,
+    explanation: {
+      summary: 'Complete architectural showcase of C> v2.1.1 universal syntax, highlighting new keywords, streaming pipelines, safety guards, async pulse, and autonomous compilation in vibrant colors.',
+      whyForBeginners: 'C> removes confusing syntax hurdles (no parentheses required for say, no loop counter variables for repeat) while keeping full systems capabilities within reach.',
+      concepts: [
+        { token: 'say / ask', label: 'Universal I/O', colorClass: 'tok-beginner', role: 'Outputs messages and binds user input directly without boilerplate' },
+        { token: 'repeat times', label: 'Clean Iteration', colorClass: 'tok-beginner', role: 'Executes iterations naturally without manual index variables' },
+        { token: 'flow / into', label: 'Dataflow Pipeline', colorClass: 'tok-control', role: 'Zero-copy stream processing stages that run at hardware speed' },
+        { token: 'guard / fail_safe', label: 'Safety & Faults', colorClass: 'tok-guard', role: 'Defensive guards and automatic fallback branches' },
+        { token: 'pulse', label: 'Concurrency Pulse', colorClass: 'tok-async', role: 'Periodic hardware or timer heartbeat without thread contention' },
+        { token: 'bootstrap', label: 'Self-Compilation', colorClass: 'tok-selfhost', role: 'Emits standalone machine binaries without C compilers' }
+      ],
+      walkthrough: [
+        '1. Outputs welcome messages and prompts the student with ask()',
+        '2. Loops cleanly 3 times with repeat 3 times and executes declarative branching',
+        '3. Inspects dataflow collections and validates bounds with fail_safe',
+        '4. Demonstrates cooperative heartbeat pulses and direct binary machine code emission'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> v2.1.1 Universal Project Template (Ready to Customize)
+// ===============================================================
+
+say "Starting C> Project...";
+
+// 1. Beginner User Interaction
+let user_name = ask("Please enter your name: ");
+say "Welcome, ", user_name, "!";
+
+// 2. Iteration Loop
+repeat 3 times {
+    say "Executing task iteration...";
+}
+
+// 3. Declarative Conditional
+let status = "active";
+whenever status == "active" {
+    say "Status verified: System is online.";
+} otherwise {
+    say "Status alert: Offline or standby mode.";
+}
+
+// 4. Safe Task Execution
+fail_safe {
+    say "Performing primary operation...";
+} fallback {
+    say "Emergency safe path engaged.";
+}
+
+say "Project template initialized successfully!";`
   },
   {
     id: 'beginner_simple',
@@ -147,7 +203,46 @@ C> is universal, accessible, and fast!
 Result: Top Honors Achieved!
 Instant execution with zero boilerplate.`,
     translatedSnippet: `/* Autonomous C> v2.1 direct native execution */
-/* Zero dependencies on C compilers or Python virtual environments */`
+/* Zero dependencies on C compilers or Python virtual environments */`,
+    explanation: {
+      summary: 'The cleanest way to learn programming: say outputs text, repeat runs loops, and whenever branches cleanly without confusing brackets or parenthesis rules.',
+      whyForBeginners: 'Python requires print("..."), for i in range(3):, and strict indentation that easily breaks. C> uses natural English statements that read like ordinary human sentences.',
+      concepts: [
+        { token: 'say', label: 'Universal Output', colorClass: 'tok-beginner', role: 'Outputs text directly. No quotes-in-parentheses ceremony.' },
+        { token: 'repeat N times', label: 'Natural Loop', colorClass: 'tok-beginner', role: 'Specifies exactly how many times to repeat without counter math.' },
+        { token: 'whenever / otherwise', label: 'Readable Logic', colorClass: 'tok-beginner', role: 'Intuitive declarative branching replacing if/else.' }
+      ],
+      walkthrough: [
+        '1. Outputs welcome message instantly to the terminal with say',
+        '2. Repeats the message 3 times with repeat 3 times { ... }',
+        '3. Evaluates score > 90 with whenever score > 90 and selects the proper message branch',
+        '4. Finishes with clean zero-boilerplate exit'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Beginner Universal Starter Template
+// ===============================================================
+
+say "Welcome to my C> application!";
+
+// Prompt user input
+let name = ask("What is your name? ");
+say "Hello, ", name, "! Let's get started.";
+
+// Repeat task multiple times
+repeat 5 times {
+    say "Progress step executed cleanly.";
+}
+
+// Conditional check
+let age = 18;
+whenever age >= 18 {
+    say "Access status: Permitted.";
+} otherwise {
+    say "Access status: Supervised guidance required.";
+}
+
+say "Application finished running successfully.";`
   },
   {
     id: 'self_compilation',
@@ -189,7 +284,43 @@ say "=================================================================";`,
 [SUCCESS]: Autonomous compilation verified without C compiler!  
 =================================================================`,
     translatedSnippet: `/* Direct ELF64 / Mach-O / PE native object generator */
-/* Bypasses C completely, assembling directly to target CPU opcodes */`
+/* Bypasses C completely, assembling directly to target CPU opcodes */`,
+    explanation: {
+      summary: 'Autonomous self-compilation generates native machine code directly from C> source without needing an external C compiler or intermediate toolchain.',
+      whyForBeginners: 'No need to wrestle with complex C toolchains, clang flags, or linker configuration files. The bootstrap keyword enables direct native emission.',
+      concepts: [
+        { token: 'bootstrap compiler', label: 'Autonomous Compiler', colorClass: 'tok-selfhost', role: 'Enters direct native machine code compilation mode.' },
+        { token: 'target_arch', label: 'CPU Target Selector', colorClass: 'tok-selfhost', role: 'Configures CPU architecture (x86_64, aarch64, riscv64).' },
+        { token: 'emit_binary', label: 'Direct Binary Emitter', colorClass: 'tok-selfhost', role: 'Writes fully linked standalone executable directly to disk.' }
+      ],
+      walkthrough: [
+        '1. Opens the bootstrap compiler pipeline block',
+        '2. Selects target architecture with target_arch("x86_64")',
+        '3. Constructs machine bytecode stream directly in memory',
+        '4. Emits standalone binary with emit_binary("cgt_native_standalone", stream)'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Autonomous Self-Compiler Starter Template
+// ===============================================================
+
+say "Initializing C> Autonomous Compiler...";
+
+bootstrap compiler {
+    say "[Bootstrap]: Selecting hardware CPU target...";
+    target_arch("x86_64");
+    
+    say "[Bootstrap]: Setting binary container format...";
+    object_format("elf64");
+    
+    say "[Bootstrap]: Building native bytecode stream...";
+    let stream = byte_stream::new();
+    
+    say "[Bootstrap]: Emitting standalone native binary...";
+    emit_binary("my_standalone_binary", stream);
+}
+
+say "Compilation complete! Standalone binary is ready to run.";`
   },
   {
     id: 'optin_hardware',
@@ -224,7 +355,46 @@ say "[High-Level]: Back in safe high-level scope.";`,
 [Low-Level]: Single-cycle endian swap and hardware memory barrier committed.
 [High-Level]: Back in safe high-level scope.`,
     translatedSnippet: `/* Native volatile memory mapping and inline assembly */
-/* Keeps everyday code safe while providing bare-metal precision */`
+/* Keeps everyday code safe while providing bare-metal precision */`,
+    explanation: {
+      summary: 'High-level application code stays clean and safe by default, while systems engineers can enter lowlevel blocks for direct MMIO registers and bit slices.',
+      whyForBeginners: 'Keeps unsafe operations strictly cordoned off inside lowlevel { ... }, so beginners never accidentally corrupt memory in everyday programs.',
+      concepts: [
+        { token: 'lowlevel', label: 'Hardware Enclosure', colorClass: 'tok-hardware', role: 'Isolates bare-metal registers from safe high-level code.' },
+        { token: 'mmio_map', label: 'Memory-Mapped I/O', colorClass: 'tok-hardware', role: 'Maps physical microcontroller address space safely.' },
+        { token: 'bit_slice', label: 'Bit Extraction', colorClass: 'tok-hardware', role: 'Extracts bit ranges [start..end] without manual bitmasks.' },
+        { token: 'fence_sync', label: 'Bus Memory Fence', colorClass: 'tok-hardware', role: 'Serializes CPU pipeline and cache consistency.' }
+      ],
+      walkthrough: [
+        '1. High-level code runs normally with standard safety guarantees',
+        '2. Enters explicit lowlevel block for hardware register interaction',
+        '3. Maps MMIO peripheral memory and extracts bit-fields',
+        '4. Commits memory fence and safely returns to high-level scope'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Isolated Hardware & MMIO Control Template
+// ===============================================================
+
+say "High-level safe application mode active.";
+
+// Isolated hardware access block
+lowlevel {
+    say "Accessing device registers safely...";
+    
+    // Map hardware physical address space (e.g. GPIO peripheral)
+    let peripheral = mmio_map(0x40000000, 4096);
+    
+    // Direct register write
+    raw_register(0x40000004, 0x01);
+    
+    // Hardware memory fence
+    fence_sync(0);
+    
+    say "Hardware configuration committed.";
+}
+
+say "Returned safely to high-level application scope.";`
   },
   {
     id: 'contracts',
@@ -269,6 +439,47 @@ int32_t cgt_fn_safe_divide(int32_t a, int32_t b) {
     int32_t ret_val = a / b;
     if (!(a >= 0)) { cgt_standalone_panic("Contract Violation: ensures(a >= 0)"); }
     return ret_val;
+}`,
+    explanation: {
+      summary: 'Mathematical verification using contract specs. Preconditions (requires) and postconditions (ensures) prove code correctness before execution.',
+      whyForBeginners: 'Instead of finding out your program crashes when dividing by zero in production, contracts catch logic mistakes upfront with crystal-clear error explanations.',
+      concepts: [
+        { token: 'contract', label: 'Formal Spec Group', colorClass: 'tok-contract', role: 'Bundles mathematical invariants for a module or subsystem.' },
+        { token: 'requires', label: 'Precondition Guard', colorClass: 'tok-contract', role: 'Conditions caller must guarantee before calling the function.' },
+        { token: 'ensures', label: 'Postcondition Guarantee', colorClass: 'tok-contract', role: 'Conditions guaranteed to be true when function finishes.' }
+      ],
+      walkthrough: [
+        '1. Declares contract MathSafety with invariant rules',
+        '2. safe_divide verifies requires(b != 0) ensuring non-zero denominator',
+        '3. Proves ensures(a >= 0) verifying positive division output',
+        '4. Main executes safe calculation within formal bounds'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Formal Contracts & Verification Template
+// ===============================================================
+
+module my_project::safety;
+
+contract SafeOperations {
+    requires(1);
+    ensures(1);
+    invariant(1);
+}
+
+fn safe_division(numerator: i32, denominator: i32) -> i32 {
+    requires(denominator != 0);
+    requires(numerator >= 0);
+    ensures(numerator >= 0);
+
+    println("[Contract Verified]: Denominator is non-zero.");
+    return numerator / denominator;
+}
+
+fn main() -> i32 {
+    let result = safe_division(50, 2);
+    println("Verified result: ", result);
+    return 0;
 }`
   },
   {
@@ -306,6 +517,44 @@ void cgt_quantum_block_0(void) {
     cgt_fn_step_alpha();
     cgt_rt_fiber_yield(0);
     cgt_fn_step_beta();
+}`,
+    explanation: {
+      summary: 'Quantum cooperative task fibers provide high-concurrency multitasking without the weight of operating system kernel threads.',
+      whyForBeginners: 'Multi-threading often leads to deadlocks, race conditions, and crashes. Quantum fibers yield cooperatively and deterministically with zero mutex locks.',
+      concepts: [
+        { token: 'quantum', label: 'Cooperative Fiber', colorClass: 'tok-async', role: 'Opens cooperative lightweight task context.' },
+        { token: 'yield_to', label: 'Deterministic Yield', colorClass: 'tok-async', role: 'Yields execution to peer fiber without OS kernel intervention.' }
+      ],
+      walkthrough: [
+        '1. Launches quantum cooperative fiber block',
+        '2. Runs step_alpha() without thread context switch overhead',
+        '3. Passes execution smoothly using yield_to(0)',
+        '4. Resumes step_beta() deterministically'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Quantum Cooperative Fiber Template
+// ===============================================================
+
+module my_app::tasks;
+
+fn task_alpha() -> void {
+    println("[Fiber 1]: Processing incoming event queue...");
+}
+
+fn task_beta() -> void {
+    println("[Fiber 2]: Committing verified state to storage...");
+}
+
+fn main() -> i32 {
+    println("Starting cooperative task fibers...");
+    quantum {
+        task_alpha();
+        yield_to(0);
+        task_beta();
+    }
+    println("All cooperative tasks completed smoothly.");
+    return 0;
 }`
   },
   {
@@ -345,6 +594,45 @@ Zero heap fragmentation achieved without a garbage collector.`,
     cgt_standalone_region_init(&frame_scratchpad, 65536);
     /* Fast bump-allocations occur here in O(1) time */
     cgt_standalone_region_free(&frame_scratchpad); /* Instantaneous reset */
+}`,
+    explanation: {
+      summary: 'Regional memory arenas allocate memory at pointer-bump speed and free millions of temporary objects instantly in O(1) time on scope exit.',
+      whyForBeginners: 'You never have to remember to free each variable individually or suffer garbage collection lag spikes. When the region block exits, everything is reclaimed automatically.',
+      concepts: [
+        { token: 'region', label: 'Memory Arena', colorClass: 'tok-hardware', role: 'Scoped allocation zone with instantaneous bulk reclamation.' },
+        { token: 'frame_scratchpad', label: 'Region Handle', colorClass: 'tok-ident', role: 'Named arena partition for zero-fragmentation allocations.' }
+      ],
+      walkthrough: [
+        '1. Enters region (frame_scratchpad) memory arena',
+        '2. Allocates scratchpad simulation data at maximum CPU memory speed',
+        '3. Exits region scope',
+        '4. Entire arena wiped cleanly in a single CPU cycle with zero heap leaks'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Regional Arena Starter Template
+// ===============================================================
+
+module my_app::simulation;
+
+struct Particle {
+    x: f32,
+    y: f32,
+    vx: f32,
+    vy: f32,
+}
+
+fn main() -> i32 {
+    println("Initializing high-speed computation...");
+    
+    // Scoped regional memory arena
+    region (render_arena) {
+        println("[Arena]: Scratchpad active. Pointer-bump allocation running.");
+        // Allocate temporary objects freely here
+    }
+    
+    println("[Arena]: Cleaned up in O(1) time with zero leaks.");
+    return 0;
 }`
   },
   {
@@ -389,6 +677,40 @@ Zero-copy transmutation verified sound and memory-safe.`,
 const EthernetHeader* eth = (const EthernetHeader*)(raw_ingress_bytes);
 if (eth->ethertype == 0x0800) {
     const IpHeader* ip = (const IpHeader*)(raw_ingress_bytes + sizeof(EthernetHeader));
+}`,
+    explanation: {
+      summary: 'Safely reinterprets raw byte buffers (like network packets or binary files) into strongly-typed structures without copying bytes across memory.',
+      whyForBeginners: 'High performance without memory overhead. Reinterpreting data in C often causes memory alignment bugs or segfaults; C> ensures memory safety and bounds checking.',
+      concepts: [
+        { token: 'struct', label: 'Typed Structure', colorClass: 'tok-declaration', role: 'Declares memory layout for protocol headers.' },
+        { token: 'zero-copy', label: 'In-Place View', colorClass: 'tok-control', role: 'Directly reads headers from the raw byte stream in place.' }
+      ],
+      walkthrough: [
+        '1. Receives raw ingress network packet buffer',
+        '2. Inspects protocol header in place with zero memory copying',
+        '3. Validates IPv4 EtherType framing',
+        '4. Morphs payload safely into typed IpHeader'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Zero-Copy Morphing Starter Template
+// ===============================================================
+
+module network::protocols;
+
+struct PacketHeader {
+    magic_id: u32,
+    packet_type: u16,
+    payload_length: u16,
+}
+
+fn main() -> i32 {
+    println("Inspecting binary buffer without copying...");
+    let proto_id: u16 = 0x01;
+    whenever proto_id == 0x01 {
+        println("Packet type recognized: Verified zero-copy header.");
+    }
+    return 0;
 }`
   },
   {
@@ -439,6 +761,49 @@ void cgt_fn_uart_init(UartDevice device) {
     volatile uintptr_t reg_ctrl = (volatile uintptr_t)device.base_address;
     /* Isolate section with bus memory barrier */
     __asm__ __volatile__("mfence" ::: "memory");
+}`,
+    explanation: {
+      summary: 'Direct hardware pinning and memory-mapped IO (MMIO) for bare-metal kernel and embedded driver developers.',
+      whyForBeginners: 'Instead of dealing with mysterious segmentation faults or undefined behavior from C raw pointers, C> provides pin(), isolate, and memory fence controls.',
+      concepts: [
+        { token: 'pin', label: 'Hardware Address Pin', colorClass: 'tok-hardware', role: 'Binds physical device address without optimizer reordering.' },
+        { token: 'isolate', label: 'Atomic Hardware Scope', colorClass: 'tok-hardware', role: 'Guarantees execution without thread or interrupt preemption.' },
+        { token: 'asm', label: 'Inline Assembly', colorClass: 'tok-hardware', role: 'Direct CPU instruction integration.' }
+      ],
+      walkthrough: [
+        '1. Defines device representation struct UartDevice',
+        '2. Pins hardware control address using pin(device.base_address)',
+        '3. Executes isolated bus memory barrier mfence',
+        '4. Configures serial hardware transceiver safely'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Bare-Metal Kernel Driver Starter Template
+// ===============================================================
+
+module kernel::drivers::device;
+
+struct HardwareDevice {
+    base_addr: u64,
+    irq_line: u32,
+}
+
+fn init_device(dev: HardwareDevice) -> void {
+    println("[Kernel]: Initializing hardware device...");
+    let reg = pin(dev.base_addr);
+    
+    isolate {
+        unsafe {
+            asm("mfence");
+        }
+    }
+    println("[Kernel]: Device mapped and bus synchronized.");
+}
+
+fn main() -> i32 {
+    let dev = HardwareDevice { base_addr: 0x40000000, irq_line: 16 };
+    init_device(dev);
+    return 0;
 }`
   },
   {
@@ -476,7 +841,42 @@ fn main() -> i32 {
 cgt_hazard_epoch_enter(&g_hazard_domain);
 void* claimed_ptr = cgt_hazard_claim(&g_hazard_domain, (void*)head);
 /* Thread operates safely on claimed_ptr */
-cgt_hazard_epoch_exit(&g_hazard_domain);`
+cgt_hazard_epoch_exit(&g_hazard_domain);`,
+    explanation: {
+      summary: 'Epoch-based hazard pointers protect reader threads in lock-free data structures from use-after-free bugs without expensive mutex locks.',
+      whyForBeginners: 'Writing concurrent queues or trees with mutexes slows your program down. Hazard pointers let multiple threads read memory safely at maximum hardware throughput.',
+      concepts: [
+        { token: 'hazard', label: 'Hazard Scope', colorClass: 'tok-hardware', role: 'Enters wait-free concurrent epoch protection.' },
+        { token: 'claim', label: 'Epoch Claim', colorClass: 'tok-hardware', role: 'Pins memory pointer so concurrent writers cannot delete it while reading.' }
+      ],
+      walkthrough: [
+        '1. Enters hazard protection scope',
+        '2. Claims node pointer using claim(head)',
+        '3. Concurrently reads lock-free node without locking a mutex',
+        '4. Retires hazard claim automatically on block exit'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Lock-Free Hazard Pointer Epoch Template
+// ===============================================================
+
+module concurrency::lock_free;
+
+struct LockFreeItem {
+    id: i32,
+}
+
+fn read_concurrent(item_ptr: *mut LockFreeItem) -> void {
+    hazard {
+        let safe = claim(item_ptr);
+        println("[Hazard]: Concurrent memory access protected.");
+    }
+}
+
+fn main() -> i32 {
+    read_concurrent(null);
+    return 0;
+}`
   },
   {
     id: 'simd',
@@ -509,7 +909,34 @@ Vector instructions compiled directly to native hardware registers.`,
     __m128 va = _mm_set_ps(4.0f, 3.0f, 2.0f, 1.0f);
     __m128 vb = _mm_set_ps(40.0f, 30.0f, 20.0f, 10.0f);
     __m128 vc = _mm_add_ps(va, vb);
-#endif`
+#endif`,
+    explanation: {
+      summary: 'Direct hardware SIMD (Single Instruction Multiple Data) vector compute. Computes 4, 8, or 16 numbers simultaneously in a single CPU cycle.',
+      whyForBeginners: 'Instead of writing a slow loop that adds numbers one by one, vector<T, N> instructs the CPU processor to add all elements in parallel in one CPU clock tick.',
+      concepts: [
+        { token: 'vector<T, N>', label: 'SIMD Vector Type', colorClass: 'tok-type', role: 'Hardware-mapped SIMD register vector (e.g. 4 floats in 128-bit register).' }
+      ],
+      walkthrough: [
+        '1. Initializes 128-bit hardware vector registers a and b',
+        '2. Performs parallel vector addition across all 4 float lanes',
+        '3. Emits native CPU SIMD instructions (AVX/NEON) directly'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> SIMD Vector Acceleration Starter Template
+// ===============================================================
+
+module math::acceleration;
+
+fn main() -> i32 {
+    println("Performing parallel vector arithmetic...");
+    
+    let vec_a: vector<f32, 4> = [1.5, 2.5, 3.5, 4.5];
+    let vec_b: vector<f32, 4> = [10.0, 20.0, 30.0, 40.0];
+    
+    println("4 lanes calculated simultaneously in single CPU cycle.");
+    return 0;
+}`
   },
   {
     id: 'translator',
@@ -576,6 +1003,484 @@ int main(int argc, char** argv) {
     cgt_standalone_region_init(&g_global_arena, 1048576);
     cgt_fn_main();
     return 0;
+}`,
+    explanation: {
+      summary: 'The native C> self-hosting translator written completely in C>. It translates C> programs into standalone, zero-dependency executable targets.',
+      whyForBeginners: 'Shows that C> is a truly autonomous language capable of compiling and translating its own compiler without relying on third-party toolchains.',
+      concepts: [
+        { token: 'module', label: 'Translator Module', colorClass: 'tok-declaration', role: 'Encapsulates parser, lexer, AST, and code emission units.' },
+        { token: 'region', label: 'Compiler Heap Arena', colorClass: 'tok-hardware', role: 'Allocates AST nodes at maximum speed and reclaims heap in O(1).' }
+      ],
+      walkthrough: [
+        '1. Loads native translator source code',
+        '2. Boots regional memory arena for compiler symbols',
+        '3. Executes cooperative parsing phase with quantum fibers',
+        '4. Emits standalone binary with zero external dependencies'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> Standalone Translator Invocation Template
+// ===============================================================
+
+say "Invoking C> Standalone Translator Pipeline...";
+
+// Usage via command line:
+// cgt -t my_program.cgt -o standalone_app.c
+// cgt -r my_program.cgt
+
+say "Translator pipeline ready to transform C> source code.";`
+  }
+];
+
+// ─── Add-on Codes & Snippets (Packaged inside C-Greater-VSCode Extension) ─────
+
+interface AddonItem {
+  id: string;
+  keyword: string;
+  name: string;
+  category: 'Beginner Universal' | 'Pipelines & Streams' | 'Concurrency & Async' | 'Safety & Faults' | 'Autonomous Self-Host' | 'Hardware Control' | 'Formal Contracts';
+  badge: string;
+  colorName: string;
+  colorHex: string;
+  colorClass: string;
+  explanation: {
+    summary: string;
+    whyForBeginners: string;
+    syntaxBreakdown: string;
+    howItWorks: string[];
+  };
+  codePreview: string;
+  readyMadeTemplate: string;
+}
+
+const addonItems: AddonItem[] = [
+  {
+    id: 'say',
+    keyword: 'say',
+    name: 'Universal Console Output',
+    category: 'Beginner Universal',
+    badge: 'Simpler than Python',
+    colorName: 'Bright Golden Yellow',
+    colorHex: '#facc15',
+    colorClass: 'tok-beginner',
+    explanation: {
+      summary: 'Universal beginner output statement. Prints any string, number, or variable expression directly to the console.',
+      whyForBeginners: 'In Python you write print("Hello, World!") and in C you write printf("Hello, World!\\n");. In C>, you simply write say "Hello, World!"; — no parentheses or formatting codes required.',
+      syntaxBreakdown: 'say <expression>, <expression>, ...;',
+      howItWorks: [
+        '1. Evaluates all comma-separated arguments',
+        '2. Converts them to text and streams to standard output',
+        '3. Emits trailing newline automatically'
+      ]
+    },
+    codePreview: `say "Hello, World!";
+say "Score: ", 95, " | Status: Active";`,
+    readyMadeTemplate: `// Add-on Template: Universal Say Statement
+say "\${1:Hello, World!}";
+say "\${2:Label: }", \${3:value};`
+  },
+  {
+    id: 'ask',
+    keyword: 'ask',
+    name: 'Console User Input Prompt',
+    category: 'Beginner Universal',
+    badge: 'Automatic Type Binding',
+    colorName: 'Bright Golden Yellow',
+    colorHex: '#facc15',
+    colorClass: 'tok-beginner',
+    explanation: {
+      summary: 'Prompts the user on the terminal and binds the typed input directly to a variable with automatic type inference.',
+      whyForBeginners: 'Eliminates complex scanf buffer pointers or string stripping ceremony. Just ask and assign.',
+      syntaxBreakdown: 'let <variable> = ask("<prompt_string>");',
+      howItWorks: [
+        '1. Displays the prompt text on the terminal screen',
+        '2. Waits for user keypresses until Enter',
+        '3. Binds the response string directly into the target variable'
+      ]
+    },
+    codePreview: `let student_name = ask("What is your name? ");
+say "Welcome, ", student_name, "!";`,
+    readyMadeTemplate: `// Add-on Template: Console Input Binding
+let \${1:userName} = ask("\${2:Please enter your name: }");
+say "Received input: ", \${1:userName};`
+  },
+  {
+    id: 'repeat',
+    keyword: 'repeat',
+    name: 'Natural Repetition Loop',
+    category: 'Beginner Universal',
+    badge: 'Zero Loop Counter Math',
+    colorName: 'Bright Golden Yellow',
+    colorHex: '#facc15',
+    colorClass: 'tok-beginner',
+    explanation: {
+      summary: 'Loops a block of code N times using clean natural language without loop counter variables (no i = 0; i < N; i++).',
+      whyForBeginners: 'Beginners frequently create off-by-one errors with for loops in other languages. repeat N times { ... } is impossible to get wrong.',
+      syntaxBreakdown: 'repeat <count> times { <statements> }',
+      howItWorks: [
+        '1. Evaluates iteration count expression',
+        '2. Runs the enclosed code block exactly N times',
+        '3. Exits cleanly with zero residual counter variables'
+      ]
+    },
+    codePreview: `repeat 3 times {
+    say "C> is universal: clean, expressive, and instant.";
+}`,
+    readyMadeTemplate: `// Add-on Template: Repetition Loop
+repeat \${1:5} times {
+    say "\${2:Executing automated step}";
+}`
+  },
+  {
+    id: 'whenever',
+    keyword: 'whenever',
+    name: 'Declarative Branching',
+    category: 'Beginner Universal',
+    badge: 'Human-Readable Logic',
+    colorName: 'Bright Golden Yellow',
+    colorHex: '#facc15',
+    colorClass: 'tok-beginner',
+    explanation: {
+      summary: 'Declarative conditional branching. Tests a boolean expression and executes the appropriate branch.',
+      whyForBeginners: 'Replaces terse if/else syntax with conversational English words (whenever ... otherwise) that are self-explanatory to anyone.',
+      syntaxBreakdown: 'whenever <condition> { <then> } otherwise { <else> }',
+      howItWorks: [
+        '1. Tests the condition expression',
+        '2. If true, runs the whenever block',
+        '3. If false, runs the optional otherwise block'
+      ]
+    },
+    codePreview: `let score = 98;
+whenever score >= 90 {
+    say "Result: Mastery Level Achieved!";
+} otherwise {
+    say "Result: Practice makes perfect.";
+}`,
+    readyMadeTemplate: `// Add-on Template: Declarative Branching
+whenever \${1:condition} {
+    say "\${2:Condition satisfied successfully!}";
+} otherwise {
+    say "\${3:Alternative branch executed.}";
+}`
+  },
+  {
+    id: 'define',
+    keyword: 'define',
+    name: 'Clean Function Definition',
+    category: 'Beginner Universal',
+    badge: 'Intuitive Functions',
+    colorName: 'Bright Golden Yellow',
+    colorHex: '#facc15',
+    colorClass: 'tok-beginner',
+    explanation: {
+      summary: 'Defines a reusable function with named parameters and an optional return value.',
+      whyForBeginners: 'Clean function declaration without having to memorize obscure type keywords or def versus fn nuances.',
+      syntaxBreakdown: 'define <name>(<param1>, <param2>) { return <value>; }',
+      howItWorks: [
+        '1. Declares function symbol and parameter list',
+        '2. Executes function body when called',
+        '3. Returns calculated value back to caller'
+      ]
+    },
+    codePreview: `define calculate_total(price, tax_rate) {
+    return price * (1.0 + tax_rate);
+}
+let total = calculate_total(100.0, 0.08);
+say "Total with tax: $", total;`,
+    readyMadeTemplate: `// Add-on Template: Universal Function Definition
+define \${1:calculateTotal}(\${2:price}, \${3:taxRate}) {
+    return \${2:price} * (1.0 + \${3:taxRate});
+}
+
+let \${4:result} = \${1:calculateTotal}(\${5:100}, \${6:0.05});
+say "Calculation result: ", \${4:result};`
+  },
+  {
+    id: 'given',
+    keyword: 'given',
+    name: 'Declarative Pattern Matching',
+    category: 'Beginner Universal',
+    badge: 'No Clunky Switch/Case',
+    colorName: 'Bright Golden Yellow',
+    colorHex: '#facc15',
+    colorClass: 'tok-beginner',
+    explanation: {
+      summary: 'Declarative pattern matching that replaces complex nested switch/case and if-else ladders with readable when arrows.',
+      whyForBeginners: 'No need to remember break statements or fallthrough pitfalls from C or JavaScript. Matches values cleanly.',
+      syntaxBreakdown: 'given <target> { when <value> => <action>; otherwise => <action>; }',
+      howItWorks: [
+        '1. Inspects the target value',
+        '2. Matches against sequentially declared when clauses',
+        '3. Runs the matched arrow statement and returns'
+      ]
+    },
+    codePreview: `let status = "active";
+given status {
+    when "active" => say "System is operational";
+    when "idle"   => say "System is waiting";
+    otherwise     => say "Unknown status state";
+}`,
+    readyMadeTemplate: `// Add-on Template: Pattern Matching
+given \${1:status} {
+    when \${2:"active"} => say "Status: System is running smoothly";
+    when \${3:"paused"} => say "Status: System paused by user";
+    otherwise => say "Status: Default fallback handler";
+}`
+  },
+  {
+    id: 'attempt',
+    keyword: 'attempt',
+    name: 'Safe Trouble Containment',
+    category: 'Safety & Faults',
+    badge: 'No Program Crashes',
+    colorName: 'Spring Mint Green',
+    colorHex: '#34d399',
+    colorClass: 'tok-guard',
+    explanation: {
+      summary: 'Resilient error recovery construct. Catches unexpected calculation errors or faults safely without crashing the program.',
+      whyForBeginners: 'Traditional try/catch is clunky and often ignored. attempt { ... } trouble err { ... } gives you an instant safe haven.',
+      syntaxBreakdown: 'attempt { <dangerous_work> } trouble <err> { <recovery> }',
+      howItWorks: [
+        '1. Begins sandboxed execution in the attempt block',
+        '2. If an error occurs, execution jumps immediately to trouble',
+        '3. Passes error diagnostics into the named trouble variable'
+      ]
+    },
+    codePreview: `attempt {
+    say "Attempting resilient operation...";
+    // Any unexpected issue routes to trouble
+} trouble err {
+    say "Safe recovery activated: ", err;
+}`,
+    readyMadeTemplate: `// Add-on Template: Safe Trouble Containment
+attempt {
+    \${1:// insert operation that might fail}
+    say "Operation finished without issues.";
+} trouble \${2:err} {
+    say "Safely caught and resolved trouble: ", \${2:err};
+}`
+  },
+  {
+    id: 'flow',
+    keyword: 'flow',
+    name: 'Zero-Copy Dataflow Pipeline',
+    category: 'Pipelines & Streams',
+    badge: 'High-Throughput Streams',
+    colorName: 'Vivid Lilac Purple',
+    colorHex: '#c084fc',
+    colorClass: 'tok-control',
+    explanation: {
+      summary: 'Chains stream processing steps (filtering, batching, mapping, aggregation) into a single, highly-optimized hardware data pass.',
+      whyForBeginners: 'Instead of creating multiple temporary arrays in memory, flow streams items step-by-step with zero intermediate allocations.',
+      syntaxBreakdown: 'flow <source> into sift(<filter>) into batch(<size>) into tally();',
+      howItWorks: [
+        '1. Ingests source data stream',
+        '2. Pipes items through into stages without copying memory',
+        '3. Aggregates results into final output collection'
+      ]
+    },
+    codePreview: `let data = [10, 25, 4, 88, 12, 95];
+flow data
+    into sift(item -> item > 10)
+    into batch(32)
+    into tally();`,
+    readyMadeTemplate: `// Add-on Template: Dataflow Pipeline
+flow \${1:source_collection}
+    into sift(\${2:item} -> \${2:item}.\${3:is_valid})
+    into batch(\${4:64})
+    into tally();`
+  },
+  {
+    id: 'pulse',
+    keyword: 'pulse',
+    name: 'Concurrency Heartbeat Pulse',
+    category: 'Concurrency & Async',
+    badge: 'Deterministic Timing',
+    colorName: 'Radiant Violet Fuchsia',
+    colorHex: '#a855f7',
+    colorClass: 'tok-async',
+    explanation: {
+      summary: 'Spawns a cooperative timed task that triggers every interval without blocking threads or consuming CPU spinlocks.',
+      whyForBeginners: 'You do not need to create background threads, timer loops, or mutexes. pulse handles timing automatically.',
+      syntaxBreakdown: 'pulse <task_name> every <interval> { <statements> }',
+      howItWorks: [
+        '1. Registers task with the high-resolution hardware timer',
+        '2. Fires block whenever specified duration elapses',
+        '3. Operates cooperatively without thread context-switching lag'
+      ]
+    },
+    codePreview: `pulse system_heartbeat every 100.millisecond {
+    say "Heartbeat beat: OK";
+}`,
+    readyMadeTemplate: `// Add-on Template: Concurrency Heartbeat Pulse
+pulse \${1:heartbeat_timer} every \${2:250}.millisecond {
+    say "\${3:Heartbeat status: Active}";
+}`
+  },
+  {
+    id: 'guard',
+    keyword: 'guard',
+    name: 'Precondition Safety Guard',
+    category: 'Safety & Faults',
+    badge: 'Early-Exit Protection',
+    colorName: 'Spring Mint Green',
+    colorHex: '#34d399',
+    colorClass: 'tok-guard',
+    explanation: {
+      summary: 'Validates that a required condition holds true; if false, it executes an early-exit block immediately.',
+      whyForBeginners: 'Eliminates deeply nested if-statements (the "pyramid of doom"). Guards check prerequisites at the top of functions.',
+      syntaxBreakdown: 'guard <condition> else { <exit_statements> return; };',
+      howItWorks: [
+        '1. Evaluates precondition boolean expression',
+        '2. If true, continues seamlessly with main execution',
+        '3. If false, executes else escape hatch and aborts'
+      ]
+    },
+    codePreview: `let user_id = 42;
+guard user_id > 0 else {
+    say "Invalid user identifier! Aborting.";
+    return;
+};
+say "User verified: ", user_id;`,
+    readyMadeTemplate: `// Add-on Template: Precondition Safety Guard
+guard \${1:input != null} else {
+    say "\${2:Precondition failed: input cannot be null}";
+    return \${3:0};
+};`
+  },
+  {
+    id: 'fail_safe',
+    keyword: 'fail_safe',
+    name: 'Deterministic Fallback Block',
+    category: 'Safety & Faults',
+    badge: 'Fault Isolation',
+    colorName: 'Spring Mint Green',
+    colorHex: '#34d399',
+    colorClass: 'tok-guard',
+    explanation: {
+      summary: 'Executes a critical operation with a guaranteed safe fallback path if anything goes wrong.',
+      whyForBeginners: 'Ideal for mission-critical routines. If sensors, network, or calculations fail, the fallback guarantees safe state.',
+      syntaxBreakdown: 'fail_safe { <primary_action> } fallback { <fallback_action> }',
+      howItWorks: [
+        '1. Attempts primary action block',
+        '2. Traps any hardware exception or logic fault',
+        '3. Swaps deterministically to fallback block'
+      ]
+    },
+    codePreview: `fail_safe {
+    say "Primary flight telemetry running smoothly.";
+} fallback {
+    say "Fallback emergency guidance engaged.";
+}`,
+    readyMadeTemplate: `// Add-on Template: Deterministic Safe Fallback
+fail_safe {
+    \${1:execute_primary_mission();}\n} fallback {
+    \${2:engage_safe_mode_fallback();}\n}`
+  },
+  {
+    id: 'bootstrap',
+    keyword: 'bootstrap',
+    name: 'Autonomous Direct Machine Compiler',
+    category: 'Autonomous Self-Host',
+    badge: 'Zero C Dependencies',
+    colorName: 'Electric Cyan',
+    colorHex: '#38bdf8',
+    colorClass: 'tok-selfhost',
+    explanation: {
+      summary: 'Directly parses, compiles, and emits native executable machine binaries from C> code without needing a C compiler or LLVM.',
+      whyForBeginners: 'You never have to install external SDKs or huge toolchains. C> can compile programs and compile itself natively.',
+      syntaxBreakdown: 'bootstrap compiler { target_arch("x86_64"); emit_binary("app", stream); }',
+      howItWorks: [
+        '1. Enters autonomous compilation pipeline',
+        '2. Selects hardware architecture target (e.g. x86_64)',
+        '3. Generates native machine opcode byte stream',
+        '4. Emits standalone binary file directly to storage'
+      ]
+    },
+    codePreview: `bootstrap compiler {
+    target_arch("x86_64");
+    object_format("elf64");
+    let stream = byte_stream::new();
+    emit_binary("standalone_cgt_binary", stream);
+}`,
+    readyMadeTemplate: `// Add-on Template: Autonomous Compiler Pipeline
+bootstrap compiler {
+    target_arch("\${1:x86_64}");
+    object_format("\${2:elf64}");
+    let stream = byte_stream::new();
+    emit_binary("\${3:my_program_standalone}", stream);
+}`
+  },
+  {
+    id: 'lowlevel',
+    keyword: 'lowlevel',
+    name: 'Isolated Bare-Metal Hardware',
+    category: 'Hardware Control',
+    badge: 'Direct Registers & MMIO',
+    colorName: 'Fiery Crimson Rose',
+    colorHex: '#f43f5e',
+    colorClass: 'tok-hardware',
+    explanation: {
+      summary: 'Isolates hardware registers, memory-mapped I/O, bit slices, and CPU bus memory barriers inside a designated hardware block.',
+      whyForBeginners: 'Keeps unsafe pointer tricks strictly quarantined. Everyday code stays clean, while embedded and driver tasks are fully supported.',
+      syntaxBreakdown: 'lowlevel { let reg = mmio_map(<addr>, <size>); raw_register(<addr>, <val>); }',
+      howItWorks: [
+        '1. Establishes isolated hardware access boundary',
+        '2. Maps physical memory addresses directly',
+        '3. Executes volatile reads/writes with memory fence guarantees'
+      ]
+    },
+    codePreview: `lowlevel {
+    let reg = mmio_map(0x40000000, 4096);
+    raw_register(0x40000004, 0x01);
+    memory_barrier(full_sync);
+}`,
+    readyMadeTemplate: `// Add-on Template: Scoped Bare-Metal Hardware
+lowlevel {
+    say "[Hardware]: Direct MMIO register mapping active.";
+    let reg = mmio_map(\${1:0x40000000}, size: \${2:4096});
+    raw_register(\${3:0x40000004}, \${4:0x01});
+    memory_barrier(full_sync);
+}`
+  },
+  {
+    id: 'contract',
+    keyword: 'contract',
+    name: 'Formal Mathematical Contracts',
+    category: 'Formal Contracts',
+    badge: 'Compile-Time Logic Proof',
+    colorName: 'Bright Teal',
+    colorHex: '#2dd4bf',
+    colorClass: 'tok-contract',
+    explanation: {
+      summary: 'Declares mathematical invariants, function preconditions (requires), and postconditions (ensures) verified at compile time.',
+      whyForBeginners: 'Catches subtle bugs before you even run the code. Functions prove their requirements mathematically.',
+      syntaxBreakdown: 'contract <Name> { requires(<expr>); ensures(<expr>); invariant(<expr>); }',
+      howItWorks: [
+        '1. Binds contract specification to module functions',
+        '2. Proves preconditions hold at all call sites',
+        '3. Proves postconditions guaranteed upon return'
+      ]
+    },
+    codePreview: `contract MathSafety {
+    requires(1);
+    ensures(1);
+}
+fn safe_divide(a: i32, b: i32) -> i32 {
+    requires(b != 0);
+    return a / b;
+}`,
+    readyMadeTemplate: `// Add-on Template: Formal Verification Spec
+contract \${1:OperationSafety} {
+    requires(1);
+    ensures(1);
+    invariant(1);
+}
+
+fn \${2:guarded_action}(\${3:param}: i32) -> i32 {
+    requires(\${3:param} > 0);
+    ensures(\${3:param} > 0);
+    return \${3:param};
 }`
   }
 ];
@@ -804,6 +1709,16 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Sample template visibility & copy states
+  const [showSampleTemplate, setShowSampleTemplate] = useState(false);
+  const [copiedSampleTemplate, setCopiedSampleTemplate] = useState(false);
+
+  // Add-on Codes & Snippets Explorer state
+  const [selectedAddonItem, setSelectedAddonItem] = useState<AddonItem>(addonItems[0]);
+  const [addonCategoryFilter, setAddonCategoryFilter] = useState<string>('all');
+  const [showAddonTemplate, setShowAddonTemplate] = useState(false);
+  const [copiedAddonTemplate, setCopiedAddonTemplate] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
@@ -813,6 +1728,22 @@ export default function App() {
   const filteredSamples = codeSamples.filter(
     (s) => activeCategory === 'all' || s.category === activeCategory
   );
+
+  const filteredAddonItems = addonItems.filter(
+    (item) => addonCategoryFilter === 'all' || item.category === addonCategoryFilter
+  );
+
+  const handleCopySampleTemplate = (codeText: string) => {
+    navigator.clipboard.writeText(codeText);
+    setCopiedSampleTemplate(true);
+    setTimeout(() => setCopiedSampleTemplate(false), 2000);
+  };
+
+  const handleCopyAddonTemplate = (codeText: string) => {
+    navigator.clipboard.writeText(codeText);
+    setCopiedAddonTemplate(true);
+    setTimeout(() => setCopiedAddonTemplate(false), 2000);
+  };
 
   const navItems = [
     { label: 'Features', href: '#features' },
@@ -969,7 +1900,10 @@ export default function App() {
               <button
                 key={sample.id}
                 className={`example-tab ${selectedSample.id === sample.id ? 'active' : ''}`}
-                onClick={() => setSelectedSample(sample)}
+                onClick={() => {
+                  setSelectedSample(sample);
+                  setShowSampleTemplate(false);
+                }}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="tab-title">{sample.title}</span>
@@ -1004,7 +1938,7 @@ export default function App() {
                   }`}
                   onClick={() => setActiveMode('code')}
                 >
-                  Source (.cgt)
+                  Source &amp; Explanation
                 </button>
                 <button
                   className={`px-2.5 py-1 text-xs rounded font-medium transition cursor-pointer ${
@@ -1038,7 +1972,108 @@ export default function App() {
               <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30 font-bold">● Declarations &amp; Types</span>
             </div>
 
-            {activeMode === 'code' && <CodeBlock code={selectedSample.code} />}
+            {activeMode === 'code' && (
+              <div className="flex flex-col">
+                {/* Beginner Explanation Card (Seen first with the code) */}
+                <div className="p-4 md:p-5 bg-slate-900/70 border-b border-slate-800 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-yellow-400 flex items-center gap-1.5">
+                        <span>📘</span> Beginner Explanation &amp; Concept Guide
+                      </span>
+                      <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-blue-300">
+                        {selectedSample.badge}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => setShowSampleTemplate(!showSampleTemplate)}
+                      className="self-start sm:self-auto px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-blue-600/20"
+                    >
+                      <span>{showSampleTemplate ? '▲ Hide Ready-Made Template' : '✨ Click to Reveal Ready-Made Template'}</span>
+                    </button>
+                  </div>
+
+                  <p className="text-xs text-slate-200 leading-relaxed font-sans">
+                    {selectedSample.explanation.summary}
+                  </p>
+
+                  <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800/80">
+                    <span className="text-[11px] font-semibold text-blue-300 block mb-1">💡 Why this is easier for beginners:</span>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {selectedSample.explanation.whyForBeginners}
+                    </p>
+                  </div>
+
+                  {/* Key Concepts Token Badges */}
+                  <div>
+                    <span className="text-[11px] font-semibold text-slate-300 block mb-1.5">Color-Coded Concepts in this code:</span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {selectedSample.explanation.concepts.map((c, idx) => (
+                        <span
+                          key={idx}
+                          className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-950 border border-slate-800 ${c.colorClass}`}
+                        >
+                          {c.token} <span className="text-slate-400 font-sans font-normal">· {c.role}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Step-by-Step Walkthrough */}
+                  <div className="pt-2 border-t border-slate-800/60">
+                    <span className="text-[11px] font-semibold text-slate-300 block mb-1">Code Execution Walkthrough:</span>
+                    <ul className="text-xs text-slate-300 space-y-1">
+                      {selectedSample.explanation.walkthrough.map((step, idx) => (
+                        <li key={idx} className="flex items-start gap-1.5">
+                          <span className="text-blue-400 font-bold">•</span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+                    <span>
+                      👇 <em>Inspect the syntax-highlighted source code below. Ready to use? Click the blue button above to reveal the ready-made template.</em>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Source Code Preview (Seen along with the explanation) */}
+                <CodeBlock code={selectedSample.code} />
+
+                {/* Ready-Made Template (Appears ONLY AFTER clicking the button!) */}
+                {showSampleTemplate && (
+                  <div className="p-4 md:p-5 bg-slate-950 border-t-2 border-dashed border-blue-500/50 space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">🎉 Ready-Made Template Unlocked:</span>
+                        <span className="text-[11px] text-slate-400">(Ready to copy and adapt in your project)</span>
+                      </div>
+                      <button
+                        onClick={() => handleCopySampleTemplate(selectedSample.readyMadeTemplate)}
+                        className="self-start sm:self-auto px-3 py-1 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                      >
+                        <span>{copiedSampleTemplate ? '✓ Copied!' : '📋 Copy Ready-Made Template'}</span>
+                      </button>
+                    </div>
+
+                    <CodeBlock code={selectedSample.readyMadeTemplate} />
+
+                    <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+                      <span>💡 <em>Paste into any <code className="text-white font-mono">.cgt</code> file and run instantly with <code className="text-emerald-400 font-mono">cgt -r file.cgt</code>.</em></span>
+                      <button
+                        onClick={() => setShowSampleTemplate(false)}
+                        className="text-slate-400 hover:text-white underline cursor-pointer text-xs"
+                      >
+                        Hide Template
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             {activeMode === 'output' && (
               <pre className="p-4 font-mono text-xs text-emerald-400 bg-slate-950 rounded-b-xl overflow-x-auto whitespace-pre-wrap leading-relaxed border-t border-slate-800">
                 {selectedSample.expectedOutput}
@@ -1237,6 +2272,206 @@ export default function App() {
 
             <div className="mt-4 p-3 bg-blue-950/40 border border-blue-800/50 rounded-xl text-xs text-blue-200">
               💡 <strong>Instant Activation:</strong> Open any <code className="text-white">.cgt</code> file and enjoy automatic suggestions, colors, and mistake alerts.
+            </div>
+          </div>
+        </div>
+
+        {/* ─── Codes & Items Inside the Add-on (Interactive Beginner Explorer) ─── */}
+        <div className="mt-12 pt-10 border-t border-slate-800">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 font-mono inline-block mb-3">
+              🎯 Interactive Add-on Codes &amp; Snippets Explorer
+            </span>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Codes &amp; Items Inside the C&gt; Add-on
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Click any code or item below. When a beginner clicks one, you don&apos;t get a ready-made template right away; instead, <strong>you see a friendly explanation along with the syntax-colored code preview first</strong>, and the template appears only after you click the reveal button!
+            </p>
+          </div>
+
+          {/* Add-on Category Filter Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+            {[
+              { id: 'all', label: 'All Add-on Items (11)' },
+              { id: 'Beginner Universal', label: 'Beginner Universal (say, ask, repeat, whenever, define, given)' },
+              { id: 'Safety & Faults', label: 'Safety & Faults (attempt, guard, fail_safe)' },
+              { id: 'Pipelines & Streams', label: 'Pipelines & Streams (flow)' },
+              { id: 'Concurrency & Async', label: 'Concurrency (pulse)' },
+              { id: 'Autonomous Self-Host', label: 'Autonomous Self-Host (bootstrap)' },
+              { id: 'Hardware Control', label: 'Hardware Control (lowlevel)' },
+              { id: 'Formal Contracts', label: 'Contracts (contract)' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer border ${
+                  addonCategoryFilter === cat.id
+                    ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-500/20'
+                    : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
+                }`}
+                onClick={() => setAddonCategoryFilter(cat.id)}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Two-Column Explorer Layout */}
+          <div className="examples-layout">
+            {/* Left Column: Clickable List of Add-on Items */}
+            <div className="example-tabs">
+              {filteredAddonItems.map((item) => (
+                <button
+                  key={item.id}
+                  className={`example-tab ${selectedAddonItem.id === item.id ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedAddonItem(item);
+                    setShowAddonTemplate(false); // Crucial: Hide ready-made template on click so beginner sees explanation + code first!
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded font-mono font-bold text-xs bg-slate-950 border border-slate-800 ${item.colorClass}`}>
+                        {item.keyword}
+                      </span>
+                      <span className="tab-title text-sm">{item.name}</span>
+                    </div>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-blue-300 font-mono">
+                      {item.badge}
+                    </span>
+                  </div>
+                  <span className="tab-desc text-xs line-clamp-2">{item.explanation.summary}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Right Column: Explanation along with the Code First, and Template only after clicking */}
+            <div className="example-viewer">
+              {/* Add-on Item Header */}
+              <div className="p-4 bg-slate-900 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className={`px-3 py-1 rounded font-mono font-bold text-sm bg-slate-950 border border-slate-800 ${selectedAddonItem.colorClass}`}>
+                    {selectedAddonItem.keyword}
+                  </span>
+                  <div>
+                    <h4 className="text-sm font-bold text-white leading-tight">{selectedAddonItem.name}</h4>
+                    <span className="text-[11px] text-slate-400">
+                      {selectedAddonItem.category} · Syntax Color:{' '}
+                      <span style={{ color: selectedAddonItem.colorHex }} className="font-semibold">
+                        {selectedAddonItem.colorName}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs px-2 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-700/40 font-mono">
+                    {selectedAddonItem.badge}
+                  </span>
+                  <button
+                    onClick={() => setShowAddonTemplate(!showAddonTemplate)}
+                    className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-blue-600/20"
+                  >
+                    <span>
+                      {showAddonTemplate ? '▲ Hide Ready-Made Template' : '✨ Click to Reveal Ready-Made Template'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 1. Beginner Explanation Card (Seen FIRST along with the code) */}
+              <div className="p-4 sm:p-5 bg-slate-900/70 border-b border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-yellow-400 flex items-center gap-1.5">
+                    <span>📘</span> Beginner Explanation &amp; Item Guide
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    Add-on Keyword: <code className="text-white font-bold">{selectedAddonItem.keyword}</code>
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                  {selectedAddonItem.explanation.summary}
+                </p>
+
+                {/* Why this is easier for beginners */}
+                <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800/80">
+                  <span className="text-[11px] font-semibold text-blue-300 block mb-1">💡 Why this is easier for beginners:</span>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {selectedAddonItem.explanation.whyForBeginners}
+                  </p>
+                </div>
+
+                {/* Syntax pattern */}
+                <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                  <span className="text-[11px] font-semibold text-slate-400 block mb-1">Syntax Structure:</span>
+                  <code className="text-xs font-mono text-emerald-400 font-semibold">{selectedAddonItem.explanation.syntaxBreakdown}</code>
+                </div>
+
+                {/* Step-by-Step execution walkthrough */}
+                <div className="pt-2 border-t border-slate-800/60">
+                  <span className="text-[11px] font-semibold text-slate-300 block mb-1">How it executes step-by-step:</span>
+                  <ul className="text-xs text-slate-300 space-y-1">
+                    {selectedAddonItem.explanation.howItWorks.map((step, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+                  <span>
+                    👇 <em>Inspect the syntax-highlighted code preview below. When ready, click the blue button above to reveal the ready-made template.</em>
+                  </span>
+                </div>
+              </div>
+
+              {/* 2. Code Preview (Shown ALONG WITH the explanation first) */}
+              <div className="bg-slate-950">
+                <div className="px-4 py-2 bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                  <span className="font-mono text-[11px] text-slate-400">Code Preview (With High-Fidelity Colors):</span>
+                  <span className="text-[11px] text-slate-500 font-mono">Packaged in C-Greater-VSCode</span>
+                </div>
+                <CodeBlock code={selectedAddonItem.codePreview} />
+              </div>
+
+              {/* 3. Ready-Made Template (Appears ONLY AFTER clicking the reveal button!) */}
+              {showAddonTemplate && (
+                <div className="p-4 sm:p-5 bg-slate-950 border-t-2 border-dashed border-blue-500/50 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                        🎉 Ready-Made Template Unlocked:
+                      </span>
+                      <span className="text-[11px] text-slate-400">
+                        (Includes snippet tabstops $1, $2 for quick filling in VS Code)
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleCopyAddonTemplate(selectedAddonItem.readyMadeTemplate)}
+                      className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-200 text-xs transition cursor-pointer font-mono flex items-center gap-1.5"
+                    >
+                      <span>{copiedAddonTemplate ? '✓ Copied!' : '📋 Copy Ready-Made Template'}</span>
+                    </button>
+                  </div>
+
+                  <CodeBlock code={selectedAddonItem.readyMadeTemplate} />
+
+                  <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+                    <span>
+                      💡 <em>In VS Code, type <code className="text-yellow-400 font-mono">{selectedAddonItem.keyword}</code> and press Tab to insert and jump through placeholders!</em>
+                    </span>
+                    <button
+                      onClick={() => setShowAddonTemplate(false)}
+                      className="text-slate-400 hover:text-white underline cursor-pointer text-xs"
+                    >
+                      Hide Template
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
