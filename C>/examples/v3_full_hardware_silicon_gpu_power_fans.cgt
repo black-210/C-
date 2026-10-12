@@ -1,0 +1,74 @@
+// C> (C-Greater) v3.0 Flagship: Comprehensive Silicon, GPU, Power, VRM & Fan Control
+// Demonstrates direct hardware control built into the language without external libraries:
+// - GPU Power Limit (TDP in Watts) & VCore Voltage Regulators
+// - GPU PWM Triple-Fan Curve & Junction Hotspot Telemetry
+// - Motherboard VRM SVID Rails & PMIC Current Sensors
+// - PCIe Gen 5 Link Negotiation & Resizable BAR (ReBAR)
+// - Screen Display Backlight & DDC/CI Cable Interface
+
+module examples::v3_full_hardware_silicon_gpu_power_fans;
+
+import std::hardware;
+
+fn main() -> i32 {
+    say "=== C> v3.0 Complete Silicon & Hardware Telemetry Controller ===";
+    say "Direct silicon mastery: Zero drivers, zero wrappers, 100% native language.";
+
+    let target_gpu_id: u32 = 0;
+
+    // 1. GPU Power Delivery & Voltage Tuning
+    say "[1. GPU Power & Voltage Control]";
+    gpu_set_power_limit_watts(target_gpu_id, 320); // 320W TDP cap
+    gpu_set_voltage_vcore_mv(target_gpu_id, 1050); // 1050 mV (1.05V)
+    gpu_set_clock_core_mhz(target_gpu_id, 2850);   // 2850 MHz Boost Clock
+    gpu_set_clock_memory_mhz(target_gpu_id, 11500);// 23 Gbps effective GDDR6X
+
+    let cur_watts = gpu_get_power_draw_watts(target_gpu_id);
+    let cur_mv = gpu_get_voltage_vcore_mv(target_gpu_id);
+    say "  -> Current GPU Power Draw: ", cur_watts, " Watts";
+    say "  -> VCore Voltage:          ", cur_mv, " mV";
+
+    // 2. Thermal Telemetry & PWM Triple-Fan Curve
+    say "[2. Thermal Telemetry & Fan Acoustic Tuning]";
+    let hotspot_temp = gpu_get_temp_junction_hotspot(target_gpu_id);
+    let vram_temp = gpu_get_temp_vram(target_gpu_id);
+    say "  -> GPU Junction Hotspot:   ", hotspot_temp, " C";
+    say "  -> GDDR6X VRAM Temp:       ", vram_temp, " C";
+
+    // Adaptive Fan Curve: If hotspot > 70C -> 75% PWM, else quiet 40% PWM
+    whenever hotspot_temp > 70.0f32 {
+        gpu_set_fan_speed_pwm(target_gpu_id, 0, 75); // Fan 1 (Intake)
+        gpu_set_fan_speed_pwm(target_gpu_id, 1, 75); // Fan 2 (Core)
+        gpu_set_fan_speed_pwm(target_gpu_id, 2, 75); // Fan 3 (Exhaust)
+        say "  -> Fans spun up to 75% PWM for aggressive silicon cooling.";
+    } otherwise {
+        gpu_set_fan_speed_pwm(target_gpu_id, 0, 40);
+        gpu_set_fan_speed_pwm(target_gpu_id, 1, 40);
+        gpu_set_fan_speed_pwm(target_gpu_id, 2, 40);
+        say "  -> Fans set to whisper-quiet 40% PWM profile.";
+    }
+
+    let fan_rpm = gpu_get_fan_speed_rpm(target_gpu_id, 0);
+    say "  -> Tachometer Sensor RPM:  ", fan_rpm, " RPM";
+
+    // 3. Motherboard PMIC & VRM Power Phase Monitoring
+    say "[3. Motherboard VRM & PMIC Phase Controller]";
+    let vrm_temp = pmic_read_vrm_temp(0);
+    say "  -> Motherboard VRM Rail Temp: ", vrm_temp, " C";
+    pmic_set_rail_voltage(0, 1200); // 1.20V VDD rail
+
+    // 4. PCIe Gen 5 Link & Resizable BAR
+    say "[4. High-Speed Interconnect]";
+    gpu_pcie_set_link_gen(target_gpu_id, 5); // Gen 5 32 GT/s
+    gpu_pcie_enable_rebar(target_gpu_id);
+    say "  -> PCIe Gen 5 negotiated & Resizable BAR mapped into 64-bit address space.";
+
+    // 5. Display Cable Interface & DDC/CI Backlight
+    say "[5. Display Cable & Screen Backlight]";
+    display_set_backlight_brightness(0, 85); // 85% Monitor Brightness
+    display_set_refresh_rate_hz(0, 240);     // 240 Hz Ultra-Fast Refresh
+    say "  -> Screen DDC/CI sent: 85% brightness, 240 Hz refresh rate applied.";
+
+    say "All hardware components running synchronously with zero external libraries!";
+    return 0;
+}

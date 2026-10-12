@@ -953,6 +953,62 @@ function activate(context) {
                 const target = sel || 'tensor_buffer';
                 return `// Tailored GPU kernel for ${target}\n@kernel\nfn process_${target}_gpu(buf: device_span<f32>) {\n    let gid = gpu_global_id();\n    buf[gid] = buf[gid] + 1.0;\n}\n`;
             }
+        },
+        {
+            keyword: 'gpu_power',
+            label: 'gpu_power — GPU Power Delivery, Voltage & TDP Tuning',
+            category: 'Hardware Control (Fiery Crimson)',
+            code: 'gpu_set_power_limit_watts(0, 320);\ngpu_set_voltage_vcore_mv(0, 1050);\ngpu_set_clock_core_mhz(0, 2850);',
+            explanation: 'Built-in direct silicon regulation for GPU power stages, millivolt voltage regulation (VCore), and clock frequencies without proprietary tools.',
+            basicTemplate: '// Basic GPU Power Regulation\ngpu_set_power_limit_watts(${1:0}, ${2:300});\ngpu_set_voltage_vcore_mv(${1:0}, ${3:1050});\n',
+            practicalTemplate: '// Practical GPU Undervolt & Overclock Tuning\nfn tune_gpu_performance(gpu_id: u32) {\n    gpu_set_power_limit_watts(gpu_id, 320); // 320W TDP Cap\n    gpu_set_voltage_vcore_mv(gpu_id, 1025); // Clean 1025 mV undervolt\n    gpu_set_clock_core_mhz(gpu_id, 2850);   // Boost to 2850 MHz\n    gpu_set_clock_memory_mhz(gpu_id, 11500);// High-speed GDDR6X\n    say "[GPU Power Engine]: Power limit set to 320W and core locked to 2850 MHz.";\n}\n',
+            productionTemplate: '// Mission-Critical GPU Power State Throttle Guard\nfn guard_gpu_power(gpu_id: u32, max_watts: f32) {\n    let current_draw = gpu_get_power_draw_watts(gpu_id);\n    whenever current_draw > max_watts {\n        gpu_set_pstate(gpu_id, 2); // Down-throttle to P2 to avoid tripping PSU OCP\n        say "[GPU Guard]: Power draw exceeded! Down-throttled to safe state.";\n    }\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'graphics_card';
+                return `// Tailored GPU Power Delivery for ${target}\ngpu_set_power_limit_watts(0, 300);\ngpu_set_voltage_vcore_mv(0, 1050);\nsay "[Power Stage]: Custom power delivery active for ${target}";\n`;
+            }
+        },
+        {
+            keyword: 'gpu_fans',
+            label: 'gpu_fans — GPU PWM Triple-Fan Curves & Hotspot Telemetry',
+            category: 'Hardware Control (Fiery Crimson)',
+            code: 'let hotspot = gpu_get_temp_junction_hotspot(0);\nwhenever hotspot > 70.0f32 {\n    gpu_set_fan_speed_pwm(0, 0, 80);\n}',
+            explanation: 'Direct hardware control of GPU PWM fan headers, tachometer RPM sensors, and microsecond thermal telemetry across core, junction hotspot, and VRAM.',
+            basicTemplate: '// Basic GPU Fan PWM Speed\ngpu_set_fan_speed_pwm(${1:0}, ${2:0}, ${3:75});\nlet rpm = gpu_get_fan_speed_rpm(${1:0}, ${2:0});\n',
+            practicalTemplate: '// Practical Triple-Fan Acoustic Curve\nfn apply_gpu_fan_curve(gpu_id: u32) {\n    let hotspot = gpu_get_temp_junction_hotspot(gpu_id);\n    let vram = gpu_get_temp_vram(gpu_id);\n    whenever hotspot > 75.0f32 || vram > 80.0f32 {\n        gpu_set_fan_speed_pwm(gpu_id, 0, 85); // Fan 1\n        gpu_set_fan_speed_pwm(gpu_id, 1, 85); // Fan 2\n        gpu_set_fan_speed_pwm(gpu_id, 2, 85); // Fan 3\n        say "[GPU Thermals]: Hotspot reached, aggressive cooling engaged.";\n    } otherwise {\n        gpu_set_fan_speed_pwm(gpu_id, 0, 35);\n        gpu_set_fan_speed_pwm(gpu_id, 1, 35);\n        gpu_set_fan_speed_pwm(gpu_id, 2, 35);\n    }\n}\n',
+            productionTemplate: '// Defensive Emergency Thermal Shutdown & Zero-RPM Acoustic Mode\nfn monitor_thermal_envelope(gpu_id: u32) {\n    let junction = gpu_get_temp_junction_hotspot(gpu_id);\n    whenever junction >= 95.0f32 {\n        gpu_set_fan_speed_pwm(gpu_id, 0, 100);\n        gpu_set_fan_speed_pwm(gpu_id, 1, 100);\n        gpu_set_fan_speed_pwm(gpu_id, 2, 100);\n        say "[CRITICAL THERMAL ALERT]: Emergency maximum cooling engaged!";\n    } whenever junction < 45.0f32 {\n        // Zero-RPM silent mode\n        gpu_set_fan_speed_pwm(gpu_id, 0, 0);\n        gpu_set_fan_speed_pwm(gpu_id, 1, 0);\n        gpu_set_fan_speed_pwm(gpu_id, 2, 0);\n    }\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'cooling_system';
+                return `// Tailored cooling fan controller for ${target}\nlet temp = gpu_get_temp_junction_hotspot(0);\ngpu_set_fan_speed_pwm(0, 0, 70);\nsay "[Fan Telemetry]: Cooling active for ${target} at temp = ", temp;\n`;
+            }
+        },
+        {
+            keyword: 'vrm_pmic',
+            label: 'vrm_pmic — Motherboard VRMs, PMIC SVID & Rail Regulators',
+            category: 'Hardware Control (Fiery Crimson)',
+            code: 'let vrm_temp = pmic_read_vrm_temp(0);\npmic_set_rail_voltage(0, 1200);',
+            explanation: 'Direct SMBus and I2C hardware bus access to motherboard PMIC power phases, SVID rails, and VRM temperature sensors with zero operating system drivers.',
+            basicTemplate: '// Basic Motherboard VRM Rail Tuning\nlet vrm_temp = pmic_read_vrm_temp(${1:0});\npmic_set_rail_voltage(${1:0}, ${2:1200});\n',
+            practicalTemplate: '// Practical Multi-Phase VRM Load-Line Calibration\nfn calibrate_vrm_phases() {\n    let temp_phase = pmic_read_vrm_temp(0);\n    say "[VRM Telemetry]: Power phase temperature: ", temp_phase, " C";\n    pmic_set_rail_voltage(0, 1225); // 1.225V stable VDD rail under full load\n}\n',
+            productionTemplate: '// Mission-Critical VRM Phase Over-Temperature Protection (OTP)\nfn protect_vrm_phases() {\n    let temp = pmic_read_vrm_temp(0);\n    whenever temp > 105.0f32 {\n        say "[FATAL VRM OVERHEAT]: Phase temperature critical! Cutting voltage rail.";\n        pmic_set_rail_voltage(0, 800); // Drop to idle safe rail\n    }\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'power_rail';
+                return `// Tailored VRM power controller for ${target}\nlet vrm_c = pmic_read_vrm_temp(0);\npmic_set_rail_voltage(0, 1200);\nsay "[VRM Phase]: Regulated ${target} to 1.20V (Temp: ", vrm_c, " C)";\n`;
+            }
+        },
+        {
+            keyword: 'display_ddc',
+            label: 'display_ddc — Display Backlight, Cables & DDC/CI Protocol',
+            category: 'Hardware Control (Fiery Crimson)',
+            code: 'display_set_backlight_brightness(0, 85);\ndisplay_set_refresh_rate_hz(0, 240);',
+            explanation: 'Direct I2C/AUX hardware channel communication across HDMI and DisplayPort cables. Controls monitor backlight, refresh rate, and VCP commands.',
+            basicTemplate: '// Basic Display Backlight & Refresh Rate\ndisplay_set_backlight_brightness(${1:0}, ${2:80});\ndisplay_set_refresh_rate_hz(${1:0}, ${3:144});\n',
+            practicalTemplate: '// Practical Ambient-Aware Display Refresh Controller\nfn configure_display_mode(display_id: u8, gaming_mode: bool) {\n    whenever gaming_mode {\n        display_set_refresh_rate_hz(display_id, 240); // 240Hz High-Refresh\n        display_set_backlight_brightness(display_id, 100); // 100% Brightness\n        say "[Display Engine]: 240Hz competitive gaming profile active.";\n    } otherwise {\n        display_set_refresh_rate_hz(display_id, 60);  // 60Hz Low-Power\n        display_set_backlight_brightness(display_id, 50);  // 50% Soft Brightness\n        say "[Display Engine]: 60Hz eye-comfort power-saving mode active.";\n    }\n}\n',
+            productionTemplate: '// Defensive DisplayPort Link Negotiation & DDC/CI Handshake\nfn verify_display_link(display_id: u8) -> bool {\n    let status = display_link_training_status(display_id);\n    guard status == 0 else {\n        say "[DISPLAY ERROR]: Link training failed. Dropping lane count.";\n        return false;\n    };\n    display_set_refresh_rate_hz(display_id, 144);\n    return true;\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'monitor_screen';
+                return `// Tailored display backlight controller for ${target}\ndisplay_set_backlight_brightness(0, 85);\ndisplay_set_refresh_rate_hz(0, 240);\nsay "[Display]: Configured 240Hz and 85% brightness on ${target}";\n`;
+            }
         }
     ];
 

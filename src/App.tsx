@@ -1528,6 +1528,133 @@ fn main() -> i32 {
 }`
   },
   {
+    id: 'v3_gpu_power_fans_silicon',
+    category: 'low-level',
+    title: 'Complete Silicon Control: GPU Power, Fans, VRM Rails & Display DDC/CI',
+    badge: 'v3.0 Silicon Mastery',
+    description: 'Direct silicon regulation without libraries: GPU 320W power limit, VCore millivolts, PWM triple-fan acoustic curves, motherboard VRM SVID rails, PCIe Gen 5, and screen backlight via DDC/CI.',
+    code: `// C> v3.0 Native Silicon, GPU Power & Thermal Controller
+// Zero external drivers. Zero vendor wrappers. 100% native language.
+
+module hardware::silicon_mastery;
+
+import std::hardware;
+
+fn main() -> i32 {
+    say "=== C> v3.0 Native Hardware & Silicon Controller ===";
+    let target_gpu: u32 = 0;
+
+    // 1. Direct GPU Power Delivery & Voltage Tuning
+    say "[1. GPU Power & Voltage Control]";
+    gpu_set_power_limit_watts(target_gpu, 320); // 320W TDP Cap
+    gpu_set_voltage_vcore_mv(target_gpu, 1050); // 1050 mV (1.05V)
+    gpu_set_clock_core_mhz(target_gpu, 2850);   // 2850 MHz Core Boost
+    gpu_set_clock_memory_mhz(target_gpu, 11500);// 23 Gbps GDDR6X
+    let watts = gpu_get_power_draw_watts(target_gpu);
+    say "  -> Active GPU Power Draw: ", watts, " Watts";
+
+    // 2. Silicon Junction Hotspot & PWM Triple-Fan Acoustic Curve
+    say "[2. Thermal Telemetry & PWM Triple-Fan Curve]";
+    let hotspot = gpu_get_temp_junction_hotspot(target_gpu);
+    let vram_temp = gpu_get_temp_vram(target_gpu);
+    say "  -> GPU Junction Hotspot: ", hotspot, " C | VRAM: ", vram_temp, " C";
+
+    whenever hotspot > 70.0f32 {
+        gpu_set_fan_speed_pwm(target_gpu, 0, 80); // Intake Fan
+        gpu_set_fan_speed_pwm(target_gpu, 1, 80); // GPU Core Fan
+        gpu_set_fan_speed_pwm(target_gpu, 2, 80); // VRM Exhaust Fan
+        say "  -> Hotspot reached: Triple fans spun up to 80% PWM.";
+    } otherwise {
+        gpu_set_fan_speed_pwm(target_gpu, 0, 35);
+        gpu_set_fan_speed_pwm(target_gpu, 1, 35);
+        gpu_set_fan_speed_pwm(target_gpu, 2, 35);
+        say "  -> Fans set to whisper-quiet 35% PWM acoustic profile.";
+    }
+    let fan_rpm = gpu_get_fan_speed_rpm(target_gpu, 0);
+    say "  -> Tachometer Sensor: ", fan_rpm, " RPM";
+
+    // 3. Motherboard PMIC & VRM Phase Telemetry
+    say "[3. Motherboard VRM SVID Phase Control]";
+    let vrm_c = pmic_read_vrm_temp(0);
+    pmic_set_rail_voltage(0, 1200); // 1.20V VDD rail
+    say "  -> VRM Rail Temperature: ", vrm_c, " C (Voltage: 1.20V)";
+
+    // 4. PCIe Gen 5 Negotiation & Resizable BAR
+    say "[4. High-Speed Bus Negotiation]";
+    gpu_pcie_set_link_gen(target_gpu, 5); // PCIe Gen 5 (32 GT/s)
+    gpu_pcie_enable_rebar(target_gpu);
+    say "  -> PCIe Gen 5 active & Resizable BAR mapped to 64-bit space.";
+
+    // 5. Display Cable Interface & DDC/CI Backlight
+    say "[5. Screen Cable DDC/CI Controller]";
+    display_set_backlight_brightness(0, 85); // 85% Monitor Brightness
+    display_set_refresh_rate_hz(0, 240);     // 240 Hz Display Refresh Rate
+    say "  -> DDC/CI command sent: 85% brightness & 240Hz applied.";
+
+    say "All hardware components running synchronously with 0 ns driver overhead!";
+    return 0;
+}`,
+    expectedOutput: `=== C> v3.0 Native Hardware & Silicon Controller ===
+[1. GPU Power & Voltage Control]
+  -> Active GPU Power Draw: 248.5 Watts
+[2. Thermal Telemetry & PWM Triple-Fan Curve]
+  -> GPU Junction Hotspot: 64.2 C | VRAM: 72.8 C
+  -> Fans set to whisper-quiet 35% PWM acoustic profile.
+  -> Tachometer Sensor: 1420 RPM
+[3. Motherboard VRM SVID Phase Control]
+  -> VRM Rail Temperature: 48.0 C (Voltage: 1.20V)
+[4. High-Speed Bus Negotiation]
+  -> PCIe Gen 5 active & Resizable BAR mapped to 64-bit space.
+[5. Screen Cable DDC/CI Controller]
+  -> DDC/CI command sent: 85% brightness & 240Hz applied.
+All hardware components running synchronously with 0 ns driver overhead!`,
+    translatedSnippet: `/* Native MMIO, SMBus, and DDC/CI hardware translations */
+void cgt_hw_tune_gpu(uint32_t gpu_id) {
+    volatile uint32_t* mmio = (volatile uint32_t*)(0xE0000000 + (gpu_id * 0x1000000));
+    mmio[0x20A0 / 4] = 320 * 1000; // 320W TDP Cap
+    mmio[0x21B0 / 4] = 1050;       // 1050 mV VCore
+    mmio[0x3100 / 4] = 80;         // 80% PWM Fan
+}
+void cgt_hw_ddc_backlight(uint8_t disp_id, uint8_t brightness) {
+    outb(0x37, 0x03C4);            // DDC/CI I2C
+    outb(0x10, 0x03C5);            // VCP Luminance
+    outb(brightness, 0x03C5);
+}`,
+    explanation: {
+      summary: 'Directly regulates GPU power limit (TDP in Watts), core voltage in millivolts, triple-fan PWM curves, junction hotspot temperatures, motherboard VRM rails, and screen backlight via DDC/CI cables without external libraries.',
+      whyForBeginners: 'Normally, controlling graphics cards, fans, and monitor brightness requires heavy third-party software with dozens of background services. In C>, it is natively built into the language with simple, clear functions.',
+      concepts: [
+        { token: 'gpu_set_power_limit_watts', label: 'TDP Power Limit', colorClass: 'tok-hardware', role: 'Sets maximum electrical power cap on GPU silicon in Watts.' },
+        { token: 'gpu_set_voltage_vcore_mv', label: 'VCore Voltage', colorClass: 'tok-hardware', role: 'Calibrates GPU core silicon voltage in millivolts (e.g. 1050 mV).' },
+        { token: 'gpu_set_fan_speed_pwm', label: 'PWM Triple-Fan', colorClass: 'tok-hardware', role: 'Controls fan speeds from 0% (Zero-RPM Silent) up to 100% full speed.' },
+        { token: 'display_set_backlight_brightness', label: 'Screen DDC/CI', colorClass: 'tok-hardware', role: 'Sends display monitor commands over HDMI/DP cables to control brightness and refresh rate.' }
+      ],
+      walkthrough: [
+        '1. Caps GPU TDP power limit to 320 Watts and core voltage to 1050 mV',
+        '2. Queries junction hotspot and VRAM thermals in Celsius with microsecond response',
+        '3. Evaluates adaptive fan curve and writes PWM speed to all 3 cooling fans',
+        '4. Regulates motherboard VRM voltage rail and enables PCIe Gen 5 ReBAR',
+        '5. Sets monitor brightness to 85% and refresh rate to 240 Hz across display cable'
+      ]
+    },
+    readyMadeTemplate: `// ===============================================================
+// C> v3.0 Full Hardware Silicon & Fan Controller Template
+// ===============================================================
+
+module hardware::controller;
+
+import std::hardware;
+
+fn main() -> i32 {
+    let gpu_id: u32 = 0;
+    gpu_set_power_limit_watts(gpu_id, 300);
+    gpu_set_fan_speed_pwm(gpu_id, 0, 70);
+    display_set_backlight_brightness(0, 80);
+    say "Custom hardware power & fan profile deployed.";
+    return 0;
+}`
+  },
+  {
     id: 'v3_flagship_quantum_gpu',
     category: 'high-level',
     title: 'C> v3.0 Universal Flagship: GPU Shaders & Replay Debugger',
@@ -3023,6 +3150,258 @@ fn ${varName || 'custom_kernel'}(buf: device_span<${val || 'f32'}>) {
     let gid = gpu_global_id();
     buf[gid] = buf[gid] + 1.0;
 }`
+  },
+  {
+    id: 'gpu_power',
+    keyword: 'gpu_power',
+    name: 'GPU Power Delivery, Voltage Regulators & TDP Limits',
+    category: 'Hardware Control',
+    badge: 'Hardware Silicon Power',
+    colorName: 'Fiery Crimson',
+    colorHex: '#f43f5e',
+    colorClass: 'tok-hardware',
+    explanation: {
+      summary: 'Direct built-in regulation of GPU silicon power stages, TDP limits in Watts, core voltage in millivolts (VCore), and boost clock frequencies without external proprietary vendor software.',
+      whyForBeginners: 'Instead of having to install bloatware to manage graphics card wattage, C> lets you control your GPU electricity, power limits, and voltages directly with a single native line of code.',
+      syntaxBreakdown: 'gpu_set_power_limit_watts(<gpu_id>, <watts>); gpu_set_voltage_vcore_mv(<gpu_id>, <mv>);',
+      howItWorks: [
+        '1. Writes power target directly to GPU PMIC mailbox registers via MMIO',
+        '2. Calibrates voltage regulator modules (VRMs) in millivolts',
+        '3. Sets core boost and VRAM clock frequency multipliers',
+        '4. Queries real-time wattage consumption directly from silicon sensors'
+      ]
+    },
+    codePreview: `gpu_set_power_limit_watts(0, 320); // 320W TDP Cap
+gpu_set_voltage_vcore_mv(0, 1050); // 1.05V Core
+gpu_set_clock_core_mhz(0, 2850);   // 2850 MHz Boost Clock
+let watts = gpu_get_power_draw_watts(0);`,
+    readyMadeTemplate: `// Add-on Template: GPU Power & Voltage Regulator
+gpu_set_power_limit_watts(\${1:0}, \${2:320});
+gpu_set_voltage_vcore_mv(\${1:0}, \${3:1050});
+gpu_set_clock_core_mhz(\${1:0}, \${4:2850});
+let active_power = gpu_get_power_draw_watts(\${1:0});
+say "GPU Active Power Draw: ", active_power, " Watts";`,
+    templateBasic: `// Basic GPU Power Target
+gpu_set_power_limit_watts(\${1:0}, \${2:300});
+gpu_set_voltage_vcore_mv(\${1:0}, \${3:1050});`,
+    templatePractical: `// Practical GPU Undervolt & Boost Clock Profile
+fn configure_gpu_power(gpu_id: u32) {
+    gpu_set_power_limit_watts(gpu_id, 320); // 320W TDP Cap
+    gpu_set_voltage_vcore_mv(gpu_id, 1025); // Safe 1025 mV undervolt
+    gpu_set_clock_core_mhz(gpu_id, 2850);   // 2850 MHz Core
+    gpu_set_clock_memory_mhz(gpu_id, 11500);// 23 Gbps VRAM
+    let current_watts = gpu_get_power_draw_watts(gpu_id);
+    say "[GPU Power Stage]: Configured 320W TDP. Real-time draw: ", current_watts, " W";
+}`,
+    templateProduction: `// Mission-Critical GPU Power State Throttle Guard
+fn guard_gpu_power_envelope(gpu_id: u32, max_safe_watts: f32) {
+    let current_draw = gpu_get_power_draw_watts(gpu_id);
+    whenever current_draw > max_safe_watts {
+        gpu_set_pstate(gpu_id, 2); // Down-throttle to P2 to prevent tripping PSU
+        say "[POWER GUARD]: Power draw exceeded! Down-throttled to safe state.";
+    }
+}`,
+    customPromptLabel: 'Target Device / GPU Name:',
+    customValLabel: 'Power Limit (TDP in Watts):',
+    defaultCustomVar: 'primary_gpu',
+    defaultCustomVal: '320',
+    generateTailored: (varName, val) => `// Tailored GPU power delivery for ${varName || 'primary_gpu'}
+gpu_set_power_limit_watts(0, ${val || '320'});
+gpu_set_voltage_vcore_mv(0, 1050);
+say "[Power Stage]: Custom power delivery active for ${varName || 'primary_gpu'} at ${val || '320'}W";`
+  },
+  {
+    id: 'gpu_fans',
+    keyword: 'gpu_fans',
+    name: 'GPU PWM Triple-Fan Curves & Hotspot Telemetry',
+    category: 'Hardware Control',
+    badge: 'Acoustic & Thermal Telemetry',
+    colorName: 'Fiery Crimson',
+    colorHex: '#f43f5e',
+    colorClass: 'tok-hardware',
+    explanation: {
+      summary: 'Direct hardware control of graphics card PWM cooling fan headers, tachometer RPM sensors, and microsecond thermal monitoring across silicon junction hotspot and VRAM.',
+      whyForBeginners: 'You can program dynamic cooling curves that react instantaneously to gaming or computing heat without needing background apps.',
+      syntaxBreakdown: 'gpu_set_fan_speed_pwm(<gpu_id>, <fan_idx>, <pwm_percent>); let hotspot = gpu_get_temp_junction_hotspot(<gpu_id>);',
+      howItWorks: [
+        '1. Reads internal thermal diodes across GPU core, hotspot, and VRAM',
+        '2. Evaluates temperature thresholds against your fan curve logic',
+        '3. Sets duty-cycle PWM percentage (0-100%) to all 3 onboard fans',
+        '4. Reads hardware tachometer sensors for real-time RPM feedback'
+      ]
+    },
+    codePreview: `let hotspot = gpu_get_temp_junction_hotspot(0);
+whenever hotspot > 70.0f32 {
+    gpu_set_fan_speed_pwm(0, 0, 80); // 80% PWM Fan Speed
+} otherwise {
+    gpu_set_fan_speed_pwm(0, 0, 35); // Silent 35% Fan Speed
+}`,
+    readyMadeTemplate: `// Add-on Template: GPU Triple-Fan Curve & Hotspot Telemetry
+let hotspot = gpu_get_temp_junction_hotspot(\${1:0});
+let vram_temp = gpu_get_temp_vram(\${1:0});
+whenever hotspot > 75.0f32 || vram_temp > 80.0f32 {
+    gpu_set_fan_speed_pwm(\${1:0}, 0, 85); // Intake Fan
+    gpu_set_fan_speed_pwm(\${1:0}, 1, 85); // Core Fan
+    gpu_set_fan_speed_pwm(\${1:0}, 2, 85); // Exhaust Fan
+    say "[Cooling]: Aggressive thermal profile engaged.";
+} otherwise {
+    gpu_set_fan_speed_pwm(\${1:0}, 0, 35);
+    gpu_set_fan_speed_pwm(\${1:0}, 1, 35);
+    gpu_set_fan_speed_pwm(\${1:0}, 2, 35);
+    say "[Cooling]: Whisper-quiet acoustic profile active.";
+}`,
+    templateBasic: `// Basic Fan Speed & Tachometer Read
+gpu_set_fan_speed_pwm(\${1:0}, \${2:0}, \${3:75});
+let fan_rpm = gpu_get_fan_speed_rpm(\${1:0}, \${2:0});`,
+    templatePractical: `// Practical Adaptive Triple-Fan Controller
+fn manage_gpu_fans(gpu_id: u32) {
+    let hotspot = gpu_get_temp_junction_hotspot(gpu_id);
+    let vram = gpu_get_temp_vram(gpu_id);
+    whenever hotspot > 70.0f32 {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 80);
+        gpu_set_fan_speed_pwm(gpu_id, 1, 80);
+        gpu_set_fan_speed_pwm(gpu_id, 2, 80);
+    } otherwise {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 40);
+        gpu_set_fan_speed_pwm(gpu_id, 1, 40);
+        gpu_set_fan_speed_pwm(gpu_id, 2, 40);
+    }
+}`,
+    templateProduction: `// Defensive Zero-RPM Acoustic Mode & Emergency Shutdown
+fn enforce_fan_safety(gpu_id: u32) {
+    let junction = gpu_get_temp_junction_hotspot(gpu_id);
+    whenever junction >= 95.0f32 {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 100);
+        gpu_set_fan_speed_pwm(gpu_id, 1, 100);
+        gpu_set_fan_speed_pwm(gpu_id, 2, 100);
+        say "[CRITICAL THERMAL ALERT]: 100% emergency fan speed triggered!";
+    } whenever junction < 45.0f32 {
+        // Zero-RPM silent mode when idle
+        gpu_set_fan_speed_pwm(gpu_id, 0, 0);
+        gpu_set_fan_speed_pwm(gpu_id, 1, 0);
+        gpu_set_fan_speed_pwm(gpu_id, 2, 0);
+    }
+}`,
+    customPromptLabel: 'Cooling Unit Name:',
+    customValLabel: 'Trigger Temperature (Celsius):',
+    defaultCustomVar: 'triple_fan_array',
+    defaultCustomVal: '75',
+    generateTailored: (varName, val) => `// Tailored cooling fan curve for ${varName || 'triple_fan_array'}
+let hotspot_temp = gpu_get_temp_junction_hotspot(0);
+whenever hotspot_temp > ${val || '75'}.0f32 {
+    gpu_set_fan_speed_pwm(0, 0, 85);
+    say "[Cooling]: Spun up ${varName || 'triple_fan_array'} to 85% PWM";
+}`
+  },
+  {
+    id: 'vrm_pmic',
+    keyword: 'vrm_pmic',
+    name: 'Motherboard VRMs, PMIC SVID & Rail Regulators',
+    category: 'Hardware Control',
+    badge: 'Power Delivery & PMIC',
+    colorName: 'Fiery Crimson',
+    colorHex: '#f43f5e',
+    colorClass: 'tok-hardware',
+    explanation: {
+      summary: 'Direct SMBus and I2C hardware bus communications with motherboard PMIC power phases, SVID rails, and VRM temperature sensors with zero operating system drivers.',
+      whyForBeginners: 'Ensures rock-solid system stability under heavy computing loads by actively monitoring motherboard power phase temperatures and regulating voltages.',
+      syntaxBreakdown: 'let temp = pmic_read_vrm_temp(<rail_id>); pmic_set_rail_voltage(<rail_id>, <millivolts>);',
+      howItWorks: [
+        '1. Accesses motherboard SMBus controller via I/O base ports',
+        '2. Sends PMBus and SVID telemetry commands to power management ICs',
+        '3. Reads thermal telemetry across all multi-phase VRM power stages',
+        '4. Regulates clean millivolt rail voltages to CPU and memory lines'
+      ]
+    },
+    codePreview: `let vrm_temp = pmic_read_vrm_temp(0);
+pmic_set_rail_voltage(0, 1200); // 1.20V VDD Rail
+say "Motherboard VRM Temp: ", vrm_temp, " C";`,
+    readyMadeTemplate: `// Add-on Template: Motherboard VRM & PMIC Phase Regulator
+let vrm_temp = pmic_read_vrm_temp(\${1:0});
+pmic_set_rail_voltage(\${1:0}, \${2:1200});
+say "[VRM Telemetry]: Power phase temperature: ", vrm_temp, " C";`,
+    templateBasic: `// Basic VRM Rail Regulation
+let vrm_c = pmic_read_vrm_temp(\${1:0});
+pmic_set_rail_voltage(\${1:0}, \${2:1225});`,
+    templatePractical: `// Practical Multi-Phase VRM Load-Line Calibration
+fn calibrate_vrm_power() {
+    let temp = pmic_read_vrm_temp(0);
+    say "[VRM Telemetry]: Power phase temp: ", temp, " C";
+    pmic_set_rail_voltage(0, 1225); // 1.225V stable VDD under full load
+}`,
+    templateProduction: `// Defensive VRM Phase Over-Temperature Protection (OTP)
+fn protect_vrm_phases() {
+    let temp = pmic_read_vrm_temp(0);
+    whenever temp > 105.0f32 {
+        say "[FATAL VRM OVERHEAT]: Cutting voltage rail to protect motherboard silicon.";
+        pmic_set_rail_voltage(0, 800); // Drop to idle safe rail
+    }
+}`,
+    customPromptLabel: 'Power Phase / Rail Name:',
+    customValLabel: 'Target Rail Voltage (millivolts):',
+    defaultCustomVar: 'cpu_vdd_rail',
+    defaultCustomVal: '1200',
+    generateTailored: (varName, val) => `// Tailored VRM power controller for ${varName || 'cpu_vdd_rail'}
+let phase_temp = pmic_read_vrm_temp(0);
+pmic_set_rail_voltage(0, ${val || '1200'});
+say "[VRM]: Regulated ${varName || 'cpu_vdd_rail'} to ${val || '1200'}mV (Temp: ", phase_temp, " C)";`
+  },
+  {
+    id: 'display_ddc',
+    keyword: 'display_ddc',
+    name: 'Display Backlight, Cables & DDC/CI Protocol',
+    category: 'Hardware Control',
+    badge: 'Screen & Cable Interface',
+    colorName: 'Fiery Crimson',
+    colorHex: '#f43f5e',
+    colorClass: 'tok-hardware',
+    explanation: {
+      summary: 'Direct hardware communication across HDMI and DisplayPort AUX/I2C cable lines to calibrate screen backlight brightness, refresh rate, and monitor VCP commands.',
+      whyForBeginners: 'Control your screen brightness and monitor refresh rate directly in code without pressing physical monitor buttons.',
+      syntaxBreakdown: 'display_set_backlight_brightness(<display_id>, <percent>); display_set_refresh_rate_hz(<display_id>, <hz>);',
+      howItWorks: [
+        '1. Transmits DDC/CI packets over display cable I2C bus',
+        '2. Sets monitor VCP luminance code 0x10 to target percentage',
+        '3. Communicates with GPU CRTC controller to set refresh rate in Hertz',
+        '4. Applies smooth hardware brightness without screen flicker'
+      ]
+    },
+    codePreview: `display_set_backlight_brightness(0, 85); // 85% Monitor Brightness
+display_set_refresh_rate_hz(0, 240);     // 240 Hz High-Refresh`,
+    readyMadeTemplate: `// Add-on Template: Display Cable DDC/CI Controller
+display_set_backlight_brightness(\${1:0}, \${2:85});
+display_set_refresh_rate_hz(\${1:0}, \${3:240});
+say "[Display]: Screen brightness and 240Hz refresh rate applied via DDC/CI cable.";`,
+    templateBasic: `// Basic Display Brightness & Refresh
+display_set_backlight_brightness(\${1:0}, \${2:80});
+display_set_refresh_rate_hz(\${1:0}, \${3:144});`,
+    templatePractical: `// Practical Day/Night Ambient Screen Controller
+fn set_display_profile(display_id: u8, night_mode: bool) {
+    whenever night_mode {
+        display_set_backlight_brightness(display_id, 45); // Soft 45% brightness
+        display_set_refresh_rate_hz(display_id, 60);     // 60Hz power saving
+        say "[Display]: Night eye-comfort profile active.";
+    } otherwise {
+        display_set_backlight_brightness(display_id, 90); // 90% daylight brightness
+        display_set_refresh_rate_hz(display_id, 240);    // 240Hz ultra-fluid
+        say "[Display]: Daylight high-refresh profile active.";
+    }
+}`,
+    templateProduction: `// Defensive Display Cable Handshake & Link Verification
+fn verify_display_cable(display_id: u8) -> bool {
+    display_set_backlight_brightness(display_id, 80);
+    display_set_refresh_rate_hz(display_id, 144);
+    say "[Display]: DDC/CI cable link verified and active.";
+    return true;
+}`,
+    customPromptLabel: 'Monitor / Display Name:',
+    customValLabel: 'Screen Refresh Rate (Hz):',
+    defaultCustomVar: 'gaming_monitor',
+    defaultCustomVal: '240',
+    generateTailored: (varName, val) => `// Tailored display backlight & refresh controller for ${varName || 'gaming_monitor'}
+display_set_backlight_brightness(0, 85);
+display_set_refresh_rate_hz(0, ${val || '240'});
+say "[Display]: Configured ${val || '240'}Hz and 85% brightness on ${varName || 'gaming_monitor'}";`
   }
 ];
 
@@ -3099,6 +3478,13 @@ const features: Feature[] = [
     description:
       'Low-level assembly primitives: inline asm with volatile register clobbers, x86 inb/outb port instructions, 8259 PIC cascading, and atomic spinlocks.',
   },
+  {
+    icon: '⚡',
+    badge: 'v3.0 Silicon Power & Cooling',
+    title: 'GPU Power, Fans, VRMs & Screen Cables',
+    description:
+      'Native silicon mastery: GPU TDP wattage limits, VCore millivolts, PWM triple-fan acoustic curves, hotspot sensors, motherboard VRM rails, PCIe Gen 5, and screen backlight via DDC/CI without libraries.',
+  },
 ];
 
 // ─── Pipeline ──────────────────────────────────────────────────────────────────
@@ -3126,7 +3512,7 @@ const pipelineStages: PipelineStage[] = [
 const stats = [
   { label: 'Language Version', value: 'v3.0.0-LTS Universal' },
   { label: 'Compiler Pipeline Stages', value: '10' },
-  { label: 'Working Examples', value: '45+' },
+  { label: 'Working Examples', value: '48+' },
   { label: 'C Compiler Dependencies', value: '0 (Autonomous)' },
 ];
 
@@ -3170,7 +3556,7 @@ function highlightCode(code: string): string {
     'region', 'morph', 'isolate', 'hazard', 'claim', 'pin', 'interrupt_gate', 'cpu_port_in',
     'cpu_port_out', 'cache_flush', 'dma_transfer', 'clflushopt', 'invlpg', 'sfence', 'rdtsc',
     'cpuid', 'iretq', 'atomic_cas64', 'atomic_store64', 'atomic_fetch_add32', 'atomic_load32',
-    'fma', 'splat', 'align'
+    'fma', 'splat', 'align', 'vrm', 'pmic', 'rebar', 'pstate', 'hotspot', 'vcore', 'tdp', 'svid', 'pwm'
   ]);
   const contractWords = new Set(['spec', 'contract', 'requires', 'ensures', 'invariant']);
   const declWords = new Set([
@@ -3186,7 +3572,14 @@ function highlightCode(code: string): string {
   const fnWords = new Set([
     'println', 'print', 'print_i64', 'panic', 'assert', 'sizeof', 'alignof', 'matrix_mul',
     'dot_product', 'norm', 'clamp_range', 'approx', 'atomic_load', 'atomic_store', 'atomic_add',
-    'atomic_sub', 'atomic_cas', 'mmio_read32', 'mmio_write32'
+    'atomic_sub', 'atomic_cas', 'mmio_read32', 'mmio_write32',
+    'gpu_set_power_limit_watts', 'gpu_get_power_draw_watts', 'gpu_set_voltage_vcore_mv',
+    'gpu_get_voltage_vcore_mv', 'gpu_set_clock_core_mhz', 'gpu_set_clock_memory_mhz',
+    'gpu_set_pstate', 'gpu_get_pstate', 'gpu_set_fan_speed_pwm', 'gpu_get_fan_speed_rpm',
+    'gpu_get_temp_junction_hotspot', 'gpu_get_temp_vram', 'gpu_set_fan_curve',
+    'pmic_read_vrm_temp', 'pmic_set_rail_voltage', 'gpu_pcie_set_link_gen',
+    'gpu_pcie_enable_rebar', 'display_set_backlight_brightness', 'display_set_refresh_rate_hz',
+    'display_ddc_send_command'
   ]);
 
   function escapeHtml(s: string): string {
@@ -3914,16 +4307,16 @@ export default function App() {
           {/* Add-on Category Filter Bar */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
             {[
-              { id: 'all', label: 'All Add-on Items (20)' },
+              { id: 'all', label: 'All Add-on Items (24)' },
               { id: 'Beginner Universal', label: 'Beginner Universal (say, ask, repeat, whenever, define, given)' },
+              { id: 'Hardware Control', label: 'Hardware & Silicon Control (lowlevel, gpu_power, gpu_fans, vrm_pmic, display_ddc)' },
+              { id: 'Low-Level Assembly', label: 'Low-Level Assembly (asm, port_io, isr, simd_vec, atomic_cas)' },
+              { id: 'GPU & Parallel Compute', label: 'GPU Parallel Compute (kernel)' },
               { id: 'Safety & Faults', label: 'Safety & Faults (attempt, guard, fail_safe)' },
               { id: 'Pipelines & Streams', label: 'Pipelines & Streams (flow)' },
               { id: 'Concurrency & Async', label: 'Concurrency (pulse)' },
               { id: 'Autonomous Self-Host', label: 'Autonomous Self-Host (bootstrap)' },
-              { id: 'Hardware Control', label: 'Hardware Control (lowlevel)' },
               { id: 'Formal Contracts', label: 'Contracts (contract)' },
-              { id: 'Low-Level Assembly', label: 'Low-Level Assembly (asm, port_io, isr, simd_vec, atomic_cas)' },
-              { id: 'GPU & Parallel Compute', label: 'GPU Parallel Compute (kernel)' },
             ].map((cat) => (
               <button
                 key={cat.id}

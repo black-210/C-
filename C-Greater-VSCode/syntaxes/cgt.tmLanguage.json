@@ -147,7 +147,7 @@
       "patterns": [
         {
           "name": "keyword.other.hardware.cgt",
-          "match": "\\b(lowlevel|opt_hardware|raw_register|mmio_map|fence_sync|direct_reg|bit_slice|endian_swap|unmanaged|bare_metal|memory_barrier|simd_lane)\\b"
+          "match": "\\b(lowlevel|opt_hardware|raw_register|mmio_map|fence_sync|direct_reg|bit_slice|endian_swap|unmanaged|bare_metal|memory_barrier|simd_lane|vrm|pmic|rebar|pstate|hotspot|vcore|tdp|svid)\\b"
         }
       ]
     },
@@ -234,7 +234,7 @@
         },
         {
           "name": "support.function.cgt",
-          "match": "\\b(println|print|say|ask|check|hold|panic|assert|sizeof|alignof|matrix_mul|dot_product|norm|clamp_range|approx|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|atomic_cas64|atomic_store64|snapshot_state|memory_barrier|mmio_read32|mmio_write32|cpu_port_in|cpu_port_out|cache_flush|dma_transfer)\\b"
+          "match": "\\b(println|print|say|ask|check|hold|panic|assert|sizeof|alignof|matrix_mul|dot_product|norm|clamp_range|approx|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|atomic_cas64|atomic_store64|snapshot_state|memory_barrier|mmio_read32|mmio_write32|cpu_port_in|cpu_port_out|cache_flush|dma_transfer|gpu_set_power_limit_watts|gpu_get_power_draw_watts|gpu_set_voltage_vcore_mv|gpu_get_voltage_vcore_mv|gpu_set_clock_core_mhz|gpu_set_clock_memory_mhz|gpu_set_pstate|gpu_get_pstate|gpu_set_fan_speed_pwm|gpu_get_fan_speed_rpm|gpu_get_temp_junction_hotspot|gpu_get_temp_vram|gpu_set_fan_curve|pmic_read_vrm_temp|pmic_set_rail_voltage|gpu_pcie_set_link_gen|gpu_pcie_enable_rebar|display_set_backlight_brightness|display_set_refresh_rate_hz|display_ddc_send_command)\\b"
         },
         {
           "name": "entity.name.function.call.cgt",

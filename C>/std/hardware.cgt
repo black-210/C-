@@ -1,0 +1,191 @@
+// C> (C-Greater) Standard Library: Built-in Native Silicon & Hardware Control
+// Direct GPU & CPU power regulation, voltage regulators, VRM rails, PWM fans,
+// PCIe link negotiation, VRAM clocks, thermal telemetry, and display interfaces.
+// 100% Built-in — Zero External Libraries Required.
+
+module std::hardware;
+
+// ─── GPU POWER DELIVERY & VOLTAGE REGULATORS ───
+
+pub struct align(64) GpuPowerState {
+    pub gpu_id: u32,
+    pub cur_power_watts: f32,
+    pub tdp_limit_watts: u32,
+    pub max_tdp_watts: u32,
+    pub core_voltage_mv: u32,
+    pub mem_voltage_mv: u32,
+    pub pstate: u32, // P0 (Max Perf) down to P8 (Idle)
+}
+
+pub fn gpu_set_power_limit_watts(gpu_id: u32, limit_watts: u32) -> bool {
+    lowlevel {
+        // Direct MMIO or NV/AMD PMIC mailbox register write
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        let power_reg_offset: usize = 0x20A0;
+        mmio_write32(mmio_bar + power_reg_offset, limit_watts * 1000); // in milliwatts
+        fence_sync();
+        return true;
+    }
+}
+
+pub fn gpu_get_power_draw_watts(gpu_id: u32) -> f32 {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        let milliwatts = mmio_read32(mmio_bar + 0x20A4);
+        return (milliwatts as f32) / 1000.0f32;
+    }
+}
+
+pub fn gpu_set_voltage_vcore_mv(gpu_id: u32, millivolts: u32) -> bool {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        mmio_write32(mmio_bar + 0x21B0, millivolts);
+        fence_sync();
+        return true;
+    }
+}
+
+pub fn gpu_get_voltage_vcore_mv(gpu_id: u32) -> u32 {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        return mmio_read32(mmio_bar + 0x21B4);
+    }
+}
+
+pub fn gpu_set_clock_core_mhz(gpu_id: u32, freq_mhz: u32) -> bool {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        mmio_write32(mmio_bar + 0x2200, freq_mhz);
+        fence_sync();
+        return true;
+    }
+}
+
+pub fn gpu_set_clock_memory_mhz(gpu_id: u32, freq_mhz: u32) -> bool {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        mmio_write32(mmio_bar + 0x2208, freq_mhz);
+        fence_sync();
+        return true;
+    }
+}
+
+pub fn gpu_set_pstate(gpu_id: u32, pstate: u32) -> bool {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        mmio_write32(mmio_bar + 0x2240, pstate);
+        return true;
+    }
+}
+
+// ─── GPU FANS, ACOUSTICS & THERMAL TELEMETRY ───
+
+pub struct align(64) GpuThermalState {
+    pub gpu_id: u32,
+    pub temp_edge_c: f32,
+    pub temp_junction_hotspot_c: f32,
+    pub temp_vram_c: f32,
+    pub fan_pwm_percent: u8,
+    pub fan_tach_rpm: u32,
+}
+
+pub fn gpu_set_fan_speed_pwm(gpu_id: u32, fan_idx: u32, pwm_percent: u8) -> bool {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        let clamped_pwm = if pwm_percent > 100 { 100 } else { pwm_percent };
+        mmio_write32(mmio_bar + 0x3100 + (fan_idx as usize * 4), clamped_pwm as u32);
+        fence_sync();
+        return true;
+    }
+}
+
+pub fn gpu_get_fan_speed_rpm(gpu_id: u32, fan_idx: u32) -> u32 {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        return mmio_read32(mmio_bar + 0x3120 + (fan_idx as usize * 4));
+    }
+}
+
+pub fn gpu_get_temp_junction_hotspot(gpu_id: u32) -> f32 {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        let raw = mmio_read32(mmio_bar + 0x3004);
+        return (raw as f32) / 100.0f32; // In 0.01 C resolution
+    }
+}
+
+pub fn gpu_get_temp_vram(gpu_id: u32) -> f32 {
+    lowlevel {
+        let mmio_bar = mmio_map(0xE0000000 + (gpu_id as u64 * 0x1000000), 0x10000);
+        let raw = mmio_read32(mmio_bar + 0x3008);
+        return (raw as f32) / 100.0f32;
+    }
+}
+
+// ─── MOTHERBOARD VRM, PMIC & SVID VOLTAGE REGULATORS ───
+
+pub fn pmic_read_vrm_temp(rail_id: u8) -> f32 {
+    lowlevel {
+        // Direct SMBus controller access (I/O base 0x0500 on standard x86 chipsets)
+        cpu_port_out(0x0504, 0x58); // PMIC I2C address
+        cpu_port_out(0x0503, 0x8D + rail_id); // READ_TEMPERATURE_1
+        cpu_port_out(0x0502, 0x48); // Start transaction
+        let raw_c = cpu_port_in(0x0505);
+        return raw_c as f32;
+    }
+}
+
+pub fn pmic_set_rail_voltage(rail_id: u8, millivolts: u32) -> bool {
+    lowlevel {
+        cpu_port_out(0x0504, 0x58);
+        cpu_port_out(0x0503, 0x21 + rail_id); // VOUT_COMMAND
+        cpu_port_out(0x0505, (millivolts & 0xFF) as u8);
+        cpu_port_out(0x0506, ((millivolts >> 8) & 0xFF) as u8);
+        cpu_port_out(0x0502, 0x54);
+        return true;
+    }
+}
+
+// ─── PCIE LINK & RESIZABLE BAR (REBAR) ───
+
+pub fn gpu_pcie_set_link_gen(gpu_id: u32, gen: u8) -> bool {
+    lowlevel {
+        let pcie_cfg_base = 0xF0000000 + (gpu_id as u64 * 0x100000);
+        let pcie_link_ctl2 = pcie_cfg_base + 0xA0;
+        let reg = mmio_read32(pcie_link_ctl2);
+        let new_reg = (reg & !0xF) | (gen as u32 & 0xF);
+        mmio_write32(pcie_link_ctl2, new_reg);
+        return true;
+    }
+}
+
+pub fn gpu_pcie_enable_rebar(gpu_id: u32) -> bool {
+    lowlevel {
+        let pcie_cfg_base = 0xF0000000 + (gpu_id as u64 * 0x100000);
+        let rebar_ctl = pcie_cfg_base + 0x240;
+        mmio_write32(rebar_ctl, 0x00000001); // Enable Full BAR 256MB-64GB Window
+        return true;
+    }
+}
+
+// ─── DISPLAY BACKLIGHT, CABLES & DDC/CI ───
+
+pub fn display_set_backlight_brightness(display_id: u8, percent: u8) -> bool {
+    lowlevel {
+        // DDC/CI VCP Code 0x10 (Luminance / Brightness) over DisplayPort AUX or HDMI I2C (0x37)
+        let ddc_i2c_addr: u8 = 0x37;
+        let vcp_code_luminance: u8 = 0x10;
+        cpu_port_out(0x03C4, ddc_i2c_addr);
+        cpu_port_out(0x03C5, vcp_code_luminance);
+        cpu_port_out(0x03C5, percent);
+        return true;
+    }
+}
+
+pub fn display_set_refresh_rate_hz(display_id: u8, hz: u32) -> bool {
+    lowlevel {
+        let crtc_base: u64 = 0xE0000000 + (display_id as u64 * 0x4000);
+        mmio_write32(crtc_base + 0x08, hz);
+        return true;
+    }
+}

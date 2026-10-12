@@ -227,6 +227,78 @@ fn invalidate_tlb_page(vaddr: u64) -> void {
 }
 ```
 
+### 2.7 تحكم كامل في كرت الشاشة، الكهرباء، الفولتية، والواط (GPU Power & Voltage Control)
+التحكم الكامل والمباشر في وصول الكهرباء، سقف الواط (TDP Limit)، وفولتية الأنوية والترددات بدون أي مكتبات خارجية:
+```cgt
+module hardware::gpu::power;
+
+import std::hardware;
+
+fn set_gpu_power_and_clocks(gpu_id: u32) -> void {
+    // تحديد سقف استهلاك الكهرباء إلى 320 واط مباشرة
+    gpu_set_power_limit_watts(gpu_id, 320);
+
+    // ضبط فولتية النواة VCore بدقة بالمللي فولت (1.05 فولت)
+    gpu_set_voltage_vcore_mv(gpu_id, 1050);
+
+    // رفع تردد نواة كرت الشاشة وذاكرة VRAM
+    gpu_set_clock_core_mhz(gpu_id, 2850);
+    gpu_set_clock_memory_mhz(gpu_id, 11500);
+
+    // قراءة استهلاك الطاقة اللحظي بالواط
+    let power_watts = gpu_get_power_draw_watts(gpu_id);
+    say "استهلاك طاقة كرت الشاشة اللحظي: ", power_watts, " واط";
+}
+```
+
+### 2.8 تحكم دقيق بمراوح التبريد، الحرارة، ونقطة الاتصال الساخنة (GPU Fans & Thermals)
+منحنيات مراوح تفاعلية، قراءة حرارة نقطة الاتصال الساخنة (Hotspot)، ذاكرة VRAM، وسرعة الدوران RPM:
+```cgt
+module hardware::gpu::cooling;
+
+import std::hardware;
+
+fn configure_cooling_profile(gpu_id: u32) -> void {
+    let hotspot = gpu_get_temp_junction_hotspot(gpu_id);
+    let vram_temp = gpu_get_temp_vram(gpu_id);
+
+    // ضبط منحنى سرعة المراوح التلقائي حسب الحرارة
+    whenever hotspot > 70.0f32 || vram_temp > 80.0f32 {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 80); // مروحة 1: 80% PWM
+        gpu_set_fan_speed_pwm(gpu_id, 1, 80); // مروحة 2: 80% PWM
+        gpu_set_fan_speed_pwm(gpu_id, 2, 80); // مروحة 3: 80% PWM
+        say "تم رفع سرعة المراوح لـ 80% للتبريد السريع.";
+    } otherwise {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 35); // هدوء فائق 35%
+        gpu_set_fan_speed_pwm(gpu_id, 1, 35);
+        gpu_set_fan_speed_pwm(gpu_id, 2, 35);
+        say "المراوح تعمل بوضع الهدوء الفائق.";
+    }
+}
+```
+
+### 2.9 أطوار الطاقة باللوحة الأم، كيابل الشاشة وإضاءة الشاشة (Motherboard VRM, PCIe & Display DDC/CI)
+تحكم عتادي مدمج في أطوار الفولتية باللوحة الأم، وتوجيه إشارات كيبل الشاشة وسطوع الإضاءة ومعدل التحديث:
+```cgt
+module hardware::motherboard::display;
+
+import std::hardware;
+
+fn configure_vrm_and_display() -> void {
+    // 1. مراقبة حرارة أطوار طاقة اللوحة الأم VRM وتعديل الفولتية
+    let vrm_temp = pmic_read_vrm_temp(0);
+    pmic_set_rail_voltage(0, 1200); // 1.20 فولت لمغذي المعالج
+
+    // 2. تفعيل الجيل الخامس لمسار كرت الشاشة PCIe Gen 5 وتقنية ReBAR
+    gpu_pcie_set_link_gen(0, 5);
+    gpu_pcie_enable_rebar(0);
+
+    // 3. إرسال أوامر DDC/CI عبر كيبل الشاشة للتحكم بالإضاءة والتردد
+    display_set_backlight_brightness(0, 85); // إضاءة الشاشة 85%
+    display_set_refresh_rate_hz(0, 240);     // تردد 240 هرتز
+}
+```
+
 ---
 
 ## 3. حوسبة كروت الشاشة والمعالجة المتوازية (GPU Compute Shaders)

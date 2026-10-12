@@ -262,6 +262,75 @@ fn flush_tlb_page(vaddr: u64) -> void {
 }
 ```
 
+### 3.7 Complete GPU Silicon, Power Delivery & Voltage Regulation (`gpu_power`)
+Direct control over GPU silicon power stages, voltage regulation modules, and core frequencies without external proprietary vendor tools:
+```cgt
+module hardware::gpu::power;
+
+import std::hardware;
+
+fn tune_gpu_power_stage(gpu_id: u32) -> void {
+    // Set 320 Watts TDP limit directly via PMIC mailbox MMIO
+    gpu_set_power_limit_watts(gpu_id, 320);
+
+    // Set core voltage to 1050 mV (1.05V)
+    gpu_set_voltage_vcore_mv(gpu_id, 1050);
+
+    // Clock frequencies: 2850 MHz Core, 11500 MHz Memory
+    gpu_set_clock_core_mhz(gpu_id, 2850);
+    gpu_set_clock_memory_mhz(gpu_id, 11500);
+
+    // Lock to maximum performance power state (P0)
+    gpu_set_pstate(gpu_id, 0);
+}
+```
+
+### 3.8 GPU Dynamic Fan Curves, Junction Hotspot & VRAM Thermal Telemetry (`gpu_fans`)
+Reads silicon temperature sensors and sets precise PWM fan curves with zero-latency response:
+```cgt
+module hardware::gpu::thermals;
+
+import std::hardware;
+
+fn regulate_cooling_fans(gpu_id: u32) -> void {
+    let hotspot = gpu_get_temp_junction_hotspot(gpu_id);
+    let vram = gpu_get_temp_vram(gpu_id);
+
+    // Dynamic fan curve according to silicon junction thermal telemetry
+    whenever hotspot >= 75.0f32 || vram >= 80.0f32 {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 85); // Fan 1: 85% PWM
+        gpu_set_fan_speed_pwm(gpu_id, 1, 85); // Fan 2: 85% PWM
+        gpu_set_fan_speed_pwm(gpu_id, 2, 85); // Fan 3: 85% PWM
+    } otherwise {
+        gpu_set_fan_speed_pwm(gpu_id, 0, 35); // Silent 35% PWM profile
+        gpu_set_fan_speed_pwm(gpu_id, 1, 35);
+        gpu_set_fan_speed_pwm(gpu_id, 2, 35);
+    }
+}
+```
+
+### 3.9 Motherboard VRMs, PMIC SVID Rails, PCIe Gen 5 & Display Cable DDC/CI (`vrm_pmic` & `display_ddc`)
+Direct control over motherboard VRMs, PCIe bus negotiation, and display monitor communications:
+```cgt
+module hardware::system::motherboard;
+
+import std::hardware;
+
+fn optimize_motherboard_and_display() -> void {
+    // 1. Read VRM temperatures and set VDD rail voltage
+    let vrm_temp = pmic_read_vrm_temp(0);
+    pmic_set_rail_voltage(0, 1200); // 1.20V VRM rail
+
+    // 2. High-Speed PCIe Gen 5 negotiation and Resizable BAR
+    gpu_pcie_set_link_gen(0, 5); // Gen 5 (32 GT/s)
+    gpu_pcie_enable_rebar(0);    // Resizable BAR window unlocked
+
+    // 3. Display cable interface: Screen backlight & Refresh Rate via DDC/CI
+    display_set_backlight_brightness(0, 90); // 90% Screen Brightness
+    display_set_refresh_rate_hz(0, 240);     // 240 Hz Native Refresh
+}
+```
+
 ---
 
 ## 4. Heterogeneous GPU Compute Shaders (`@kernel`)
