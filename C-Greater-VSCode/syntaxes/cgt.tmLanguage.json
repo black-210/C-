@@ -4,6 +4,7 @@
   "scopeName": "source.cgt",
   "patterns": [
     { "include": "#comments" },
+    { "include": "#decorators" },
     { "include": "#strings" },
     { "include": "#numbers" },
     { "include": "#keywords_beginner" },
@@ -27,6 +28,14 @@
     { "include": "#constants" }
   ],
   "repository": {
+    "decorators": {
+      "patterns": [
+        {
+          "name": "entity.name.function.decorator.cgt",
+          "match": "@(kernel|interrupt_handler|align|export|intrinsic|cold|hot|inline|noinline)\\b"
+        }
+      ]
+    },
     "comments": {
       "patterns": [
         {
@@ -114,7 +123,7 @@
       "patterns": [
         {
           "name": "keyword.control.guard.cgt",
-          "match": "\\b(guard|ensure_clean|isolate_fault|on_fault|sealed|audit_bounds|fail_safe)\\b"
+          "match": "\\b(guard|ensure_clean|isolate_fault|on_fault|sealed|audit_bounds|fail_safe|fallback)\\b"
         }
       ]
     },
@@ -162,7 +171,7 @@
       "patterns": [
         {
           "name": "keyword.other.lowlevel.cgt",
-          "match": "\\b(isolate|hazard|claim|pin|morph|region|volatile|asm)\\b"
+          "match": "\\b(isolate|hazard|claim|pin|morph|region|volatile|asm|clflushopt|sfence|invlpg|pause|rdtsc)\\b"
         }
       ]
     },
@@ -170,7 +179,7 @@
       "patterns": [
         {
           "name": "keyword.control.cgt",
-          "match": "\\b(if|else|while|for|in|return|break|continue|defer|match)\\b"
+          "match": "\\b(if|else|while|for|in|return|break|continue|defer|match|replay)\\b"
         }
       ]
     },
@@ -186,7 +195,7 @@
       "patterns": [
         {
           "name": "keyword.declaration.cgt",
-          "match": "\\b(fn|let|mut|struct|enum|trait|impl|type|const|pub|extern|module|import|as)\\b"
+          "match": "\\b(fn|let|mut|struct|enum|trait|impl|type|const|pub|extern|module|import|as|kernel)\\b"
         }
       ]
     },
@@ -194,7 +203,7 @@
       "patterns": [
         {
           "name": "keyword.other.gpu.cgt",
-          "match": "\\b(gpu_kernel|gpu_dispatch|gpu_alloc|gpu_free)\\b"
+          "match": "\\b(gpu_kernel|gpu_dispatch|gpu_alloc|gpu_free|gpu_global_id|gpu_local_id|gpu_group_id|gpu_barrier)\\b"
         }
       ]
     },
@@ -225,7 +234,7 @@
         },
         {
           "name": "support.function.cgt",
-          "match": "\\b(println|print|say|ask|check|hold|panic|assert|sizeof|alignof|matrix_mul|dot_product|norm|clamp_range|approx|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|mmio_read32|mmio_write32|cpu_port_in|cpu_port_out|cache_flush|dma_transfer)\\b"
+          "match": "\\b(println|print|say|ask|check|hold|panic|assert|sizeof|alignof|matrix_mul|dot_product|norm|clamp_range|approx|atomic_load|atomic_store|atomic_add|atomic_sub|atomic_cas|atomic_cas64|atomic_store64|snapshot_state|memory_barrier|mmio_read32|mmio_write32|cpu_port_in|cpu_port_out|cache_flush|dma_transfer)\\b"
         },
         {
           "name": "entity.name.function.call.cgt",

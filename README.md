@@ -1,14 +1,15 @@
-# C> (C-Greater) Systems Programming Language
+# C> (C-Greater) Systems & Universal Programming Language
 
-**Version**: 2.0.0-LTS (v2+)  
-**Target Environments**: Operating Systems, Kernels, Drivers, Firmware, Embedded Devices, Real-Time Graphics, High-Performance Computing, and Systems Infrastructure  
+**Version**: 3.0.0-LTS Universal & Bare-Metal Edition  
+**Target Environments**: Beginners & Learners, Operating Systems, Kernels, Drivers, Firmware, Embedded Devices, Real-Time Graphics, High-Performance Computing, and Systems Infrastructure  
 **Implementation**: Self-Hosting Independent Translator in C> + Bootstrap Native Compiler (ISO C11)  
-**Specification Reference**: `docs/V2_SPECIFICATION.md`
+**Specification References**: `V3_SPECIFICATION.md` & `V3_EXPLANATION.md` (شرح وتوثيق شامل)
 
 ---
 
 ## Table of Contents
 
+-1. [What's New in Version 3.0 Universal & Systems Flagship Edition](#-1-whats-new-in-version-30-universal--systems-flagship-edition)
 0. [What's New in Version 2+ (v2+) & Self-Translator](#0-whats-new-in-version-2-v2--self-translator)
 1. [What C> Is](#1-what-c-is)
 2. [Design Philosophy](#2-design-philosophy)
@@ -40,6 +41,17 @@
 28. [Foreign Function Interface (FFI) & C ABI](#28-foreign-function-interface-ffi--c-abi)
 29. [Inline Assembly Support](#29-inline-assembly-support)
 30. [Architecture Support (x86_64, AArch64, RISC-V)](#30-architecture-support-x86_64-aarch64-risc-v)
+
+---
+
+## -1. What's New in Version 3.0 Universal & Systems Flagship Edition
+
+C> v3.0 realizes the vision of a **Universal Language**:
+1. **Ultra-Simple Beginner Syntax**: Natural human keywords (`say`, `ask`, `repeat N times`, `whenever / otherwise`, `define`, `given / when`, `fail_safe`).
+2. **Comprehensive Low-Level Assembly Silicon Control**: Direct CPU registers (`asm volatile`, `rdtsc`), motherboard port I/O (`cpu_port_out`/`in`), bare-metal interrupt service routines (`@interrupt_handler`), DMA descriptor rings with CPU cache flush (`clflushopt`, `sfence`), wait-free atomics (`atomic_cas64`, `pause`), and 4-level paging (`CR3`, `invlpg`).
+3. **Unified GPU Compute Shaders**: First-class `@kernel` shaders compiling to Vulkan SPIR-V, CUDA PTX, and Apple Metal.
+4. **Deterministic Time-Travel Replay Debugger**: Microsecond hardware state recording (`replay`, `snapshot_state`).
+5. **VS Code & Code-OSS Extension v3.0.0**: Packaged in `public/c-greater-3.0.0.vsix` with 20 syntax snippets, beginner-first explanations, and tailored code generation.
 
 ---
 

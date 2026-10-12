@@ -272,5 +272,107 @@
       "}"
     ],
     "description": "Formal Hoare-logic contract specification verified by static analyzer"
+  },
+  "Direct Inline Assembly Block": {
+    "prefix": "asm",
+    "body": [
+      "unsafe {",
+      "    asm volatile (",
+      "        \"${1:nop}\"",
+      "        : \"=r\"(${2:output_val})",
+      "        : \"r\"(${3:input_val})",
+      "        : \"memory\"",
+      "    );",
+      "}"
+    ],
+    "description": "Direct CPU instruction integration with register pinning and volatile barriers (C> v3.0)"
+  },
+  "Motherboard Port Output": {
+    "prefix": "cpu_port_out",
+    "body": [
+      "cpu_port_out(${1:0x3F8}, ${2:0x41});"
+    ],
+    "description": "Direct motherboard hardware port output (x86 outb instruction)"
+  },
+  "Motherboard Port Input": {
+    "prefix": "cpu_port_in",
+    "body": [
+      "let ${1:status} = cpu_port_in(${2:0x3FD});"
+    ],
+    "description": "Direct motherboard hardware port input (x86 inb instruction)"
+  },
+  "Hardware Interrupt Handler": {
+    "prefix": "isr",
+    "body": [
+      "@interrupt_handler",
+      "fn ${1:hardware_irq_handler}(frame: *InterruptFrame) -> void {",
+      "    say \"[ISR]: Hardware interrupt triggered\";",
+      "    lowlevel {",
+      "        cpu_port_out(0x20, 0x20); // Master PIC EOI",
+      "    }",
+      "}"
+    ],
+    "description": "Bare-metal interrupt service routine with automatic stack frame preservation and iretq return"
+  },
+  "SIMD Hardware Vector Compute": {
+    "prefix": "simd_vec",
+    "body": [
+      "let mut ${1:v_a}: vector<f32, ${2:16}> = splat(${3:2.0f32});",
+      "let mut ${4:v_b}: vector<f32, ${2:16}> = splat(${5:5.0f32});",
+      "let ${6:v_res} = ${1:v_a} * ${4:v_b};"
+    ],
+    "description": "Hardware AVX-512 / ARM Neon vector instructions mapped to SIMD registers"
+  },
+  "Hardware Spinlock & Atomic CAS": {
+    "prefix": "atomic_cas",
+    "body": [
+      "let mut ${1:lock_state}: u64 = 0;",
+      "while !atomic_cas64(&${1:lock_state}, 0, 1) {",
+      "    unsafe { asm(\"pause\"); }",
+      "}",
+      "${0:// critical section}",
+      "atomic_store64(&${1:lock_state}, 0);"
+    ],
+    "description": "Wait-free atomic 64-bit compare-and-swap (lock cmpxchg) with CPU pause instruction"
+  },
+  "Heterogeneous GPU Compute Kernel": {
+    "prefix": "kernel",
+    "body": [
+      "@kernel",
+      "fn ${1:compute_kernel}(data: device_span<f32>, multiplier: f32) {",
+      "    let gid = gpu_global_id();",
+      "    data[gid] = data[gid] * multiplier;",
+      "}"
+    ],
+    "description": "Heterogeneous GPU compute shader compiling directly to Vulkan SPIR-V, CUDA PTX, and Apple Metal"
+  },
+  "Time-Travel Replay Session": {
+    "prefix": "replay",
+    "body": [
+      "replay ${1:session_tracer} {",
+      "    snapshot_state();",
+      "    say \"[Replay Engine]: Zero-overhead state snapshot recorded.\";",
+      "}"
+    ],
+    "description": "Deterministic microsecond-level execution state snapshot for time-travel debugging"
+  },
+  "Cache Line Invalidation": {
+    "prefix": "clflushopt",
+    "body": [
+      "unsafe {",
+      "    asm volatile (\"clflushopt (%0)\" :: \"r\"(${1:phys_addr}) : \"memory\");",
+      "    asm volatile (\"sfence\" ::: \"memory\");",
+      "}"
+    ],
+    "description": "Flushes modified cache lines to physical RAM for DMA coherency (clflushopt + sfence)"
+  },
+  "Page Table Base Load CR3": {
+    "prefix": "load_cr3",
+    "body": [
+      "unsafe {",
+      "    asm volatile (\"movq %0, %%cr3\" :: \"r\"(${1:pml4_phys_base}) : \"memory\");",
+      "}"
+    ],
+    "description": "Loads x86_64 PML4 page table physical address into CR3 CPU register and flushes TLB"
   }
 }

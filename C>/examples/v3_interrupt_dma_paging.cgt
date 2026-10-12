@@ -1,0 +1,50 @@
+// C> (C-Greater) v3.0 Interrupts, DMA Descriptor Rings & x86_64 Paging
+module examples::v3_interrupt_dma_paging;
+
+struct InterruptFrame {
+    rip: u64,
+    cs: u64,
+    rflags: u64,
+    rsp: u64,
+    ss: u64,
+}
+
+let mut g_timer_ticks: u64 = 0;
+
+@interrupt_handler
+fn pit_timer_isr(frame: *InterruptFrame) -> void {
+    g_timer_ticks = g_timer_ticks + 1;
+    // End-of-Interrupt (EOI) to PIC
+    lowlevel {
+        cpu_port_out(0x20, 0x20);
+    }
+}
+
+struct align(64) DmaDescriptor {
+    phys_addr: u64,
+    length: u32,
+    flags: u32,
+}
+
+fn flush_dma_cache(phys: u64) -> void {
+    unsafe {
+        asm volatile (
+            "clflushopt (%0)"
+            : 
+            : "r"(phys)
+            : "memory"
+        );
+        asm volatile ("sfence" ::: "memory");
+    }
+}
+
+fn main() -> i32 {
+    let desc = DmaDescriptor {
+        phys_addr: 0x1F400000,
+        length: 4096,
+        flags: 0x01,
+    };
+    flush_dma_cache(desc.phys_addr);
+    say "DMA descriptor ring flushed with clflushopt and serialized with sfence.";
+    return 0;
+}

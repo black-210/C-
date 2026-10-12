@@ -3412,6 +3412,9 @@ export default function App() {
             <a href="#snippets" className="btn btn-primary">
               Explore v3.0 Snippets
             </a>
+            <a href="/V3_EXPLANATION.md" download="V3_EXPLANATION.md" className="btn btn-ghost text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/10">
+              📄 v3.0 Guide (ملف MD)
+            </a>
             <a href="#translator" className="btn btn-ghost">
               Self-Hosting Translator
             </a>
@@ -3800,6 +3803,25 @@ export default function App() {
               >
                 <span>📦</span> Download c-greater-3.0.0.vsix (Latest Flagship v3.0)
               </a>
+              <div className="flex flex-col gap-2 pt-1 border-t border-slate-800/80">
+                <span className="text-[11px] text-slate-400 font-semibold text-center">Documentation &amp; Full v3 Guides (.md):</span>
+                <div className="flex items-center justify-center gap-2">
+                  <a
+                    href="/V3_EXPLANATION.md"
+                    download="V3_EXPLANATION.md"
+                    className="flex-1 text-center px-2.5 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-600/40 hover:bg-emerald-900/60 text-emerald-300 font-mono text-xs transition"
+                  >
+                    📄 V3_EXPLANATION.md
+                  </a>
+                  <a
+                    href="/V3_SPECIFICATION.md"
+                    download="V3_SPECIFICATION.md"
+                    className="flex-1 text-center px-2.5 py-1.5 rounded-lg bg-blue-950/60 border border-blue-600/40 hover:bg-blue-900/60 text-blue-300 font-mono text-xs transition"
+                  >
+                    📑 V3_SPECIFICATION.md
+                  </a>
+                </div>
+              </div>
               <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-mono">
                 <span>MD5 verified</span>
                 <span>•</span>
@@ -4389,6 +4411,8 @@ export default function App() {
             <a href="#snippets">v3.0 Snippets</a>
             <a href="#translator">Self-Translator</a>
             <a href="#vscode">VS Code Extension</a>
+            <a href="/V3_EXPLANATION.md" download="V3_EXPLANATION.md">v3.0 Guide (MD)</a>
+            <a href="/V3_SPECIFICATION.md" download="V3_SPECIFICATION.md">v3.0 Spec (MD)</a>
             <a href="#build">Build</a>
           </div>
           <p className="footer-license">

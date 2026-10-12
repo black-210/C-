@@ -1,0 +1,47 @@
+// C> (C-Greater) v3.0 Low-Level Assembly & Silicon Hardware Control
+// Direct registers, volatile inline assembly, motherboard I/O ports, and atomic spinlocks
+
+module examples::v3_lowlevel_assembly_silicon;
+
+const SERIAL_COM1: u16 = 0x3F8;
+
+struct align(64) Spinlock {
+    locked: u64,
+}
+
+fn spinlock_lock(lock: &mut Spinlock) -> void {
+    while !atomic_cas64(&lock.locked, 0, 1) {
+        unsafe {
+            asm volatile ("pause" ::: "memory");
+        }
+    }
+}
+
+fn spinlock_unlock(lock: &mut Spinlock) -> void {
+    atomic_store64(&lock.locked, 0);
+}
+
+fn write_motherboard_port(port: u16, val: u8) -> void {
+    lowlevel {
+        cpu_port_out(port, val);
+    }
+}
+
+fn read_motherboard_port(port: u16) -> u8 {
+    lowlevel {
+        return cpu_port_in(port);
+    }
+}
+
+fn main() -> i32 {
+    let mut lock = Spinlock { locked: 0 };
+    
+    spinlock_lock(&mut lock);
+    write_motherboard_port(SERIAL_COM1 + 0, 0x01);
+    let status = read_motherboard_port(SERIAL_COM1 + 5);
+    spinlock_unlock(&mut lock);
+
+    say "Bare-metal port I/O and hardware spinlock executed with 0 ns overhead.";
+    say "Status register read: ", status;
+    return 0;
+}

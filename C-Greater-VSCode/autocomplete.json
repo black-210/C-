@@ -1,5 +1,5 @@
 {
-  "version": "2.1.1",
+  "version": "3.0.0",
   "language": "cgt",
   "keywords": [
     {
@@ -876,6 +876,69 @@
       "documentation": "Directly accesses or mutates an individual lane of a SIMD hardware register.",
       "kind": "Keyword",
       "insertText": "simd_lane(${1:vector_reg}, ${2:lane_index})"
+    },
+    {
+      "label": "asm",
+      "detail": "Inline Assembly & Direct Registers (C> v3.0)",
+      "documentation": "Direct CPU instruction integration with register pinning (=a, =d, =r) and volatile barriers.",
+      "kind": "Keyword",
+      "insertText": "unsafe {\n    asm volatile (\n        \"${1:nop}\"\n        : \"=r\"(${2:output})\n        : \"r\"(${3:input})\n        : \"memory\"\n    );\n}"
+    },
+    {
+      "label": "cpu_port_out",
+      "detail": "Motherboard Port Output (C> v3.0)",
+      "documentation": "Emits native x86 outb instruction writing a byte to a hardware I/O port address.",
+      "kind": "Function",
+      "insertText": "cpu_port_out(${1:0x3F8}, ${2:0x41});"
+    },
+    {
+      "label": "cpu_port_in",
+      "detail": "Motherboard Port Input (C> v3.0)",
+      "documentation": "Emits native x86 inb instruction reading a byte from a hardware I/O port address.",
+      "kind": "Function",
+      "insertText": "cpu_port_in(${1:0x3F8})"
+    },
+    {
+      "label": "interrupt_handler",
+      "detail": "Interrupt Service Routine Attribute (C> v3.0)",
+      "documentation": "Decorator for hardware ISR functions with automatic stack frame preservation and iretq return.",
+      "kind": "Keyword",
+      "insertText": "@interrupt_handler\nfn ${1:irq_handler}(frame: *InterruptFrame) -> void {\n    ${0}\n}"
+    },
+    {
+      "label": "atomic_cas64",
+      "detail": "Atomic 64-bit Compare-And-Swap (C> v3.0)",
+      "documentation": "Lowers directly to x86 lock cmpxchgq instruction for wait-free silicon synchronization.",
+      "kind": "Function",
+      "insertText": "atomic_cas64(&${1:lock_word}, ${2:old_val}, ${3:new_val})"
+    },
+    {
+      "label": "kernel",
+      "detail": "Heterogeneous GPU Compute Shader (C> v3.0)",
+      "documentation": "Decorator for parallel compute kernels compiled to Vulkan SPIR-V, CUDA PTX, and Apple Metal.",
+      "kind": "Keyword",
+      "insertText": "@kernel\nfn ${1:shader_name}(data: device_span<f32>) {\n    let gid = gpu_global_id();\n    ${0}\n}"
+    },
+    {
+      "label": "replay",
+      "detail": "Time-Travel Replay Debugger (C> v3.0)",
+      "documentation": "Deterministic execution tracing with microsecond hardware register snapshots.",
+      "kind": "Keyword",
+      "insertText": "replay ${1:session_tracer} {\n    snapshot_state();\n    ${0}\n}"
+    },
+    {
+      "label": "device_span",
+      "detail": "GPU Device Memory Span Buffer (C> v3.0)",
+      "documentation": "Contiguous memory buffer residing on GPU VRAM accessible inside @kernel shaders.",
+      "kind": "Type",
+      "insertText": "device_span<${1:f32}>"
+    },
+    {
+      "label": "clflushopt",
+      "detail": "Cache Line Flush Instruction (C> v3.0)",
+      "documentation": "Flushes modified cache lines from CPU hierarchy to physical RAM for coherent DMA.",
+      "kind": "Function",
+      "insertText": "clflushopt(${1:phys_addr});"
     }
   ]
 }
