@@ -1,9 +1,9 @@
 /**
  * C> (C-Greater) Language Extension for VS Code and Code-OSS
- * Version: 2.1.2-LTS Universal Edition
+ * Version: 3.0.0-LTS Universal & Bare-Metal Edition
  * 
  * Provides:
- * - Intelligent Autocompletion (Self-completion) for C> v2.1.2:
+ * - Intelligent Autocompletion (Self-completion) for C> v3.0.0:
  *   * Pipeline & Transformation Flow (flow, into, sift, tally, mesh)
  *   * Async, Event & Concurrency (spawn, detach, await_all, await_any, signal, listen)
  *   * Scientific, Math & Tensors (tensor, matrix_mul, norm, dot_product, clamp_range)
@@ -32,7 +32,7 @@ let diagnosticCollection = null;
  * @param {vscode.ExtensionContext} context 
  */
 function activate(context) {
-    console.log('[C> Extension v2.1.2]: C-Greater language support activated.');
+    console.log('[C> Extension v3.0.0]: C-Greater language support activated.');
 
     // 1. Diagnostic Collection for Live Mistake / Error Detection
     diagnosticCollection = vscode.languages.createDiagnosticCollection('cgt');
@@ -869,6 +869,90 @@ function activate(context) {
                 const target = sel || 'custom_algorithm';
                 return `// Tailored verification contract for ${target}\ncontract ${target}_Contract {\n    requires(1);\n    ensures(1);\n}\n`;
             }
+        },
+        {
+            keyword: 'asm',
+            label: 'asm — Direct CPU Registers & Inline Assembly',
+            category: 'Low-Level Assembly (Fiery Crimson)',
+            code: 'unsafe {\n    asm volatile ("rdtsc" : "=a"(lo), "=d"(hi));\n    asm ("pause" ::: "memory");\n}',
+            explanation: 'Direct CPU instruction integration. Lets you emit machine opcodes (x86_64 or ARM64) with register pinning, clobbers, and volatile barriers.',
+            basicTemplate: 'unsafe {\n    asm volatile ("${1:nop}" ::: "${2:memory}");\n}\n',
+            practicalTemplate: '// Practical CPU Timestamp Counter (RDTSC) Reader\nunsafe {\n    let mut ${1:cycles_low}: u32 = 0;\n    let mut ${2:cycles_high}: u32 = 0;\n    asm volatile (\n        "rdtsc"\n        : "=a"(${1:cycles_low}), "=d"(${2:cycles_high})\n        : \n        : "memory"\n    );\n    let ${3:total_tsc}: u64 = ((${2:cycles_high} as u64) << 32) | (${1:cycles_low} as u64);\n    say "[CPU TSC]: Elapsed cycle timestamp = ", ${3:total_tsc};\n}\n',
+            productionTemplate: '// Production Hardware CPUID & Serialized Pipeline Flush\nunsafe {\n    isolate {\n        asm volatile (\n            "cpuid"\n            : "=a"(${1:eax}), "=b"(${2:ebx}), "=c"(${3:ecx}), "=d"(${4:edx})\n            : "a"(0)\n            : "memory"\n        );\n        asm volatile ("mfence" ::: "memory");\n    }\n    say "[Hardware CPUID]: Processor feature registers locked and verified.";\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'target_reg';
+                return `// Tailored inline assembly block for ${target}\nunsafe {\n    asm volatile (\n        "movq %0, %%rax"\n        : \n        : "r"(${target})\n        : "rax", "memory"\n    );\n}\n`;
+            }
+        },
+        {
+            keyword: 'port_io',
+            label: 'port_io — Bare-Metal Motherboard Port I/O (inb/outb)',
+            category: 'Low-Level Assembly (Fiery Crimson)',
+            code: 'lowlevel {\n    cpu_port_out(0x3F8, 0x41); // Write byte to COM1 UART\n    let status = cpu_port_in(0x3FD); // Read line status register\n}',
+            explanation: 'Direct hardware port I/O communication using CPU inb/outb/inw/outw instructions for motherboard PIC controllers, UART serial chips, and CMOS RTC.',
+            basicTemplate: 'lowlevel {\n    cpu_port_out(${1:0x3F8}, ${2:0x41}); // Emit byte to port\n    let ${3:data} = cpu_port_in(${4:0x3FD});\n}\n',
+            practicalTemplate: '// Practical UART Serial Transceiver Driver\nlowlevel {\n    let ${1:UART_COM1}: u16 = 0x3F8;\n    // Disable interrupts on COM1\n    cpu_port_out(${1:UART_COM1} + 1, 0x00);\n    // Enable DLAB divisor latch\n    cpu_port_out(${1:UART_COM1} + 3, 0x80);\n    // Set 115200 baud divisor (1)\n    cpu_port_out(${1:UART_COM1} + 0, 0x01);\n    cpu_port_out(${1:UART_COM1} + 1, 0x00);\n    // 8 bits, no parity, one stop bit\n    cpu_port_out(${1:UART_COM1} + 3, 0x03);\n    say "[UART COM1]: Serial port ready for bare-metal diagnostics.";\n}\n',
+            productionTemplate: '// Production Dual 8259 PIC Programmable Interrupt Controller Remapper\nlowlevel {\n    // Initialize Master & Slave PIC cascade\n    cpu_port_out(0x20, 0x11); // ICW1: init cascade\n    cpu_port_out(0xA0, 0x11);\n    cpu_port_out(0x21, 0x20); // ICW2: master offset IRQ 32\n    cpu_port_out(0xA1, 0x28); // slave offset IRQ 40\n    cpu_port_out(0x21, 0x04); // ICW3: slave at IRQ2\n    cpu_port_out(0xA1, 0x02);\n    cpu_port_out(0x21, 0x01); // ICW4: 8086 mode\n    cpu_port_out(0xA1, 0x01);\n    memory_barrier(full_sync);\n    say "[PIC 8259]: IRQ lines 0-15 mapped cleanly to CPU vectors 32-47.";\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || '0x3F8';
+                return `// Tailored Port I/O for port address ${target}\nlowlevel {\n    cpu_port_out(${target}, 0x01);\n    let status = cpu_port_in(${target});\n    say "Port ${target} read value: ", status;\n}\n`;
+            }
+        },
+        {
+            keyword: 'isr',
+            label: 'isr — Interrupt Service Routine & CPU Trap Vector',
+            category: 'Low-Level Assembly (Fiery Crimson)',
+            code: '@interrupt_handler\nfn timer_irq(frame: *InterruptStackFrame) -> void {\n    ack_lapic_eoi();\n    iretq;\n}',
+            explanation: 'Bare-metal interrupt service routine with automatic stack frame preservation, error code dissection, hardware EOI acknowledgment, and iretq return.',
+            basicTemplate: '@interrupt_handler\nfn ${1:hardware_irq_handler}(frame: *InterruptFrame) -> void {\n    say "[ISR]: Hardware interrupt triggered";\n    cpu_port_out(0x20, 0x20); // Send EOI to Master PIC\n}\n',
+            practicalTemplate: '// Practical System Timer Tick Interrupt Handler (1000 Hz)\nstruct InterruptFrame {\n    rip: u64,\n    cs: u64,\n    rflags: u64,\n    rsp: u64,\n    ss: u64,\n}\n\nlet mut g_ticks: u64 = 0;\n\n@interrupt_handler\nfn pit_timer_handler(frame: *InterruptFrame) -> void {\n    g_ticks = g_ticks + 1;\n    whenever g_ticks % 1000 == 0 {\n        say "[Kernel Heartbeat]: Uptime = ", g_ticks / 1000, " seconds.";\n    }\n    cpu_port_out(0x20, 0x20); // Master PIC EOI\n}\n',
+            productionTemplate: '// Mission-Critical Double Fault & Page Fault CPU Trap Vector\n@interrupt_handler\nfn page_fault_trap_vector(frame: *InterruptFrame, error_code: u64) -> void {\n    let mut cr2_fault_addr: u64 = 0;\n    unsafe {\n        asm volatile ("movq %%cr2, %0" : "=r"(cr2_fault_addr));\n    }\n    say "[FATAL CPU TRAP]: Page Fault at address = 0x", cr2_fault_addr;\n    say "                  Error Code = ", error_code, " | RIP = 0x", frame.rip;\n    fail_safe_halt();\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'keyboard_irq';
+                return `// Tailored interrupt handler for ${target}\n@interrupt_handler\nfn ${target}_handler(frame: *InterruptFrame) -> void {\n    say "Handled ${target}";\n    cpu_port_out(0x20, 0x20);\n}\n`;
+            }
+        },
+        {
+            keyword: 'simd_vec',
+            label: 'simd_vec — AVX-512 / Neon 512-bit Vector Compute',
+            category: 'Low-Level Assembly (Fiery Crimson)',
+            code: 'let a: vector<f32, 16> = load_aligned(ptr_a);\nlet b: vector<f32, 16> = load_aligned(ptr_b);\nlet c = fma(a, b, bias); // 16 float lanes in one cycle',
+            explanation: 'Direct hardware SIMD vector lanes mapped to AVX-512 (zmm0-zmm31) or ARM64 Neon registers. Executes 16 single-precision floats in a single CPU clock tick.',
+            basicTemplate: 'let a: vector<f32, ${1:4}> = [${2:1.0, 2.0, 3.0, 4.0}];\nlet b: vector<f32, ${1:4}> = [${3:10.0, 20.0, 30.0, 40.0}];\nlet c = a + b;\n',
+            practicalTemplate: '// Practical AVX-512 16-Lane Vector Arithmetic\nlet mut v_in1: vector<f32, 16> = splat(2.5f32);\nlet mut v_in2: vector<f32, 16> = splat(4.0f32);\nlet mut v_bias: vector<f32, 16> = splat(1.25f32);\n\n// Hardware Fused Multiply-Add instruction (vfmadd213ps)\nlet v_out = (v_in1 * v_in2) + v_bias;\nsay "[AVX-512 Vector Engine]: 16 float elements computed in parallel in 1 clock cycle.";\n',
+            productionTemplate: '// Defensive Aligned High-Throughput Matrix Vector Dot Product\nfn compute_vector_dot(a_buf: &[f32; 64], b_buf: &[f32; 64]) -> f32 {\n    guard is_64byte_aligned(a_buf) && is_64byte_aligned(b_buf) else {\n        say "Unaligned memory buffer supplied to AVX-512 vector unit!";\n        return 0.0;\n    };\n    let mut acc: vector<f32, 16> = splat(0.0);\n    repeat 4 times {\n        let va: vector<f32, 16> = load_stream_aligned(a_buf);\n        let vb: vector<f32, 16> = load_stream_aligned(b_buf);\n        acc = acc + (va * vb);\n    }\n    return horizontal_add(acc);\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'audio_buffer';
+                return `// Tailored SIMD vector processor for ${target}\nlet v_${target}: vector<f32, 8> = splat(1.0);\nsay "Parallel processing active for ${target}";\n`;
+            }
+        },
+        {
+            keyword: 'atomic_cas',
+            label: 'atomic_cas — Hardware Spinlock & Atomic CAS64',
+            category: 'Low-Level Assembly (Fiery Crimson)',
+            code: 'while !atomic_cas64(&lock_word, 0, 1) {\n    asm ("pause");\n}\n// Critical Section\natomic_store64(&lock_word, 0);',
+            explanation: 'Hardware atomic compare-and-swap (lock cmpxchg) with CPU pause instruction in spin loops, memory barriers, and cache-line alignment to avoid false sharing.',
+            basicTemplate: 'let mut ${1:lock_flag}: u64 = 0;\nwhile !atomic_cas64(&${1:lock_flag}, 0, 1) {\n    unsafe { asm("pause"); }\n}\n// Critical Section\natomic_store64(&${1:lock_flag}, 0);\n',
+            practicalTemplate: '// Practical Hardware-Aligned Ticket Spinlock\nstruct align(64) Spinlock {\n    ticket: u32,\n    serving: u32,\n}\n\nfn acquire_lock(lock: &mut Spinlock) -> void {\n    let my_ticket = atomic_fetch_add32(&lock.ticket, 1);\n    while atomic_load32(&lock.serving) != my_ticket {\n        unsafe { asm("pause"); } // Lowers power consumption on CPU core\n    }\n}\n\nfn release_lock(lock: &mut Spinlock) -> void {\n    memory_barrier(release_sync);\n    atomic_fetch_add32(&lock.serving, 1);\n}\n',
+            productionTemplate: '// Mission-Critical Wait-Free Lockless Ring Buffer Queue Head Update\nfn commit_queue_tail(head_ptr: *mut u64, old_val: u64, new_val: u64) -> bool {\n    let success = atomic_cas64(head_ptr, old_val, new_val);\n    guard success else {\n        return false;\n    };\n    memory_barrier(full_sync);\n    return true;\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'sync_counter';
+                return `// Tailored atomic spinlock for ${target}\nwhile !atomic_cas64(&${target}, 0, 1) {\n    unsafe { asm("pause"); }\n}\nsay "Acquired exclusive lock on ${target}";\natomic_store64(&${target}, 0);\n`;
+            }
+        },
+        {
+            keyword: 'kernel',
+            label: 'kernel — Heterogeneous GPU Compute Shader Acceleration',
+            category: 'GPU & Parallel Compute (Electric Amber)',
+            code: '@kernel\nfn matrix_multiply(a: device_span<f32>, b: device_span<f32>, c: device_span<f32>) {\n    let gid = gpu_global_id();\n    c[gid] = a[gid] * b[gid];\n}',
+            explanation: 'High-performance GPU kernel shaders compiled directly to Vulkan SPIR-V, CUDA PTX, and Apple Metal shaders from unified C> code.',
+            basicTemplate: '@kernel\nfn ${1:compute_kernel}(data: device_span<f32>) {\n    let idx = gpu_global_id();\n    data[idx] = data[idx] * ${2:2.0f32};\n}\n',
+            practicalTemplate: '// Practical GPU Accelerated Image Filter Shader\n@kernel\nfn gaussian_blur_gpu(img_in: device_span<u32>, img_out: device_span<u32>, width: u32) {\n    let x = gpu_global_id_x();\n    let y = gpu_global_id_y();\n    let idx = (y * width) + x;\n    img_out[idx] = img_in[idx]; // GPU parallel thread write\n}\n\nfn dispatch_filter() {\n    gpu_dispatch(gaussian_blur_gpu, grid: [1920, 1080, 1], block: [16, 16, 1]);\n    say "[GPU Compute]: Filter kernel finished across 2,073,600 parallel cores.";\n}\n',
+            productionTemplate: '// Production Heterogeneous GPU Tensor GEMM Matrix Engine\n@kernel\nfn tensor_gemm_kernel(a: device_span<f32>, b: device_span<f32>, c: device_span<f32>, n: u32) {\n    let row = gpu_global_id_y();\n    let col = gpu_global_id_x();\n    guard (row < n && col < n) else { return; };\n    let mut sum: f32 = 0.0;\n    for k in 0..n {\n        sum = sum + (a[(row * n) + k] * b[(k * n) + col]);\n    }\n    c[(row * n) + col] = sum;\n}\n',
+            buildTailored: (sel) => {
+                const target = sel || 'tensor_buffer';
+                return `// Tailored GPU kernel for ${target}\n@kernel\nfn process_${target}_gpu(buf: device_span<f32>) {\n    let gid = gpu_global_id();\n    buf[gid] = buf[gid] + 1.0;\n}\n`;
+            }
         }
     ];
 
@@ -882,7 +966,7 @@ function activate(context) {
             })),
             {
                 placeHolder: 'Select any C> Add-on item to view its explanation first...',
-                title: 'C> Add-on Codes & Snippets Explorer (v2.1.2)'
+                title: 'C> Add-on Codes & Snippets Explorer (v3.0.0)'
             }
         );
 
@@ -936,7 +1020,7 @@ function activate(context) {
 
         const picked = await vscode.window.showQuickPick(
             addonItems.map(i => ({ label: i.keyword, description: i.label, item: i })),
-            { title: 'Generate Tailored Template According to Your Code (v2.1.2)', placeHolder: 'Select construct...' }
+            { title: 'Generate Tailored Template According to Your Code (v3.0.0)', placeHolder: 'Select construct...' }
         );
         if (!picked) return;
 
@@ -982,7 +1066,7 @@ function activate(context) {
     const versionCommand = vscode.commands.registerCommand('cgt.version', () => {
         const term = getOrCreateTerminal();
         term.show();
-        term.sendText('cgt --version || ./bin/cgt --version || echo "C> Compiler v2.1.2-LTS Universal Edition (Autonomous Native)"');
+        term.sendText('cgt --version || ./bin/cgt --version || echo "C> Compiler v3.0.0-LTS Universal Edition (Autonomous Native)"');
     });
 
     context.subscriptions.push(
